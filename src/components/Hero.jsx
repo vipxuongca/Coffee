@@ -13,7 +13,7 @@ const Hero = () => {
               HÀNG BÁN CHẠY NHẤT
             </p>
           </div>
-          <h1 className="text-3x1 sm:py-3 lg:text-5x1 leading-relaxed">
+          <h1 className="main-font text-3x1 sm:py-3 lg:text-5x1 leading-relaxed">
             Hàng mới về
           </h1>
 
