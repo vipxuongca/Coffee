@@ -7,10 +7,9 @@ const productSchema = new mongoose.Schema({
   image: { type: Array, required: true },
   category: { type: String, required: true },
   subCategory: { type: String, required: true },
-  sizes: { type: Array, required: true },
+  weight: { type: Array, required: true },
   bestseller: { type: Boolean },
-  date: { type: Number, required: true }
-})
+}, { timestamps: true })
 
 const productModel = mongoose.models.product || mongoose.model('Products', productSchema);
 // if available, use the product model, if that is not available, create it using the product schema
