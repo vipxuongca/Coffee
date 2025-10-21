@@ -30,7 +30,7 @@ const loginAdmin = async (req, res) => {
       return res.status(400).json({ message: 'Admin does not exist' });
     }
 
-    const isMatch = await bycrypt.compare(password, admin.password);
+    const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     } else {
