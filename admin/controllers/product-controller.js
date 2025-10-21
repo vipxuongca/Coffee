@@ -52,9 +52,12 @@ const addProduct = async (req, res) => {
 };
 
 const getProducts = async (req, res) => {
-  try { } catch (error) {
+  try {
+    const products = await productModel.find({});
+    res.json({ success: true, products });
+  } catch (error) {
     console.error('Error fetching products:', error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
