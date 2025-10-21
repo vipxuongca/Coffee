@@ -12,7 +12,7 @@ router.post('/add', adminAuth, upload.fields([
   { name: "image4", maxCount: 1 }
 ]), addProduct);
 router.get('/get', getProducts);
-router.get('/fetch', getOneProduct);
+router.get('/fetch/:id', getOneProduct);
 router.put('/update', updateProduct);
 router.delete('/delete', adminAuth, removeProduct);
 

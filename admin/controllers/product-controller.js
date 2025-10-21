@@ -77,14 +77,20 @@ const removeProduct = async (req, res) => {
 
 const getOneProduct = async (req, res) => {
   try {
-    const { productId } = req.body;
-    const product = await productModel.findById(productId);
+    const { id } = req.params; // get id from URL path
+    const product = await productModel.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
     res.json({ success: true, product });
   } catch (error) {
     console.error('Error fetching product:', error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 const updateProduct = async (req, res) => {
   try { } catch (error) {
