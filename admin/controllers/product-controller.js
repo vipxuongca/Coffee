@@ -63,7 +63,10 @@ const getProducts = async (req, res) => {
 
 const removeProduct = async (req, res) => {
   try {
-    await productModel.findByIdAndDelete(req.body.id);
+    const deleted = await productModel.findByIdAndDelete(req.body.id);
+    if (!deleted) {
+      return res.status(404).json({ message: 'Delete failed' });
+    }
     res.json({ success: true, message: 'Product removed successfully' });
   } catch (error) {
     console.error('Error removing product:', error);
@@ -72,7 +75,11 @@ const removeProduct = async (req, res) => {
 };
 
 const getOneProduct = async (req, res) => {
-  try { } catch (error) {
+  try {
+    const { productId } = req.body;
+    const product = await productModel.findById(productId);
+    res.json({ success: true, product });
+  } catch (error) {
     console.error('Error fetching product:', error);
     res.status(500).json({ message: error.message });
   }
