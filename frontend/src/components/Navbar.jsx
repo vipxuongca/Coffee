@@ -18,7 +18,7 @@ const Navbar = () => {
         <img
           src={assets.company}
           alt="Company Name"
-          className="h-10 md:h-12 mb-3 object-contain"
+          className="md:h-12 mb-3 object-contain"
         />
 
         {/* Navigation buttons */}
