@@ -26,11 +26,11 @@ const Navbar = () => {
         {/* Navigation buttons */}
         <ul className="hidden sm:flex gap-6 text-base">
           {[
-            { name: "HOME", path: "/" },
+            { name: "TRANG CHỦ", path: "/" },
             // { name: "PRODUCT", path: "/product" },
-            { name: "COLLECTION", path: "/collection" },
-            { name: "ABOUT", path: "/about" },
-            { name: "CONTACT", path: "/contact" },
+            { name: "CỬA HÀNG", path: "/shop" },
+            { name: "GIỚI THIỆU", path: "/about" },
+            { name: "LIÊN HỆ", path: "/contact" },
           ].map((item) => (
             <NavLink
               key={item.name}
