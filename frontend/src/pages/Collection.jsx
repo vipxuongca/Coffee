@@ -5,7 +5,7 @@ import ProductItem from "../components/ProductItem";
 import Title from "../components/Title";
 
 const Collection = () => {
-  const { products, search, showSearch } = useContext(ShopContext);
+  const { categories, products, search, showSearch } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setcategory] = useState([]);
@@ -73,7 +73,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [category, subCategory, search, showSearch]);
+  }, [category, subCategory, search, showSearch, products]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
@@ -98,24 +98,17 @@ const Collection = () => {
         >
           <p className="mb-3 text-sm font-medium">CATEGORIES</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value="Robusta"
-                onChange={toggleCategory}
-              />{" "}
-              Robusta
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value="Arabica"
-                onChange={toggleCategory}
-              />{" "}
-              Arabica
-            </p>
+            {categories.map((cat) => (
+              <p key={cat._id}>
+                <input
+                  className="w-3"
+                  type="checkbox"
+                  value={cat.name}
+                  onChange={toggleCategory}
+                />{" "}
+                {cat.name}
+              </p>
+            ))}
           </div>
 
           {/* Subcategory filter */}

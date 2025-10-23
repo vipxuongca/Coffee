@@ -1,28 +1,50 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
+import { assets } from "../assets/assets";
 
 const Product = () => {
   const { productId } = useParams();
   const { products, currency } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
-  const [size, setSize] = useState("");
+  const [variants, setVariants] = useState("");
 
-  const fetchProductData = () => {
+  const fetchProductDetails = () => {
+    console.log("product id from param: " + productId);
+    console.log("products are: " + products);
     const item = products.find((p) => p._id === productId);
-    console.log(item);
+    console.log(`item: ${item}`);
     if (item) {
       setProductData(item);
       setImage(item.image[0]);
+    } else {
+      console.log("error");
     }
   };
 
   useEffect(() => {
-    fetchProductData();
-  }, [productId]);
+
+    // no product ID, no array, no product, do not go into this, return right away
+    if (!productId || !Array.isArray(products) || products.length === 0) return;
+
+    // test logging
+    // console.log("productId (raw):", productId, " typeof:", typeof productId);
+    // console.log("products length:", products.length);
+
+    const item = products.find((p) => String(p._id) === String(productId));// make it explicitly string
+
+    // console.log("found item:", item);
+
+    if (item) {
+      setProductData(item);
+      setImage(Array.isArray(item.image) ? item.image[0] : item.image || "");
+    } else {
+      // optional fallback: attempt to fetch single product from backend if not found in context
+      console.log("product not found in context; leaving productData false");
+    }
+  }, [products, productId]);
 
   return productData ? (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
@@ -67,19 +89,19 @@ const Product = () => {
           </p>
           <div className="flex flex-col gap-4 my-8">
             <p>Variant</p>
-            <div className="flex gap-2">
-              {productData.sizes.map((item, index) => (
+            {/* <div className="flex gap-2">
+              {productData.variants.map((item, index) => (
                 <button
-                  onClick={() => setSize(item)}
+                  onClick={() => setVariants(item)}
                   className={`border py-2 px-4 bg-gray-100 ${
-                    item === size ? "border-orange-500" : ""
+                    item === variants ? "border-orange-500" : ""
                   }`}
                   key={index}
                 >
                   {item}
                 </button>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <button className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700">
@@ -116,7 +138,9 @@ const Product = () => {
       />
     </div>
   ) : (
-    <div className="opacity-0"></div>
+    <div className="opacity-0">
+      <p>none</p>
+    </div>
   );
 };
 
