@@ -76,6 +76,7 @@ const List = ({ token }) => {
             <span>Name</span>
             <span>Category</span>
             <span>Price</span>
+            <span>Stock</span>
             <span className="text-center">Action</span>
           </div>
 
@@ -100,6 +101,9 @@ const List = ({ token }) => {
               </div>
               <div className="border-r border-b border-gray-400 p-2 text-center">
                 {item.price} {currency}
+              </div>
+              <div className="border-r border-b border-gray-400 p-2 text-center">
+                {item.stock}
               </div>
               <div className="border-b border-gray-400 flex justify-center gap-2 p-2">
                 <button
