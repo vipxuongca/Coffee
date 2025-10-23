@@ -76,9 +76,7 @@ const registerAdmin = async (req, res) => {
     const admin = await newAdmin.save();
     console.log('Admin registered successfully:', admin);
 
-    const token = createToken(admin._id);
-
-    res.json({ success: true, token })
+    res.json({ success: true })
   }
   catch (error) {
     console.error('Error registering admin:', error);
