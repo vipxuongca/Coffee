@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendUrl } from "../App";
@@ -12,14 +12,35 @@ const Add = ({ token }) => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [discount, setDiscount] = useState("");
+  const [price, setPrice] = useState("100000");
+  const [discount, setDiscount] = useState("0");
   const [stock, setStock] = useState("");
-  const [category, setCategory] = useState("Arabica");
+  const [categoryList, setCategoryList] = useState([]);
+  const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [bestseller, setBestseller] = useState(false);
   const [variants, setVariants] = useState([]);
   const [brand, setBrand] = useState("");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/category/get`);
+        if (response.data.success) {
+          const categories = response.data.category || []; // adjust key if needed
+          setCategoryList(categories);
+          if (categories.length > 0) {
+            setCategory(categories[0].name); // default to first item
+          }
+        } else {
+          console.error(response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -172,8 +193,11 @@ const Add = ({ token }) => {
               onChange={(e) => setCategory(e.target.value)}
               value={category}
             >
-              <option value="Arabica">Arabica</option>
-              <option value="Robusta">Robusta</option>
+              {categoryList.map((cat) => (
+                <option key={cat._id} value={cat.name}>
+                  {cat.name}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -184,8 +208,11 @@ const Add = ({ token }) => {
               onChange={(e) => setSubCategory(e.target.value)}
               value={subCategory}
             >
-              <option value="Roasted">d</option>
-              <option value="Raw">d</option>
+              {categoryList.map((cat) => (
+                <option key={cat._id} value={cat.name}>
+                  {cat.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -235,7 +262,7 @@ const Add = ({ token }) => {
           <input
             type="checkbox"
             id="bestseller"
-            onChange={(e) => setBestseller(e.target.value)}
+            onChange={(e) => setBestseller(e.target.checked)}
             value={bestseller}
           />
           <label className="cursor-pointer" htmlFor="bestseller">
