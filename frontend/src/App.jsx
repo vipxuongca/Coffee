@@ -12,10 +12,12 @@ import PlaceOrder from "./pages/PlaceOrder.jsx";
 import Order from "./pages/Order.jsx";    
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
+import SearchBar from "./components/SearchBar.jsx";
 
 const App = () => {
-  return <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
+  return <div className="px-4 lg:px-[9vw]">
     <Navbar />
+    <SearchBar></SearchBar>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
