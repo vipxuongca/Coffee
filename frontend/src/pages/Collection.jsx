@@ -146,33 +146,49 @@ const Collection = () => {
       </div>
 
       {/* Cards */}
-      <div className=" 'flex-1">
-        <div className="flex justify-between text-base sm:text-2x1 mb-4">
-          <Title text1={"ALL "} text2={"PRODUCTS"} />
-          {/* Sort of products */}
-          <select
-            name=""
-            className="border-2 border-gray-300 text-sm px-2"
-            id=""
-            onChange={(e) => setSortType(e.target.value)}
-          >
-            <option value="relevant">Sort by: Relevant</option>
-            <option value="low-high">Sort by: Low to High</option>
-            <option value="high-low">Sort by: High to Low</option>
-          </select>
-        </div>
+      <div className="flex-1">
+        {/* Product Grid */}
+        <div className="flex-1">
+          {/* Header */}
+          <div className="flex justify-between items-center text-base sm:text-2xl mb-6">
+            <Title text1="ALL " text2="PRODUCTS" />
+            <select
+              className="border border-gray-300 rounded-md text-sm px-3 py-2 bg-white shadow-sm hover:border-gray-400 focus:outline-none"
+              onChange={(e) => setSortType(e.target.value)}
+            >
+              <option value="relevant">Sort by: Relevant</option>
+              <option value="low-high">Sort by: Low to High</option>
+              <option value="high-low">Sort by: High to Low</option>
+            </select>
+          </div>
 
-        {/* Map products */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
-          {filterProducts.map((item, index) => (
-            <ProductItem
-              key={index}
-              name={item.name}
-              id={item._id}
-              price={item.price}
-              image={item.image}
-            />
-          ))}
+          {/* Product Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filterProducts.map((item, index) => (
+              <a
+                key={index}
+                href={`/product/${item._id}`}
+                className="group block border border-gray-200 rounded-2xl shadow-md bg-white overflow-hidden transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+              >
+                <img
+                  src={item.image[0]}
+                  alt={item.name}
+                  className="w-full h-48 object-cover transition-transform duration-200 group-hover:scale-110"
+                />
+                <div className="p-4">
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-800 truncate">
+                    {item.name}
+                  </h3>
+                  <p className="text-gray-600 text-xs sm:text-sm mt-1 line-clamp-2">
+                    {item.description || " "}
+                  </p>
+                  <p className="text-lg font-bold text-gray-900 mt-2">
+                    {item.price.toLocaleString()}₫
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>
