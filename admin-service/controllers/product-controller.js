@@ -3,7 +3,7 @@ import productModel from '../models/product-model.js';
 
 const addProduct = async (req, res) => {
   try {
-    const { name, description, price, category, subCategory, weight, bestseller, stock, brand } = req.body;
+    const { name, description, price, category, subCategory, variants, bestseller, stock, brand, discount } = req.body;
 
     const image1 = req.files.image1 && req.files.image1[0];
     const image2 = req.files.image2 && req.files.image2[0];
@@ -29,13 +29,14 @@ const addProduct = async (req, res) => {
       name,
       description,
       price: Number(price),
+      discount: Number(discount),
       stock: Number(stock),
       brand,
       image: imagesUrl,
       discount: Number(discount) || 0,
       category,
       subCategory,
-      weight: JSON.parse(weight),
+      variants: variants ? JSON.parse(variants) : [],
       bestseller: bestseller === 'true' ? true : false, // because bestseller comes as a string, we want to convert to bool
       image: imagesUrl
     }
