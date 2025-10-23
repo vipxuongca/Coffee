@@ -22,16 +22,16 @@ const loginUser = async (req, res) => {
 
     // validation
     if (!email || !password) {
-      return res.status(400).json({ message: 'Please fill all the fields' });
+      return res.status(400).json({ message: 'Xin nhập tất cả các trường' });
     }
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'User does not exist' });
+      return res.status(400).json({ message: 'Tài khoản không tồn tại' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: 'Thông tin đăng nhập không đúng' });
     } else {
       const token = createToken(user._id);
       return res.status(200).json({ success: true, token });
@@ -48,17 +48,17 @@ const registerUser = async (req, res) => {
     const { email, password } = req.body;
     // Validation
     if ( !email || !password) {
-      return res.status(400).json({ message: 'Please fill all the fields' });
+      return res.status(400).json({ message: 'Xin nhập tất cả các trường' });
     }
 
     const exists = await userModel.findOne({ email });
     if (exists) {
-      return res.status(400).json({ success: false, message: 'Admin already exists' });
+      return res.status(400).json({ success: false, message: 'Tài khoản đã tồn tại' });
     }
 
     // validation of email and strong pass
     if (!validator.isEmail(email)) {
-      return res.status(400).json({ message: 'Please enter a valid email' });
+      return res.status(400).json({ message: 'Xin nhập Email hợp lệ' });
     } else if (!validator.isStrongPassword(password)) {
       return res.status(400).json({ message: 'Password is not strong enough. It should be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and symbols.' });
     }
@@ -73,14 +73,12 @@ const registerUser = async (req, res) => {
     });
 
     const user = await newUser.save();
-    console.log('Admin registered successfully:', user);
+    console.log('Đăng ký tài khoản thành công:', user);
 
-    const token = createToken(user._id);
-
-    res.json({ success: true, token })
+    res.json({ success: true })
   }
   catch (error) {
-    console.error('Error registering user:', error);
+    console.error('Lỗi:', error);
     res.status(500).json({ message: error.message });
   }
 }

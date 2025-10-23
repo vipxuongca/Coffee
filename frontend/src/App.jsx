@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
@@ -13,6 +13,8 @@ import Order from "./pages/Order.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import SearchBar from "./components/SearchBar.jsx";
+import Register from "./pages/Register.jsx";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   const [token, setToken] = useState(
@@ -22,8 +24,10 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("token", token);
   }, [token]);
+
   return (
     <div className="px-4 lg:px-[9vw]">
+      <ToastContainer />
       <Navbar setToken={setToken} />
       <SearchBar></SearchBar>
       <Routes>
@@ -36,6 +40,7 @@ const App = () => {
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/place-order" element={<PlaceOrder />} />
         <Route path="/order" element={<Order />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
       <Footer></Footer>
     </div>
