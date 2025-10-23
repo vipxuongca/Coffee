@@ -9,6 +9,9 @@ const ShopContextProvider = (props) => {
   const delivery_fee = 30000;
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendCartUrl = import.meta.env.VITE_BACKEND_CART_URL;
+  const backendOrderUrl = import.meta.env.VITE_BACKEND_ORDER_URL;
+  const backendUserUrl = import.meta.env.VITE_BACKEND_USER_URL;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(true);
   const [products, setProducts] = useState([]);
@@ -42,10 +45,10 @@ const ShopContextProvider = (props) => {
 
   useEffect(() => {
     getProductsData();
-  },[]);
+  }, []);
   useEffect(() => {
     getCategoriesData();
-  },[]);
+  }, []);
 
   const value = {
     products,
@@ -57,6 +60,9 @@ const ShopContextProvider = (props) => {
     showSearch,
     setShowSearch,
     backendUrl,
+    backendCartUrl,
+    backendOrderUrl,
+    backendUserUrl
   };
 
   return (
