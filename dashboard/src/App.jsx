@@ -11,6 +11,7 @@ import Add from "./pages/Add.jsx";
 import Edit from "./pages/Edit.jsx";
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
+export const currency = "₫";
 
 const App = () => {
   const [token, setToken] = useState(
