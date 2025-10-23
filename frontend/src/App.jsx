@@ -28,7 +28,8 @@ const App = () => {
   return (
     <div className="px-4 lg:px-[9vw]">
       <ToastContainer />
-      <Navbar setToken={setToken} />
+      <Navbar token={token} setToken={setToken} />
+
       <SearchBar></SearchBar>
       <Routes>
         <Route path="/" element={<Home />} />

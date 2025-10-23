@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 import { NavLink, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
-const Navbar = () => {
+const Navbar = ({ token, setToken }) => {
   const baseClass = "flex flex-col items-center gap-1 group";
   const [visible, setVisible] = useState(false);
   const { setShowSearch } = useContext(ShopContext);
@@ -80,18 +80,19 @@ const Navbar = () => {
         </div>
 
         {/* Cart Icon */}
-        <Link to="/cart" className="relative">
+        <Link to={!token ? "/login" : "/cart"} className="relative">
           <img
             src={assets.cart_icon}
             className="w-5 min-w-5 invert brightness-0 saturate-0"
             alt="cart"
           />
-          {cartCount > 0 && (
+          {token && cartCount > 0 && (
             <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px]">
               {cartCount}
             </p>
           )}
         </Link>
+
         <img
           onClick={() => setVisible(true)}
           src={assets.menu_icon}
@@ -120,11 +121,10 @@ const Navbar = () => {
           </div>
 
           {[
-            { name: "HOME", path: "/" },
-            { name: "COLLECTION", path: "/collection" },
-            { name: "ABOUT", path: "/about" },
-            { name: "CONTACT", path: "/contact" },
-            { name: "PRODUCT", path: "/product" },
+            { name: "TRANG CHỦ", path: "/" },
+            { name: "CỬA HÀNG", path: "/shop" },
+            { name: "GIỚI THIỆU", path: "/about" },
+            { name: "LIÊN HỆ", path: "/contact" },
           ].map((item) => (
             <NavLink
               key={item.name}
