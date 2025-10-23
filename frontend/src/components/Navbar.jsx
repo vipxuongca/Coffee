@@ -1,12 +1,13 @@
-import React from "react";
+import { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { NavLink, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
 const Navbar = () => {
   const baseClass = "flex flex-col items-center gap-1 group";
-  const [visible, setVisible] = React.useState(false);
-  const { setShowSearch } = React.useContext(ShopContext);
+  const [visible, setVisible] = useState(false);
+  const { setShowSearch } = useContext(ShopContext);
+  const { cartCount } = useContext(ShopContext);
 
   return (
     <div className="flex items-center justify-between py-3 px-4 md:px-8 font-serif sticky top-0 z-50 bg-[#3e2723] text-white shadow-lg">
@@ -27,7 +28,6 @@ const Navbar = () => {
         <ul className="hidden sm:flex gap-6 text-base">
           {[
             { name: "TRANG CHỦ", path: "/" },
-            // { name: "PRODUCT", path: "/product" },
             { name: "CỬA HÀNG", path: "/shop" },
             { name: "GIỚI THIỆU", path: "/about" },
             { name: "LIÊN HỆ", path: "/contact" },
@@ -86,9 +86,11 @@ const Navbar = () => {
             className="w-5 min-w-5 invert brightness-0 saturate-0"
             alt="cart"
           />
-          <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px]">
-            10
-          </p>
+          {cartCount > 0 && (
+            <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px]">
+              {cartCount}
+            </p>
+          )}
         </Link>
         <img
           onClick={() => setVisible(true)}
