@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { backendUrl, currency } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const List = ({ token }) => {
+  const navigate = useNavigate();
   const API_get = backendUrl + "/api/product/get";
   const API_delete = backendUrl + "/api/product/delete";
-  const API_edit = backendUrl + "/api/product/get";
+  const API_edit = backendUrl + "/api/product/edit";
   // console.log(API);
   const [list, setList] = useState([]);
   const fetchList = async () => {
@@ -43,22 +45,7 @@ const List = ({ token }) => {
   };
 
   const editProduct = async (id) => {
-    try {
-      const response = await axios.delete(API_delete, {
-        headers: { Authorization: `Bearer ${token}` },
-        data: { id }, // `data` must be nested under config for DELETE
-      });
-
-      if (response.data.success) {
-        toast.success(response.data.message);
-        await fetchList();
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
+    navigate(`/edit/${id}`);
   };
 
   useEffect(() => {
@@ -68,7 +55,7 @@ const List = ({ token }) => {
   return (
     <div>
       <>
-        <p className="mb-2">all product list</p>
+        <p className="mb-2">ALL PRODUCTS</p>
         <div className="flex flex-col gap-2 w-full border rounded-lg overflow-hidden">
           {/* List table */}
           <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center bg-gray-100 text-gray-800 font-semibold rounded-lg px-4 py-2 shadow-sm">
