@@ -42,7 +42,7 @@ const List = ({ token }) => {
     }
   };
 
-  const removeProduct = async (id) => {
+  const editProduct = async (id) => {
     try {
       const response = await axios.delete(API_delete, {
         headers: { Authorization: `Bearer ${token}` },

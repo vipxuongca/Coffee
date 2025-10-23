@@ -129,7 +129,6 @@ const updateProduct = async (req, res) => {
       subCategory,
       variants: variants ? JSON.parse(variants) : [],
       bestseller: bestseller === 'true' ? true : false, // because bestseller comes as a string, we want to convert to bool
-      image: imagesUrl
     }
 
     console.log(productData);
