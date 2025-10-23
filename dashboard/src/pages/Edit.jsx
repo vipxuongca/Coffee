@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendUrl } from "../App";
-import { toast } from "react-toastify";
 
-const Add = ({ token }) => {
+const Edit = () => {
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
@@ -12,35 +11,12 @@ const Add = ({ token }) => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("100000");
-  const [discount, setDiscount] = useState("0");
+  const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
-  const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [bestseller, setBestseller] = useState(false);
   const [variants, setVariants] = useState([]);
-  const [brand, setBrand] = useState("");
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${backendUrl}/api/category/get`);
-        if (response.data.success) {
-          const categories = response.data.category || []; // adjust key if needed
-          setCategoryList(categories);
-          if (categories.length > 0) {
-            setCategory(categories[0].name); // default to first item
-          }
-        } else {
-          console.error(response.data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-    fetchCategories();
-  }, []);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -48,41 +24,20 @@ const Add = ({ token }) => {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
-      formData.append("price", Number(price));
-      formData.append("discount", Number(discount));
-      formData.append("stock", Number(stock));
+      formData.append("price", price);
       formData.append("category", category);
       formData.append("subCategory", subCategory);
-      formData.append("variants", JSON.stringify(variants));
+      formData.append("variants", variants);
       formData.append("bestseller", bestseller);
-      formData.append("brand", brand);
 
       image1 && formData.append("image1", image1);
       image2 && formData.append("image2", image2);
       image3 && formData.append("image3", image3);
       image4 && formData.append("image4", image4);
 
-      const response = await axios.post(
-        backendUrl + "/api/product/add",
-        formData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (response.data.success) {
-        toast.success(response.data.message);
-        setName("");
-        setDescription("");
-        setImage1(false);
-        setImage2(false);
-        setImage3(false);
-        setImage4(false);
-        setPrice("");
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
+      const response = await axios.post(backendUrl + "/api/product/add");
+      console.log(response.data);
+    } catch (error) {}
   };
 
   return (
@@ -164,16 +119,7 @@ const Add = ({ token }) => {
             placeholder="Product Name"
           />
         </div>
-        <div className="w-full">
-          <p className="mb-2">Brand</p>
-          <input
-            onChange={(e) => setBrand(e.target.value)}
-            value={brand}
-            className="w-full max-w-[500px] px-3 py-2"
-            type="text"
-            placeholder="Brand"
-          />
-        </div>
+
         <div className="w-full">
           <p className="mb-2">Product Description</p>
           <textarea
@@ -193,11 +139,8 @@ const Add = ({ token }) => {
               onChange={(e) => setCategory(e.target.value)}
               value={category}
             >
-              {categoryList.map((cat) => (
-                <option key={cat._id} value={cat.name}>
-                  {cat.name}
-                </option>
-              ))}
+              <option value="Arabica">Arabica</option>
+              <option value="Robusta">Robusta</option>
             </select>
           </div>
 
@@ -208,44 +151,31 @@ const Add = ({ token }) => {
               onChange={(e) => setSubCategory(e.target.value)}
               value={subCategory}
             >
-              {categoryList.map((cat) => (
-                <option key={cat._id} value={cat.name}>
-                  {cat.name}
-                </option>
-              ))}
+              <option value="Roasted">d</option>
+              <option value="Raw">d</option>
             </select>
           </div>
-        </div>
-        <div>
-          <p className="mb-2">Price</p>
-          <input
-            onChange={(e) => setPrice(e.target.value)}
-            value={price}
-            className="w-full px-3 py-2 sm:w-[120px]"
-            type="number"
-            placeholder="0"
-          />
-        </div>
 
-        <div>
-          <p className="mb-2">Discount</p>
-          <input
-            onChange={(e) => setDiscount(e.target.value)}
-            value={discount}
-            className="w-full px-3 py-2 sm:w-[120px]"
-            type="number"
-            placeholder="0"
-          />
-        </div>
-        <div>
-          <p className="mb-2">Stock</p>
-          <input
-            onChange={(e) => setStock(e.target.value)}
-            value={stock}
-            className="w-full px-3 py-2 sm:w-[120px]"
-            type="number"
-            placeholder="0"
-          />
+          <div>
+            <p className="mb-2">Price</p>
+            <input
+              onChange={(e) => setPrice(e.target.value)}
+              value={price}
+              className="w-full px-3 py-2 sm:w-[120px]"
+              type="Number"
+              placeholder="0"
+            />
+          </div>
+          <div>
+            <p className="mb-2">Stock</p>
+            <input
+              onChange={(e) => setStock(e.target.value)}
+              value={stock}
+              className="w-full px-3 py-2 sm:w-[120px]"
+              type="Number"
+              placeholder="0"
+            />
+          </div>
         </div>
 
         <div>
@@ -259,13 +189,13 @@ const Add = ({ token }) => {
         </div>
 
         <div className="flex gap-2 mt-2">
-          <input
-            type="checkbox"
-            id="bestseller"
-            onChange={(e) => setBestseller(e.target.checked)}
+          <input type="checkbox" id="bestseller" />
+          <label
+            className="cursor-pointer"
+            htmlFor="bestseller"
+            onChange={(e) => setBestseller(e.target.value)}
             value={bestseller}
-          />
-          <label className="cursor-pointer" htmlFor="bestseller">
+          >
             Best seller toggle
           </label>
         </div>
@@ -281,4 +211,4 @@ const Add = ({ token }) => {
   );
 };
 
-export default Add;
+export default Edit;

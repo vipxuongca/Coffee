@@ -8,12 +8,9 @@ a.active hr {
   display: block;
 }
 
-* {
-  font-family: Outfit;
-}
 .main-font {
-  font-family: "Prata", serif;
-  font-weight: 400;
+  font-family: "Times New Roman", serif;
+  font-weight: 600;
   font-style: normal;
 }
 @media (max-width: 640px) {

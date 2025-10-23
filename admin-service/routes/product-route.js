@@ -13,7 +13,7 @@ router.post('/add', adminAuth, upload.fields([
 ]), addProduct);
 router.get('/get', getProducts);
 router.get('/fetch/:id', getOneProduct);
-router.put('/update', updateProduct);
+router.put('/update', adminAuth, updateProduct);
 router.delete('/delete', adminAuth, removeProduct);
 
 export default router;
