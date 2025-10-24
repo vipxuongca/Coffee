@@ -81,55 +81,47 @@ const Navbar = ({ token, setToken, backendCartUrl }) => {
 
       {/* Icons */}
       <div className="flex items-center gap-6">
-        <img
+        {/* Search */}
+        <button
           onClick={() => setShowSearch(true)}
-          src={assets.search_icon}
           className="w-5 cursor-pointer invert brightness-0 saturate-0"
-          alt="search"
-        />
+        >
+          <img src={assets.search_icon} alt="search" />
+        </button>
 
-        {/* Profile Dropdown */}
+        {/* Profile */}
         <div className="group relative">
-          <img
-            src={assets.profile_icon}
-            className="w-5 invert brightness-0 saturate-0"
-            alt="profile"
-          />
-          <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-            <div className="flex flex-col gap-1 w-36 py-2 px-2 bg-white text-stone-700 rounded-md shadow-lg border border-stone-200">
-              <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Tài Khoản
-              </p>
-              <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Đơn Hàng
-              </p>
-              <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Đăng Xuất
-              </p>
-            </div>
-          </div>
+          <Link to={!token ? "/login" : "/user"} className="relative">
+            <button className="w-5 invert brightness-0 saturate-0">
+              <img src={assets.profile_icon} alt="profile" />
+            </button>
+          </Link>
         </div>
 
-        {/* Cart Icon */}
-        <Link to={!token ? "/login" : "/cart"} className="relative">
-          <img
-            src={assets.cart_icon}
-            className="w-5 min-w-5 invert brightness-0 saturate-0"
-            alt="cart"
-          />
-          {token && cartCount > 0 && (
-            <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px]">
-              {cartCount}
-            </p>
-          )}
-        </Link>
+        {/* Cart */}
+<Link to={!token ? "/login" : "/cart"} className="relative inline-flex items-center justify-center">
+  <button className="relative w-5 min-w-5 flex items-center justify-center">
+    <img
+      src={assets.cart_icon}
+      alt="cart"
+      className="invert brightness-0 saturate-0"
+    />
+    {token && cartCount > 0 && (
+      <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px] z-10">
+        {cartCount}
+      </p>
+    )}
+  </button>
+</Link>
 
-        <img
+
+        {/* Menu */}
+        <button
           onClick={() => setVisible(true)}
-          src={assets.menu_icon}
           className="w-5 cursor-pointer sm:hidden invert brightness-0 saturate-0"
-          alt="menu"
-        />
+        >
+          <img src={assets.menu_icon} alt="menu" />
+        </button>
       </div>
 
       {/* Sidebar menu for small screens */}
