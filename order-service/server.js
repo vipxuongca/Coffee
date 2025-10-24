@@ -40,8 +40,11 @@ connectDB();
 app.use(bodyParser.json());
 
 // Routes listing
+// POST /api/order/create
 app.use('/api/order/create', orderCreate);
+// GET /api/order/get-one/:orderId
 app.use('/api/order/get-one', orderGetOne);
+// GET /api/order/get-user (via token)
 app.use('/api/order/get-user', orderGetUser);
 
 //listen
