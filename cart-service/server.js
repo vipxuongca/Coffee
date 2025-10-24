@@ -22,7 +22,7 @@ import cartClearRoutes from './routes/cart-clear.js';
 
 //initialisation
 const app = express();
-const PORT = process.env.PORT || 6002;
+const PORT = process.env.PORT ||4003;
 const allowedOrigins = process.env.ALLOWED_ORIGIN
   ? process.env.ALLOWED_ORIGIN.split(',').map(o => o.trim())
   : [];

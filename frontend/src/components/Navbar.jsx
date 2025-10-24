@@ -67,13 +67,13 @@ const Navbar = ({ token, setToken }) => {
           <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
             <div className="flex flex-col gap-1 w-36 py-2 px-2 bg-white text-stone-700 rounded-md shadow-lg border border-stone-200">
               <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Profile
+                Tài Khoản
               </p>
               <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Orders
+                Đơn Hàng
               </p>
               <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Logout
+                Đăng Xuất
               </p>
             </div>
           </div>

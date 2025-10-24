@@ -266,7 +266,7 @@ const Add = ({ token }) => {
             value={bestseller}
           />
           <label className="cursor-pointer" htmlFor="bestseller">
-            Best seller toggle
+            Hàng Bán Chạy
           </label>
         </div>
 
