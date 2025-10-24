@@ -1,13 +1,44 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { NavLink, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import axios from "axios";
 
-const Navbar = ({ token, setToken }) => {
+const Navbar = ({ token, setToken, backendCartUrl }) => {
   const baseClass = "flex flex-col items-center gap-1 group";
   const [visible, setVisible] = useState(false);
   const { setShowSearch } = useContext(ShopContext);
-  const { cartCount } = useContext(ShopContext);
+  const { cartCount, setCartCount } = useContext(ShopContext);
+
+  const cartCountItem = async () => {
+    try {
+      const res = await axios.get(`http://localhost:4003/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const cart = res.data;
+      // Sum quantity of all items
+      const totalItems = cart.items.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+
+      return totalItems;
+    } catch (err) {
+      console.error("error counting cart");
+      return 0;
+    }
+  };
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      if (!token) return;
+      const count = await cartCountItem(token);
+      setCartCount(count);
+    };
+
+    fetchCartCount();
+  }, [token]);
 
   return (
     <div className="flex items-center justify-between py-3 px-4 md:px-8 font-serif sticky top-0 z-50 bg-[#3e2723] text-white shadow-lg">

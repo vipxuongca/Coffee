@@ -17,6 +17,7 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [cartCount, setCartCount] = useState(0);
+  
   const getProductsData = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/product/get`);
@@ -44,12 +45,16 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  
+
   useEffect(() => {
     getProductsData();
   }, []);
   useEffect(() => {
     getCategoriesData();
   }, []);
+
+
 
   const value = {
     products,
