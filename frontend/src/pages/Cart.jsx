@@ -1,41 +1,88 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Sản phẩm A",
-      price: 120000,
-      quantity: 1,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      id: 2,
-      name: "Sản phẩm B",
-      price: 85000,
-      quantity: 2,
-      image: "https://via.placeholder.com/80",
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token") || "";
 
-  const increaseQty = (id) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
+  // Fetch cart data
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const res = await axios.get("http://localhost:4003/api/cart", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = res.data.items.map((item) => ({
+          id: item._id,
+          productId: item.product.product._id,
+          name: item.product.product.name,
+          price: item.product.product.price,
+          quantity: item.quantity,
+          image: item.product.product.image[0],
+        }));
+
+        setCartItems(data);
+      } catch (err) {
+        console.error("Error fetching cart:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) fetchCart();
+  }, [token]);
+
+  // Increase quantity (+)
+  const increaseQty = async (id) => {
+    try {
+      const item = cartItems.find((i) => i.id === id);
+      if (!item) return;
+
+      // Optimistic UI update
+      setCartItems((prev) =>
+        prev.map((i) => (i.id === id ? { ...i, quantity: i.quantity + 1 } : i))
+      );
+
+      // Backend call (productId in URL)
+      await axios.put(
+        `http://localhost:4003/api/cart/update/${item.productId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    } catch (err) {
+      console.error("Error increasing quantity:", err);
+    }
   };
 
-  const decreaseQty = (id) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
+  // Decrease quantity (-)
+  const decreaseQty = async (id) => {
+    try {
+      const item = cartItems.find((i) => i.id === id);
+      if (!item || item.quantity <= 1) return;
+
+      // Optimistic UI update
+      setCartItems((prev) =>
+        prev.map((i) => (i.id === id ? { ...i, quantity: i.quantity - 1 } : i))
+      );
+
+      // Backend call (productId in URL)
+      await axios.put(
+        `http://localhost:4003/api/cart/update/decrease/${item.productId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    } catch (err) {
+      console.error("Error decreasing quantity:", err);
+    }
   };
 
+  // Manual quantity change (optional)
   const handleQtyChange = (id, value) => {
     const qty = parseInt(value, 10);
     if (!isNaN(qty) && qty > 0) {
@@ -45,14 +92,42 @@ const Cart = () => {
     }
   };
 
-  const removeItem = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  // Remove item
+  const removeItem = async (id) => {
+    try {
+      const item = cartItems.find((i) => i.id === id);
+      if (!item) return;
+
+      setCartItems((prev) => prev.filter((i) => i.id !== id));
+
+      await axios.delete(
+        `http://localhost:4003/api/cart/remove/${item.productId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    } catch (err) {
+      console.error("Error removing item from cart:", err);
+    }
+  };
+
+  const clearCart = async () => {
+    try {
+      await axios.delete("http://localhost:4003/api/cart/clear", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCartItems([]); // Clear UI
+    } catch (err) {
+      console.error("Error clearing cart:", err);
+    }
   };
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  if (loading) return <p className="text-center p-6">Đang tải...</p>;
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -67,20 +142,19 @@ const Cart = () => {
               key={item.id}
               className="flex items-center justify-between bg-white shadow-md rounded-xl p-4"
             >
-              {/* Product image */}
               <img
                 src={item.image}
                 alt={item.name}
                 className="w-20 h-20 object-cover rounded-lg mr-4"
               />
 
-              {/* Product details */}
               <div className="flex-1">
                 <h2 className="font-semibold">{item.name}</h2>
-                <p className="text-gray-600 text-sm">{item.price}₫</p>
+                <p className="text-gray-600 text-sm">
+                  {item.price.toLocaleString()}₫
+                </p>
               </div>
 
-              {/* Quantity controls */}
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => decreaseQty(item.id)}
@@ -103,7 +177,6 @@ const Cart = () => {
                 </button>
               </div>
 
-              {/* Total + remove */}
               <div className="flex items-center space-x-4 ml-6">
                 <p className="font-semibold w-20 text-right">
                   {(item.price * item.quantity).toLocaleString()}₫
@@ -118,14 +191,21 @@ const Cart = () => {
             </div>
           ))}
 
-          {/* Cart total */}
           <div className="text-right mt-6 border-t pt-4">
             <p className="text-lg font-semibold">
               Tổng cộng: {total.toLocaleString()}₫
             </p>
-            <button className="mt-4 bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800">
-              Thanh toán
-            </button>
+            <div className="mt-4 space-x-3">
+              <button
+                onClick={clearCart}
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+              >
+                Xóa toàn bộ
+              </button>
+              <button className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800">
+                Thanh toán
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -20,7 +20,7 @@ router.get('/', verifyToken, async (req, res) => {
     const itemsWithDetails = await Promise.all(
       cart.items.map(async (item) => {
         try {
-          const fetchURI = `${process.env.PRODUCT_API}/${item.productId}`;
+          const fetchURI = `${process.env.PRODUCT_GET_ONE}/${item.productId}`;
           const productRes = await axios.get(fetchURI);
           console.log('Fetched product:', productRes.data);
           return {
