@@ -22,7 +22,7 @@ router.get('/', verifyToken, async (req, res) => {
         try {
           const fetchURI = `${process.env.PRODUCT_GET_ONE}/${item.productId}`;
           const productRes = await axios.get(fetchURI);
-          console.log('Fetched product:', productRes.data);
+          // console.log('Fetched product:', productRes.data);
           return {
             ...item.toObject(),
             product: productRes.data
