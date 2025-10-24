@@ -81,44 +81,47 @@ const Navbar = ({ token, setToken, backendCartUrl }) => {
 
       {/* Icons */}
       <div className="flex items-center gap-6">
-        <img
+        {/* Search */}
+        <button
           onClick={() => setShowSearch(true)}
-          src={assets.search_icon}
           className="w-5 cursor-pointer invert brightness-0 saturate-0"
-          alt="search"
-        />
+        >
+          <img src={assets.search_icon} alt="search" />
+        </button>
 
-        {/* Profile*/}
+        {/* Profile */}
         <div className="group relative">
           <Link to={!token ? "/login" : "/user"} className="relative">
-            <img
-              src={assets.profile_icon}
-              className="w-5 invert brightness-0 saturate-0"
-              alt="profile"
-            />
+            <button className="w-5 invert brightness-0 saturate-0">
+              <img src={assets.profile_icon} alt="profile" />
+            </button>
           </Link>
         </div>
 
-        {/* Cart Icon */}
-        <Link to={!token ? "/login" : "/cart"} className="relative">
-          <img
-            src={assets.cart_icon}
-            className="w-5 min-w-5 invert brightness-0 saturate-0"
-            alt="cart"
-          />
-          {token && cartCount > 0 && (
-            <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px]">
-              {cartCount}
-            </p>
-          )}
-        </Link>
+        {/* Cart */}
+<Link to={!token ? "/login" : "/cart"} className="relative inline-flex items-center justify-center">
+  <button className="relative w-5 min-w-5 flex items-center justify-center">
+    <img
+      src={assets.cart_icon}
+      alt="cart"
+      className="invert brightness-0 saturate-0"
+    />
+    {token && cartCount > 0 && (
+      <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px] z-10">
+        {cartCount}
+      </p>
+    )}
+  </button>
+</Link>
 
-        <img
+
+        {/* Menu */}
+        <button
           onClick={() => setVisible(true)}
-          src={assets.menu_icon}
           className="w-5 cursor-pointer sm:hidden invert brightness-0 saturate-0"
-          alt="menu"
-        />
+        >
+          <img src={assets.menu_icon} alt="menu" />
+        </button>
       </div>
 
       {/* Sidebar menu for small screens */}
