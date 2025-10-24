@@ -7,15 +7,25 @@ import {
   deleteDetail,
   setDefaultDetail,
 } from "../controllers/user-detail-controller.js";
+import { verifyToken } from "../middleware/user-auth.js"
 
 const router = express.Router();
 
+// all user details must be accommodated with a middleware
+
 // /api/user-detail
-router.post("/", addDetail);
-router.get("/:userId", getAllDetails);
-router.get("/default/:userId", getDefaultDetail);
-router.put("/:id", updateDetail);
-router.delete("/:id", deleteDetail);
-router.patch("/:id/default", setDefaultDetail);
+router.post("/", verifyToken, addDetail);
+/*
+payload: 
+{
+
+}
+*/
+
+router.get("/", verifyToken, getAllDetails);
+router.get("/default", verifyToken, getDefaultDetail);
+router.put("/", verifyToken, updateDetail);
+router.delete("/", verifyToken, deleteDetail);
+router.patch("/default", verifyToken, setDefaultDetail);
 
 export default router;
