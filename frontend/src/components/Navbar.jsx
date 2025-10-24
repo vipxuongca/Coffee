@@ -88,26 +88,15 @@ const Navbar = ({ token, setToken, backendCartUrl }) => {
           alt="search"
         />
 
-        {/* Profile Dropdown */}
+        {/* Profile*/}
         <div className="group relative">
-          <img
-            src={assets.profile_icon}
-            className="w-5 invert brightness-0 saturate-0"
-            alt="profile"
-          />
-          <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-            <div className="flex flex-col gap-1 w-36 py-2 px-2 bg-white text-stone-700 rounded-md shadow-lg border border-stone-200">
-              <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Tài Khoản
-              </p>
-              <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Đơn Hàng
-              </p>
-              <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Đăng Xuất
-              </p>
-            </div>
-          </div>
+          <Link to={!token ? "/login" : "/user"} className="relative">
+            <img
+              src={assets.profile_icon}
+              className="w-5 invert brightness-0 saturate-0"
+              alt="profile"
+            />
+          </Link>
         </div>
 
         {/* Cart Icon */}
