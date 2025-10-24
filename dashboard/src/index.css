@@ -2,12 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-  font-family: Georgia, 'Times New Roman', Times, serif;
-}
 
-select,input, textarea {
-  border:1px solid;
+select,
+input,
+textarea {
+  border: 1px solid;
   outline-color: brown;
   border-radius: 4px;
 }

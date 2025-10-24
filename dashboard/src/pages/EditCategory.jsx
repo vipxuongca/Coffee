@@ -196,7 +196,7 @@ const Edit = () => {
             onChange={(e) => setBestseller(e.target.value)}
             value={bestseller}
           >
-            Best seller toggle
+            Hàng Bán Chạy
           </label>
         </div>
 

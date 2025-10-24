@@ -1,12 +1,44 @@
-import React from "react";
+import { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { NavLink, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import axios from "axios";
 
-const Navbar = () => {
+const Navbar = ({ token, setToken, backendCartUrl }) => {
   const baseClass = "flex flex-col items-center gap-1 group";
-  const [visible, setVisible] = React.useState(false);
-  const { setShowSearch } = React.useContext(ShopContext);
+  const [visible, setVisible] = useState(false);
+  const { setShowSearch } = useContext(ShopContext);
+  const { cartCount, setCartCount } = useContext(ShopContext);
+
+  const cartCountItem = async () => {
+    try {
+      const res = await axios.get(`http://localhost:4003/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const cart = res.data;
+      // Sum quantity of all items
+      const totalItems = cart.items.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+
+      return totalItems;
+    } catch (err) {
+      console.error("error counting cart");
+      return 0;
+    }
+  };
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      if (!token) return;
+      const count = await cartCountItem(token);
+      setCartCount(count);
+    };
+
+    fetchCartCount();
+  }, [token]);
 
   return (
     <div className="flex items-center justify-between py-3 px-4 md:px-8 font-serif sticky top-0 z-50 bg-[#3e2723] text-white shadow-lg">
@@ -27,7 +59,6 @@ const Navbar = () => {
         <ul className="hidden sm:flex gap-6 text-base">
           {[
             { name: "TRANG CHỦ", path: "/" },
-            // { name: "PRODUCT", path: "/product" },
             { name: "CỬA HÀNG", path: "/shop" },
             { name: "GIỚI THIỆU", path: "/about" },
             { name: "LIÊN HỆ", path: "/contact" },
@@ -67,29 +98,32 @@ const Navbar = () => {
           <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
             <div className="flex flex-col gap-1 w-36 py-2 px-2 bg-white text-stone-700 rounded-md shadow-lg border border-stone-200">
               <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Profile
+                Tài Khoản
               </p>
               <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Orders
+                Đơn Hàng
               </p>
               <p className="cursor-pointer hover:text-black hover:bg-stone-100 rounded px-3 py-1">
-                Logout
+                Đăng Xuất
               </p>
             </div>
           </div>
         </div>
 
         {/* Cart Icon */}
-        <Link to="/cart" className="relative">
+        <Link to={!token ? "/login" : "/cart"} className="relative">
           <img
             src={assets.cart_icon}
             className="w-5 min-w-5 invert brightness-0 saturate-0"
             alt="cart"
           />
-          <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px]">
-            10
-          </p>
+          {token && cartCount > 0 && (
+            <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px]">
+              {cartCount}
+            </p>
+          )}
         </Link>
+
         <img
           onClick={() => setVisible(true)}
           src={assets.menu_icon}
@@ -118,11 +152,10 @@ const Navbar = () => {
           </div>
 
           {[
-            { name: "HOME", path: "/" },
-            { name: "COLLECTION", path: "/collection" },
-            { name: "ABOUT", path: "/about" },
-            { name: "CONTACT", path: "/contact" },
-            { name: "PRODUCT", path: "/product" },
+            { name: "TRANG CHỦ", path: "/" },
+            { name: "CỬA HÀNG", path: "/shop" },
+            { name: "GIỚI THIỆU", path: "/about" },
+            { name: "LIÊN HỆ", path: "/contact" },
           ].map((item) => (
             <NavLink
               key={item.name}

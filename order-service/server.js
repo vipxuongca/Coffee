@@ -19,7 +19,7 @@ import orderGetUser from './routes/orders/order-get-user.js';
 
 //initialisation
 const app = express();
-const PORT = process.env.PORT || 6006;
+const PORT = process.env.PORT || 4004;
 const allowedOrigins = process.env.ALLOWED_ORIGIN
   ? process.env.ALLOWED_ORIGIN.split(',').map(o => o.trim())
   : [];

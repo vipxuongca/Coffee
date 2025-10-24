@@ -3,13 +3,34 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import RelatedProducts from "../components/RelatedProducts";
 import { assets } from "../assets/assets";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const Product = () => {
+const Product = ({ token }) => {
   const { productId } = useParams();
-  const { products, currency } = useContext(ShopContext);
+  const { products, currency, backendCartUrl } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
-  const [variants, setVariants] = useState("");
+  const [quantity, setQuantity] = useState(1); // quantity state
+
+  const cartAdd = async (productId, quantity) => {
+    try {
+      const res = await axios.post(
+        `${backendCartUrl}/api/cart/add/${productId}`,
+        { quantity },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Cart updated:", res.data);
+      toast.success("Thêm vào giỏ hàng thành công");
+    } catch (err) {
+      toast.error("Có lỗi xảy ra");
+      console.error("cartAPI error:", err.response?.data || err.message);
+    }
+  };
 
   useEffect(() => {
     if (!productId || !Array.isArray(products) || products.length === 0) return;
@@ -19,6 +40,16 @@ const Product = () => {
       setImage(Array.isArray(item.image) ? item.image[0] : item.image || "");
     }
   }, [products, productId]);
+
+  const handleAddToCart = async () => {
+    if (!productData || !productData._id) return;
+    try {
+      await cartAdd(productData._id, quantity); // your API call
+      console.log("Attempt to cart:", productData._id, "Qty:", quantity);
+    } catch (error) {
+      console.error("Add to cart failed:", error);
+    }
+  };
 
   if (!productData) {
     return (
@@ -30,11 +61,9 @@ const Product = () => {
 
   return (
     <div className="border-t pt-10 px-4 sm:px-10 transition-opacity ease-in duration-500 opacity-100">
-      {/* Product Section */}
       <div className="flex flex-col sm:flex-row gap-10">
-        {/* Image Gallery */}
+        {/* Image Section */}
         <div className="flex-1 flex flex-col sm:flex-row gap-4">
-          {/* Thumbnails */}
           <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-auto gap-2 sm:w-[18%] w-full">
             {productData.image.map((item, index) => (
               <img
@@ -48,8 +77,6 @@ const Product = () => {
               />
             ))}
           </div>
-
-          {/* Main Image */}
           <div className="w-full sm:w-[80%] flex justify-center">
             <img
               className="w-full max-h-[600px] object-contain rounded-2xl shadow-md transition-transform duration-300 hover:scale-105"
@@ -65,7 +92,6 @@ const Product = () => {
             {productData.name}
           </h1>
 
-          {/* Rating */}
           <div className="flex items-center gap-1 mt-3">
             {[...Array(5)].map((_, i) => (
               <img
@@ -78,45 +104,51 @@ const Product = () => {
             <p className="pl-2 text-gray-600 text-sm">(120 reviews)</p>
           </div>
 
-          {/* Price */}
           <p className="mt-5 text-3xl font-semibold text-gray-900">
             {productData.price.toLocaleString()}
             {currency}
           </p>
 
-          {/* Description */}
           <p className="mt-5 text-gray-600 leading-relaxed">
             {productData.description}
           </p>
 
-          {/* Variants */}
           <div className="mt-8">
-            <p className="font-medium mb-2 text-sm">Variant</p>
-            {/* Placeholder for variants */}
-            {/* Uncomment if needed */}
-            {/* <div className="flex gap-2">
-              {productData.variants.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => setVariants(item)}
-                  className={`px-4 py-2 border rounded-md text-sm transition ${
-                    variants === item
-                      ? "border-black bg-gray-100"
-                      : "border-gray-300 hover:border-gray-500"
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </div> */}
+            <p className="font-medium mb-2 text-gray-450 text-sm">
+              {productData.stock} sản phẩm có sẵn
+            </p>
+          </div>
+
+          {/* Quantity Selector */}
+          <div className="mt-4 flex items-center gap-3">
+            <span className="text-sm text-gray-700 font-medium">Số lượng:</span>
+            <div className="flex items-center border rounded-lg w-fit">
+              <button
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                className="px-3 py-1 text-gray-700 hover:bg-gray-100"
+              >
+                -
+              </button>
+              <span className="px-4 text-gray-800 select-none">{quantity}</span>
+              <button
+                onClick={() =>
+                  setQuantity((q) => Math.min(productData.stock || 99, q + 1))
+                }
+                className="px-3 py-1 text-gray-700 hover:bg-gray-100"
+              >
+                +
+              </button>
+            </div>
           </div>
 
           {/* Add to Cart */}
-          <button className="mt-8 w-fit bg-black text-white px-10 py-3 text-sm rounded-lg shadow hover:bg-gray-800 active:scale-95 transition-transform duration-100">
-            ADD TO CART
+          <button
+            onClick={handleAddToCart}
+            className="mt-8 w-fit bg-[#3e2723] text-white px-10 py-3 text-sm rounded-lg shadow hover:bg-gray-800 active:scale-95 transition-transform duration-100"
+          >
+            THÊM VÀO GIỎ
           </button>
 
-          {/* Extra Info */}
           <div className="mt-8 text-sm text-gray-500 border-t pt-4 space-y-1">
             <p>Ngon</p>
             <p>Bổ</p>
