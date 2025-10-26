@@ -8,8 +8,8 @@ const router = express.Router();
 // POST /api/order/create
 router.post("/", verifyToken, async (req, res) => {
   try {
-    const { items } = req.body;
-    const token = req.headers.authorization.split(" ")[1];
+    const { items, paymentMethod, notes } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
@@ -19,17 +19,59 @@ router.post("/", verifyToken, async (req, res) => {
     }
 
     const orderData = await buildOrderData(items, token);
-    console.log(orderData);
+    if (!orderData?.user || !orderData?.userDetail || !orderData?.products) {
+      return res.status(400).json({
+        success: false,
+        message: "Failed to build order data",
+      });
+    }
 
-    // await orderData.save();
+    // Calculate total (sum of item price * quantity)
+    const total = orderData.products.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+
+    const newOrder = new Order({
+      userId: orderData.user._id,
+      userEmail: orderData.user.email,
+      userDetail: {
+        receiverName: orderData.userDetail.receiverName,
+        phone: orderData.userDetail.phone,
+        addressLine1: orderData.userDetail.addressLine1,
+        city: orderData.userDetail.city,
+        state: orderData.userDetail.state,
+        country: orderData.userDetail.country,
+        postalCode: orderData.userDetail.postalCode,
+      },
+      items: orderData.products.map((p) => ({
+        productId: p._id,
+        name: p.name,
+        description: p.description,
+        image: p.image,
+        category: p.category,
+        subCategory: p.subCategory,
+        variant: p.variant,
+        brand: p.brand,
+        discount: p.discount,
+        quantity: p.quantity,
+        price: p.price,
+      })),
+      total,
+      paymentMethod: paymentMethod || "COD",
+      shippingFee: 0,
+      notes: notes || "",
+      status: "PENDING_PAYMENT",
+    });
+
+    await newOrder.save();
 
     res.status(201).json({
       success: true,
       message: "Order created successfully",
-      id: order._id,
-      status: order.status
+      orderId: newOrder._id,
+      status: newOrder.status,
     });
-
   } catch (err) {
     console.error("Order creation error:", err);
     res.status(500).json({

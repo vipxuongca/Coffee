@@ -30,7 +30,8 @@ const orderUserSchema = new mongoose.Schema({
 // --- Order Schema ---
 const orderSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
+    userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    userEmail: { type: String, required: true },
     userDetail: { type: orderUserSchema, required: true },
     items: { type: [orderItemSchema], required: true },
 
