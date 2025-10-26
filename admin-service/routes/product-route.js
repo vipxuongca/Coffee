@@ -5,6 +5,7 @@ import adminAuth from '../middleware/admin-auth.js';
 
 const router = express.Router();
 
+// http://locahost:4000/api/product
 router.post('/add', adminAuth, upload.fields([
   { name: "image1", maxCount: 1 },
   { name: "image2", maxCount: 1 },

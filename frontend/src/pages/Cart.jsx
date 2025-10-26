@@ -5,6 +5,7 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token") || "";
+  // const [selectedItems, setSelectedItems] = useState([]);
 
   // Fetch cart data
   useEffect(() => {
@@ -84,8 +85,8 @@ const Cart = () => {
 
   // Manual quantity change (optional)
   const handleQtyChange = (id, value) => {
-    const qty = parseInt(value, 10);
-    if (!isNaN(qty) && qty > 0) {
+    const qty = Number.parseInt(value, 10);
+    if (!Number.isNaN(qty) && qty > 0) {
       setCartItems((prev) =>
         prev.map((item) => (item.id === id ? { ...item, quantity: qty } : item))
       );
@@ -119,6 +120,42 @@ const Cart = () => {
       setCartItems([]); // Clear UI
     } catch (err) {
       console.error("Error clearing cart:", err);
+    }
+  };
+
+  const handleOrderPlacement = async (token) => {
+    try {
+      if (!token) return alert("Bạn cần đăng nhập để đặt hàng.");
+
+      // Everything in cart = selected items
+      const orderPayload = {
+        items: cartItems.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+      };
+
+      const res = await axios.post(
+        "http://localhost:4004/api/order/create",
+        orderPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        alert("Đặt hàng thành công!");
+        setCartItems([]); // Optional: clear cart after success
+      } else {
+        alert(
+          "Đặt hàng thất bại: " + (res.data.message || "Lỗi không xác định.")
+        );
+      }
+    } catch (err) {
+      console.error("Error placing order:", err);
+      alert("Không thể đặt hàng. Vui lòng thử lại sau.");
     }
   };
 
@@ -202,7 +239,10 @@ const Cart = () => {
               >
                 Xóa toàn bộ
               </button>
-              <button className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800">
+              <button
+                className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800"
+                onClick={handleOrderPlacement}
+              >
                 Thanh toán
               </button>
             </div>

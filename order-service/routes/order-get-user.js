@@ -1,6 +1,6 @@
 import express from 'express';
-import OrderModel from '../../models/order-model.js';
-import { verifyToken } from '../../controllers/auth/jwt-verify.js';
+import OrderModel from '../models/order-model.js';
+import { verifyToken } from '../controllers/jwt-verify.js';
 import axios from 'axios';
 
 const router = express.Router();

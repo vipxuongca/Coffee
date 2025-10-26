@@ -3,6 +3,7 @@ import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '1d',
@@ -47,7 +48,7 @@ const registerUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     // Validation
-    if ( !email || !password) {
+    if (!email || !password) {
       return res.status(400).json({ message: 'Xin nhập tất cả các trường' });
     }
 
@@ -83,4 +84,31 @@ const registerUser = async (req, res) => {
   }
 }
 
-export { loginUser, registerUser };
+const singleUser = async (req, res) => {
+  try {
+    const user = await userModel.findOne({ _id: req.user.id }).select('-password');
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Tài khoản không tồn tại',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Sucessfully extract information',
+      data: user,
+    });
+
+  } catch (error) {
+    console.error('Lỗi:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: error.message,
+    });
+  }
+};
+
+export { loginUser, registerUser, singleUser };
