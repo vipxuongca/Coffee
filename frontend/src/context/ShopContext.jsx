@@ -17,7 +17,13 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [cartCount, setCartCount] = useState(0);
-  
+
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+
+  useEffect(() => {
+    localStorage.setItem("token", token);
+  }, [token]);
+
   const getProductsData = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/product/get`);
@@ -44,8 +50,26 @@ const ShopContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+  const fetchCartCount = async () => {
+    if (!token) return;
+    try {
+      const res = await axios.get(`${backendCartUrl}/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const totalItems = res.data.items.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+      setCartCount(totalItems);
+    } catch (err) {
+      console.error("Failed to fetch cart count:", err.message);
+      setCartCount(0);
+    }
+  };
 
-  
+  useEffect(() => {
+    fetchCartCount();
+  }, [token]);
 
   useEffect(() => {
     getProductsData();
@@ -53,8 +77,6 @@ const ShopContextProvider = (props) => {
   useEffect(() => {
     getCategoriesData();
   }, []);
-
-
 
   const value = {
     products,
@@ -69,6 +91,9 @@ const ShopContextProvider = (props) => {
     backendCartUrl,
     backendOrderUrl,
     backendUserUrl,
+    fetchCartCount,
+    token,
+    setToken,
     cartCount,
     setCartCount,
   };

@@ -4,10 +4,10 @@ import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ setToken }) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { backendUserUrl } = useContext(ShopContext);
+  const { backendUserUrl, setToken } = useContext(ShopContext);
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {

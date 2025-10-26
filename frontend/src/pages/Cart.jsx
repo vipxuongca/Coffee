@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { ShopContext } from "../context/ShopContext";
 
-const Cart = ({ token }) => {
+const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { token, fetchCartCount } = useContext(ShopContext);
+
   // const [selectedItems, setSelectedItems] = useState([]);
 
   // Fetch cart data
@@ -18,7 +21,7 @@ const Cart = ({ token }) => {
         });
 
         const data = res.data.items.map((item) => ({
-          id: item._id,
+          cartId: item._id,
           productId: item.product.product._id,
           name: item.product.product.name,
           price: item.product.product.price,
@@ -38,14 +41,14 @@ const Cart = ({ token }) => {
   }, [token]);
 
   // Increase quantity (+)
-  const increaseQty = async (id) => {
+  const increaseQty = async (cartId) => {
     try {
-      const item = cartItems.find((i) => i.id === id);
+      const item = cartItems.find((i) => i.cartId === cartId);
       if (!item) return;
 
       // Optimistic UI update
       setCartItems((prev) =>
-        prev.map((i) => (i.id === id ? { ...i, quantity: i.quantity + 1 } : i))
+        prev.map((i) => (i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i))
       );
 
       // Backend call (productId in URL)
@@ -56,20 +59,21 @@ const Cart = ({ token }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      await fetchCartCount();
     } catch (err) {
       console.error("Error increasing quantity:", err);
     }
   };
 
   // Decrease quantity (-)
-  const decreaseQty = async (id) => {
+  const decreaseQty = async (cartId) => {
     try {
-      const item = cartItems.find((i) => i.id === id);
+      const item = cartItems.find((i) => i.cartId === cartId);
       if (!item || item.quantity <= 1) return;
 
       // Optimistic UI update
       setCartItems((prev) =>
-        prev.map((i) => (i.id === id ? { ...i, quantity: i.quantity - 1 } : i))
+        prev.map((i) => (i.cartId === cartId ? { ...i, quantity: i.quantity - 1 } : i))
       );
 
       // Backend call (productId in URL)
@@ -80,28 +84,29 @@ const Cart = ({ token }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      await fetchCartCount();
     } catch (err) {
       console.error("Error decreasing quantity:", err);
     }
   };
 
   // Manual quantity change (optional)
-  const handleQtyChange = (id, value) => {
+  const handleQtyChange = (cartId, value) => {
     const qty = Number.parseInt(value, 10);
     if (!Number.isNaN(qty) && qty > 0) {
       setCartItems((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, quantity: qty } : item))
+        prev.map((item) => (item.cartId === cartId ? { ...item, quantity: qty } : item))
       );
     }
   };
 
   // Remove item
-  const removeItem = async (id) => {
+  const removeItem = async (cartId) => {
     try {
-      const item = cartItems.find((i) => i.id === id);
+      const item = cartItems.find((i) => i.cartId === cartId);
       if (!item) return;
 
-      setCartItems((prev) => prev.filter((i) => i.id !== id));
+      setCartItems((prev) => prev.filter((i) => i.cartId !== cartId));
 
       await axios.delete(
         `http://localhost:4003/api/cart/remove/${item.productId}`,
@@ -109,6 +114,7 @@ const Cart = ({ token }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      await fetchCartCount();
     } catch (err) {
       console.error("Error removing item from cart:", err);
     }
@@ -120,6 +126,7 @@ const Cart = ({ token }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCartItems([]); // Clear UI
+      await fetchCartCount();
     } catch (err) {
       console.error("Error clearing cart:", err);
     }
@@ -181,25 +188,29 @@ const Cart = ({ token }) => {
         <div className="space-y-4">
           {cartItems.map((item) => (
             <div
-              key={item.id}
+              key={item.cartId}
               className="flex items-center justify-between bg-white shadow-md rounded-xl p-4"
             >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-20 h-20 object-cover rounded-lg mr-4"
-              />
+              <Link to={"/product/" + item.productId}>
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-20 h-20 object-cover rounded-lg mr-4"
+                />
+              </Link>
 
               <div className="flex-1">
-                <h2 className="font-semibold">{item.name}</h2>
-                <p className="text-gray-600 text-sm">
-                  {item.price.toLocaleString()}₫
-                </p>
+                <Link to={"/product/" + item.productId}>
+                  <h2 className="font-semibold">{item.name}</h2>
+                  <p className="text-gray-600 text-sm">
+                    {item.price.toLocaleString()}₫
+                  </p>
+                </Link>
               </div>
 
               <div className="flex items-center space-x-3">
                 <button
-                  onClick={() => decreaseQty(item.id)}
+                  onClick={() => decreaseQty(item.cartId)}
                   className="bg-gray-200 rounded-full w-7 h-7 text-center"
                 >
                   -
@@ -208,11 +219,11 @@ const Cart = ({ token }) => {
                   type="number"
                   min="1"
                   value={item.quantity}
-                  onChange={(e) => handleQtyChange(item.id, e.target.value)}
+                  onChange={(e) => handleQtyChange(item.cartId, e.target.value)}
                   className="w-12 text-center border rounded-md"
                 />
                 <button
-                  onClick={() => increaseQty(item.id)}
+                  onClick={() => increaseQty(item.cartId)}
                   className="bg-gray-200 rounded-full w-7 h-7 text-center"
                 >
                   +
@@ -224,7 +235,7 @@ const Cart = ({ token }) => {
                   {(item.price * item.quantity).toLocaleString()}₫
                 </p>
                 <button
-                  onClick={() => removeItem(item.id)}
+                  onClick={() => removeItem(item.cartId)}
                   className="text-red-500 hover:underline text-sm"
                 >
                   Xóa

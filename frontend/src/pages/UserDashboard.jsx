@@ -24,15 +24,14 @@ const UserDashboard = () => {
     fetchUser();
   }, [token]);
 
-  if (loading)
-    return <div className="p-6 text-gray-600">Loading dashboard...</div>;
+  if (loading) return <div className="p-6 text-gray-600">Đang Tải...</div>;
 
   const renderContent = () => {
     switch (activeTab) {
       case "profile":
         return (
           <div className="bg-white shadow rounded-2xl p-6">
-            <h2 className="text-xl font-semibold mb-3">Profile Details</h2>
+            <h2 className="text-xl font-semibold mb-3">Thông tin Tài Khoản</h2>
             <p>
               <strong>Name:</strong> {userDetail?.name}
             </p>
@@ -44,7 +43,7 @@ const UserDashboard = () => {
       case "shipping":
         return (
           <div className="bg-white shadow rounded-2xl p-6">
-            <h2 className="text-xl font-semibold mb-4">Shipping Details</h2>
+            <h2 className="text-xl font-semibold mb-4">Thông Tin Người Nhận</h2>
 
             {userDetail?.data?.length > 0 ? (
               <table className="min-w-full border border-gray-200 text-sm">
@@ -86,7 +85,9 @@ const UserDashboard = () => {
                 </tbody>
               </table>
             ) : (
-              <p className="text-gray-600">No shipping details found.</p>
+              <p className="text-gray-600">
+                Không tìm thấy thông tin người nhận.
+              </p>
             )}
           </div>
         );
@@ -94,23 +95,28 @@ const UserDashboard = () => {
       case "password":
         return (
           <div className="bg-white shadow rounded-2xl p-6">
-            <h2 className="text-xl font-semibold mb-3">Change Password</h2>
+            <h2 className="text-xl font-semibold mb-3">Thay Đổi Mật Khẩu</h2>
             <form className="space-y-3 max-w-sm">
               <input
                 type="password"
-                placeholder="Current Password"
+                placeholder="Mật Khẩu Hiện Tại"
                 className="w-full border rounded-lg p-2"
               />
               <input
                 type="password"
-                placeholder="New Password"
+                placeholder="Mật Khẩu Mới"
+                className="w-full border rounded-lg p-2"
+              />
+              <input
+                type="password"
+                placeholder="Nhập Lại Mật Khẩu Mới"
                 className="w-full border rounded-lg p-2"
               />
               <button
                 type="submit"
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
-                Update Password
+                Cập Nhật Mật Khẩu
               </button>
             </form>
           </div>
@@ -128,24 +134,27 @@ const UserDashboard = () => {
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md p-6 space-y-4">
-        <h1 className="text-2xl font-semibold mb-6">Dashboard</h1>
+        <h1 className="text-2xl font-semibold mb-6">Tài Khoản</h1>
         <nav className="space-y-2">
-          {["profile", "shipping", "password", "logout"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`block w-full text-left px-3 py-2 rounded-lg ${
-                activeTab === tab
-                  ? "bg-blue-600 text-white"
-                  : "hover:bg-gray-100 text-gray-700"
-              }`}
-            >
-              {tab === "profile" && "Profile Details"}
-              {tab === "shipping" && "Shipping Detail"}
-              {tab === "password" && "Change Password"}
-              {tab === "logout" && "Log Out"}
-            </button>
-          ))}
+          {["profile", "shipping", "orders", "password", "logout"].map(
+            (tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`block w-full text-left px-3 py-2 rounded-lg ${
+                  activeTab === tab
+                    ? "bg-blue-600 text-white"
+                    : "hover:bg-gray-100 text-gray-700"
+                }`}
+              >
+                {tab === "profile" && "Thông Tin Tài Khoản"}
+                {tab === "shipping" && "Thông Tin Người Nhận"}
+                {tab === "orders" && "Danh Sách Đơn Hàng"}
+                {tab === "password" && "Thay Đổi Mật Khẩu"}
+                {tab === "logout" && "Đăng Xuất"}
+              </button>
+            )
+          )}
         </nav>
       </aside>
 
