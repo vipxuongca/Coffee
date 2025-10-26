@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 
 const AddCategory = ({ token }) => {
   const [image1, setImage1] = useState(false);
-
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -16,14 +15,14 @@ const AddCategory = ({ token }) => {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
-
       image1 && formData.append("image1", image1);
 
       const response = await axios.post(
-        backendUrl + "/api/category/add",
+        `${backendUrl}/api/category/add`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       if (response.data.success) {
         toast.success(response.data.message);
         setName("");
@@ -33,65 +32,80 @@ const AddCategory = ({ token }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error(error.message);
     }
   };
 
   return (
-    <div>
-      <h1>Add Category</h1>
+    <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-2xl mx-auto">
+      <h1 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">
+        Thêm Phân Loại
+      </h1>
+
       <form
         onSubmit={onSubmitHandler}
-        className="flex flex-col w-full items-start gap-3"
+        className="flex flex-col gap-6 text-gray-700"
       >
+        {/* Image Upload */}
         <div>
-          <p className="mb-2">Upload Image</p>
-
-          <div className="flex gap-2">
-            <label htmlFor="image1">
-              <img
-                className="w-20"
-                src={!image1 ? assets.upload_area : URL.createObjectURL(image1)}
-                alt=""
-              />
-              <input
-                onChange={(e) => setImage1(e.target.files[0])}
-                type="file"
-                id="image1"
-                hidden
-              />
-            </label>
-          </div>
+          <p className="mb-2 font-medium">Tải Lên Hình Ảnh</p>
+          <label
+            htmlFor="image1"
+            className="inline-block cursor-pointer border rounded-lg overflow-hidden hover:opacity-80 transition"
+          >
+            <img
+              className="w-24 h-24 object-cover"
+              src={
+                !image1
+                  ? assets.upload_area
+                  : typeof image1 === "string"
+                  ? image1
+                  : URL.createObjectURL(image1)
+              }
+              alt="Upload preview"
+            />
+            <input
+              onChange={(e) => setImage1(e.target.files[0])}
+              type="file"
+              id="image1"
+              hidden
+            />
+          </label>
         </div>
 
-        <div className="w-full">
-          <p className="mb-2">Category Name</p>
+        {/* Category Name */}
+        <div>
+          <p className="mb-2 font-medium">Tên Phân Loại</p>
           <input
             onChange={(e) => setName(e.target.value)}
             value={name}
-            className="w-full max-w-[500px] px-3 py-2"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
             type="text"
-            placeholder="Product Name"
+            placeholder="Enter category name"
+            required
           />
         </div>
 
-        <div className="w-full">
-          <p className="mb-2">Category Description</p>
+        {/* Category Description */}
+        <div>
+          <p className="mb-2 font-medium">Mô Tả Phân Loại</p>
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
-            className="w-full max-w-[500px] px-3 py-2"
-            type="text"
-            placeholder="Product Description"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
+            rows="3"
+            placeholder="Enter category description"
+            required
           />
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
-          className="w-28 py-3 mt-4 bg-[#3e2723] text-white"
+          className="w-40 py-2.5 bg-[#3e2723] text-white rounded-lg hover:bg-[#4e342e] transition-colors"
         >
-          ADD
+          Thêm Phân Loại
         </button>
       </form>
     </div>
