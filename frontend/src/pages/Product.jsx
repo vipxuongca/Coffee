@@ -6,13 +6,14 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Product = ({ token }) => {
+const Product = () => {
   const { productId } = useParams();
-  const { products, currency, backendCartUrl } = useContext(ShopContext);
-  const [productData, setProductData] = useState(false);
+  const { products, currency, backendCartUrl, fetchCartCount, token } = useContext(ShopContext);
+  const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
-  const [quantity, setQuantity] = useState(1); // quantity state
+  const [quantity, setQuantity] = useState(1);
 
+  // Add to cart API
   const cartAdd = async (productId, quantity) => {
     try {
       const res = await axios.post(
@@ -25,13 +26,15 @@ const Product = ({ token }) => {
         }
       );
       console.log("Cart updated:", res.data);
+      await fetchCartCount();
       toast.success("Thêm vào giỏ hàng thành công");
     } catch (err) {
-      toast.error("Có lỗi xảy ra");
-      console.error("cartAPI error:", err.response?.data || err.message);
+      console.error("Cart API error:", err.response?.data || err.message);
+      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
     }
   };
 
+  // Load product data
   useEffect(() => {
     if (!productId || !Array.isArray(products) || products.length === 0) return;
     const item = products.find((p) => String(p._id) === String(productId));
@@ -42,51 +45,49 @@ const Product = ({ token }) => {
   }, [products, productId]);
 
   const handleAddToCart = async () => {
-    if (!productData || !productData._id) return;
-    try {
-      await cartAdd(productData._id, quantity); // your API call
-      console.log("Attempt to cart:", productData._id, "Qty:", quantity);
-    } catch (error) {
-      console.error("Add to cart failed:", error);
-    }
+    if (!productData?._id) return;
+    await cartAdd(productData._id, quantity);
   };
 
   if (!productData) {
     return (
       <div className="text-center py-20 text-gray-500 animate-pulse">
-        Loading product...
+        Đang tải sản phẩm...
       </div>
     );
   }
 
   return (
-    <div className="border-t pt-10 px-4 sm:px-10 transition-opacity ease-in duration-500 opacity-100">
+    <div className="border-t pt-10 px-4 sm:px-10 transition-opacity duration-500">
       <div className="flex flex-col sm:flex-row gap-10">
         {/* Image Section */}
         <div className="flex-1 flex flex-col sm:flex-row gap-4">
+          {/* Thumbnail list */}
           <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-auto gap-2 sm:w-[18%] w-full">
-            {productData.image.map((item, index) => (
+            {productData.image?.map((item, index) => (
               <img
                 key={index}
                 src={item}
                 onClick={() => setImage(item)}
+                alt="Product thumbnail"
                 className={`cursor-pointer rounded-lg border-2 transition-all duration-200 ${
-                  image === item ? "border-black" : "border-transparent"
+                  image === item ? "border-amber-700" : "border-transparent"
                 } hover:opacity-80`}
-                alt=""
               />
             ))}
           </div>
+
+          {/* Main Image */}
           <div className="w-full sm:w-[80%] flex justify-center">
             <img
-              className="w-full max-h-[600px] object-contain rounded-2xl shadow-md transition-transform duration-300 hover:scale-105"
               src={image}
               alt={productData.name}
+              className="w-full max-h-[600px] object-contain rounded-2xl shadow-md transition-transform duration-300 hover:scale-105"
             />
           </div>
         </div>
 
-        {/* Product Details */}
+        {/* Product Info */}
         <div className="flex-1 flex flex-col">
           <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">
             {productData.name}
@@ -94,35 +95,27 @@ const Product = ({ token }) => {
 
           <div className="flex items-center gap-1 mt-3">
             {[...Array(5)].map((_, i) => (
-              <img
-                key={i}
-                src={assets.star_icon}
-                alt="star"
-                className="w-4 h-4"
-              />
+              <img key={i} src={assets.star_icon} alt="star" className="w-4 h-4" />
             ))}
-            <p className="pl-2 text-gray-600 text-sm">(120 reviews)</p>
+            <p className="pl-2 text-gray-600 text-sm">(120 đánh giá)</p>
           </div>
 
           <p className="mt-5 text-3xl font-semibold text-gray-900">
-            {productData.price.toLocaleString()}
-            {currency}
+            {productData.price.toLocaleString()} {currency}
           </p>
 
           <p className="mt-5 text-gray-600 leading-relaxed">
             {productData.description}
           </p>
 
-          <div className="mt-8">
-            <p className="font-medium mb-2 text-gray-450 text-sm">
-              {productData.stock} sản phẩm có sẵn
-            </p>
-          </div>
+          <p className="mt-8 font-medium text-gray-500 text-sm">
+            {productData.stock} sản phẩm có sẵn
+          </p>
 
           {/* Quantity Selector */}
           <div className="mt-4 flex items-center gap-3">
             <span className="text-sm text-gray-700 font-medium">Số lượng:</span>
-            <div className="flex items-center border rounded-lg w-fit">
+            <div className="flex items-center border rounded-lg">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 className="px-3 py-1 text-gray-700 hover:bg-gray-100"
@@ -132,7 +125,10 @@ const Product = ({ token }) => {
               <span className="px-4 text-gray-800 select-none">{quantity}</span>
               <button
                 onClick={() =>
-                  setQuantity((q) => Math.min(productData.stock || 99, q + 1))
+                  setQuantity((q) =>
+                    Math.min(productData.stock || 99, q + 1)
+                  )
+                  
                 }
                 className="px-3 py-1 text-gray-700 hover:bg-gray-100"
               >
@@ -150,9 +146,8 @@ const Product = ({ token }) => {
           </button>
 
           <div className="mt-8 text-sm text-gray-500 border-t pt-4 space-y-1">
-            <p>Ngon</p>
-            <p>Bổ</p>
-            <p>Rẻ</p>
+            <p>Chính sách đổi trả rõ ràng</p>
+            <p>Hỗ trợ khách hàng 24/7</p>
           </div>
         </div>
       </div>
@@ -160,14 +155,13 @@ const Product = ({ token }) => {
       {/* Description & Reviews */}
       <div className="mt-20">
         <div className="flex border-b">
-          <b className="border px-5 py-3 text-sm bg-gray-100">Description</b>
+          <b className="border px-5 py-3 text-sm bg-gray-100">Mô tả</b>
           <p className="border px-5 py-3 text-sm text-gray-500">
-            Reviews (122)
+            Đánh giá (122)
           </p>
         </div>
         <div className="border-x border-b px-6 py-6 text-sm text-gray-600 space-y-3 leading-relaxed">
-          <p>fdfewqafesa</p>
-          <p>fjioahfioewahfuiewahf8u9ewah</p>
+          <p>{productData.description || "Không có mô tả chi tiết."}</p>
         </div>
       </div>
 

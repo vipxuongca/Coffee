@@ -9,3 +9,4 @@ export { default as PlaceOrder } from "./PlaceOrder.jsx";
 export { default as Order } from "./Order.jsx";
 export { default as Register } from "./Register.jsx";
 export { default as UserDashboard } from "./UserDashboard.jsx";
+export { default as NotFound } from "./NotFound.jsx";

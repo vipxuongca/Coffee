@@ -4,58 +4,55 @@ import { NavLink, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 
-const Navbar = ({ token, setToken, backendCartUrl }) => {
+const Navbar = ({ backendCartUrl }) => {
   const baseClass = "flex flex-col items-center gap-1 group";
   const [visible, setVisible] = useState(false);
-  const { setShowSearch } = useContext(ShopContext);
-  const { cartCount, setCartCount } = useContext(ShopContext);
+  const { setShowSearch, cartCount, setCartCount, token } =
+    useContext(ShopContext);
 
-  const cartCountItem = async () => {
+  // Fetch and update cart count
+  const fetchCartCount = async () => {
+    if (!token) {
+      setCartCount(0);
+      return;
+    }
     try {
-      const res = await axios.get(`http://localhost:4003/api/cart`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const cart = res.data;
-      // Sum quantity of all items
-      const totalItems = cart.items.reduce(
-        (sum, item) => sum + item.quantity,
-        0
+      const res = await axios.get(
+        `${backendCartUrl || "http://localhost:4003/api/cart"}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-
-      return totalItems;
+      const totalItems =
+        res.data.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+      setCartCount(totalItems);
     } catch (err) {
-      console.error("error counting cart");
-      return 0;
+      console.error("Error fetching cart count:", err.message);
+      setCartCount(0);
     }
   };
 
   useEffect(() => {
-    const fetchCartCount = async () => {
-      if (!token) return;
-      const count = await cartCountItem(token);
-      setCartCount(count);
-    };
-
     fetchCartCount();
+
+    // Optional: listen to storage changes (e.g., another tab modifies the cart)
+    window.addEventListener("storage", fetchCartCount);
+    return () => window.removeEventListener("storage", fetchCartCount);
   }, [token]);
 
   return (
-    <div className="flex items-center justify-between py-3 px-4 md:px-8 font-serif sticky top-0 z-50 bg-[#3e2723] text-white shadow-lg">
+    <div className="flex items-center justify-between py-3 px-4 md:px-8 sticky top-0 z-50 bg-[#3e2723] text-white shadow-lg">
       <Link to="/">
         <img src={assets.logo} alt="Logo" className="w-24 h-auto" />
       </Link>
 
-      {/* Desktop Navigation */}
+      {/* Company title and nav */}
       <div className="flex flex-col items-center">
-        {/* Company name image */}
         <img
           src={assets.company}
           alt="Company Name"
           className="md:h-12 mb-3 object-contain"
         />
-
-        {/* Navigation buttons */}
         <ul className="hidden sm:flex gap-6 text-base">
           {[
             { name: "TRANG CHỦ", path: "/" },
@@ -90,32 +87,32 @@ const Navbar = ({ token, setToken, backendCartUrl }) => {
         </button>
 
         {/* Profile */}
-        <div className="group relative">
-          <Link to={!token ? "/login" : "/user"} className="relative">
-            <button className="w-5 invert brightness-0 saturate-0">
-              <img src={assets.profile_icon} alt="profile" />
-            </button>
-          </Link>
-        </div>
+        <Link to={!token ? "/login" : "/user"} className="relative">
+          <button className="w-5 invert brightness-0 saturate-0">
+            <img src={assets.profile_icon} alt="profile" />
+          </button>
+        </Link>
 
         {/* Cart */}
-<Link to={!token ? "/login" : "/cart"} className="relative inline-flex items-center justify-center">
-  <button className="relative w-5 min-w-5 flex items-center justify-center">
-    <img
-      src={assets.cart_icon}
-      alt="cart"
-      className="invert brightness-0 saturate-0"
-    />
-    {token && cartCount > 0 && (
-      <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px] z-10">
-        {cartCount}
-      </p>
-    )}
-  </button>
-</Link>
+        <Link
+          to={!token ? "/login" : "/cart"}
+          className="relative inline-flex items-center justify-center"
+        >
+          <button className="relative w-5 min-w-5 flex items-center justify-center">
+            <img
+              src={assets.cart_icon}
+              alt="cart"
+              className="invert brightness-0 saturate-0"
+            />
+            {token && cartCount > 0 && (
+              <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px] z-10">
+                {cartCount}
+              </p>
+            )}
+          </button>
+        </Link>
 
-
-        {/* Menu */}
+        {/* Menu for small screens */}
         <button
           onClick={() => setVisible(true)}
           className="w-5 cursor-pointer sm:hidden invert brightness-0 saturate-0"
@@ -124,7 +121,7 @@ const Navbar = ({ token, setToken, backendCartUrl }) => {
         </button>
       </div>
 
-      {/* Sidebar menu for small screens */}
+      {/* Sidebar (mobile) */}
       <div
         className={`fixed sm:hidden top-0 right-0 bottom-0 overflow-hidden bg-[#4e342e] text-white transition-all z-50 ${
           visible ? "w-full" : "w-0"
@@ -142,7 +139,6 @@ const Navbar = ({ token, setToken, backendCartUrl }) => {
             />
             <p>Back</p>
           </div>
-
           {[
             { name: "TRANG CHỦ", path: "/" },
             { name: "CỬA HÀNG", path: "/shop" },

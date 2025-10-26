@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import { ShopContext } from "../context/ShopContext";
 
-const PlaceOrder = ({ token }) => {
+const PlaceOrder = () => {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { token } = useContext(ShopContext);
 
   useEffect(() => {
     const fetchOrder = async () => {

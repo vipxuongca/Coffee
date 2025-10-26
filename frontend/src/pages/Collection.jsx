@@ -96,7 +96,7 @@ const Collection = () => {
             showFilter ? "" : "hidden"
           } sm:block`}
         >
-          <p className="mb-3 text-sm font-medium">CATEGORIES</p>
+          <p className="mb-3 text-sm font-medium">PHÂN LOẠI</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
             {categories.map((cat) => (
               <p key={cat._id}>
@@ -112,7 +112,7 @@ const Collection = () => {
           </div>
 
           {/* Subcategory filter */}
-          <p className="mb-3 mt-6 text-sm font-medium">TYPE</p>
+          {/* <p className="mb-3 mt-6 text-sm font-medium">KIỂU LOẠI</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
             <p className="flex gap-2">
               <input
@@ -141,7 +141,7 @@ const Collection = () => {
               />{" "}
               Ground
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -151,14 +151,14 @@ const Collection = () => {
         <div className="flex-1">
           {/* Header */}
           <div className="flex justify-between items-center text-base sm:text-2xl mb-6">
-            <Title text1="ALL " text2="PRODUCTS" />
+            <Title text1="TẤT CẢ " text2="SẢN PHẨM" />
             <select
               className="border border-gray-300 rounded-md text-sm px-3 py-2 bg-white shadow-sm hover:border-gray-400 focus:outline-none"
               onChange={(e) => setSortType(e.target.value)}
             >
-              <option value="relevant">Sort by: Relevant</option>
-              <option value="low-high">Sort by: Low to High</option>
-              <option value="high-low">Sort by: High to Low</option>
+              <option value="relevant">Tất cả</option>
+              <option value="low-high">Giá: Thấp - Cao</option>
+              <option value="high-low">Giá: Cao - Thấp</option>
             </select>
           </div>
 

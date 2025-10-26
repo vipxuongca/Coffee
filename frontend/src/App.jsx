@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import {
   Home,
@@ -12,25 +11,23 @@ import {
   Order,
   Register,
   UserDashboard,
+  NotFound,
 } from "./pages";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import SearchBar from "./components/SearchBar.jsx";
-import { ToastContainer, cssTransition } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ShopContext } from "./context/ShopContext";
+import { useContext } from "react";
 
 const App = () => {
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
-
-  useEffect(() => {
-    localStorage.setItem("token", token);
-  }, [token]);
-
+  const { token, setToken } = useContext(ShopContext);
   return (
     <div className="px-4 lg:px-[9vw] relative">
       <ToastContainer position="top-left" autoClose={1200} />
 
-      <Navbar token={token} setToken={setToken} />
+      <Navbar />
       <SearchBar />
 
       <Routes>
@@ -38,9 +35,9 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/shop" element={<Collection />} />
-        <Route path="/product/:productId" element={<Product token={token} />} />
+        <Route path="/product/:productId" element={<Product />} />
         <Route path="/cart" element={<Cart token={token} />} />
-        <Route path="/login" element={<Login setToken={setToken} />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
           path="/place-order/:orderId"
@@ -48,6 +45,9 @@ const App = () => {
         />
         <Route path="/order" element={<Order />} />
         <Route path="/user" element={<UserDashboard />} />
+
+        {/* Catch-all route for undefined paths */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />

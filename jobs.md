@@ -19,11 +19,11 @@ SHOP
 CART
 - [ ] cart front end page use hard coded APIs
 - [ ] cart change number does not update the database
-- [ ] Sửa cập nhật số đếm sản phẩm trên icon giỏ hàng => cần cập nhật ngay lập tức
+- [x] Sửa cập nhật số đếm sản phẩm trên icon giỏ hàng => cần cập nhật ngay lập tức
 - [ ] Front end prevent from adding to cart, if no user is logged in. Upon clicking the button, if not log in, system redirect to log in page
 - [ ] Tất cả các thao tác trước khi xóa giỏ hàng hoặc xóa sản phẩm, cần phải có warning
 - [ ] Lựa chọn một số sản phẩm trong giỏ hàng để thanh toán. Hiện tại là tất cả đều được thanh toán
-- [ ] Ấn vào sản phẩm phải chuyển đến trang của sản phẩm đó. Hiện tại là chưa chuyển được
+- [x] Ấn vào sản phẩm phải chuyển đến trang của sản phẩm đó. Hiện tại là chưa chuyển được
 
 
 ORDER
