@@ -13,9 +13,9 @@ import connectDB from './config/mongodb.js'
 
 //routing modules
 // routing for
-import orderCreate from './routes/orders/order-create.js';
-import orderGetOne from './routes/orders/order-get-one.js';
-import orderGetUser from './routes/orders/order-get-user.js';
+import orderCreate from './routes/order-create.js';
+import orderGetOne from './routes/order-get-one.js';
+import orderGetUser from './routes/order-get-user.js';
 
 //initialisation
 const app = express();
@@ -23,7 +23,7 @@ const PORT = process.env.PORT || 4004;
 const allowedOrigins = process.env.ALLOWED_ORIGIN
   ? process.env.ALLOWED_ORIGIN.split(',').map(o => o.trim())
   : [];
-  
+
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -34,18 +34,20 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+
 connectDB();
 
 // use json for the whole application, this automatically parse JSON into objects
 app.use(bodyParser.json());
 
+
 // Routes listing
-// POST /api/order/create
-app.use('/api/order/create', orderCreate);
-// GET /api/order/get-one/:orderId
-app.use('/api/order/get-one', orderGetOne);
-// GET /api/order/get-user (via token)
-app.use('/api/order/get-user', orderGetUser);
+// http://localhost:4004
+
+app.use('/api/order/create', orderCreate); // POST /api/order/create
+app.use('/api/order/get-one', orderGetOne); // GET /api/order/get-one/:orderId
+app.use('/api/order/get-user', orderGetUser); // GET /api/order/get-user (via token)
 
 //listen
 app.listen(PORT, () => console.log(`Server running on port: http://localhost:${PORT}`));

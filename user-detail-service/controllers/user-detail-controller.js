@@ -79,12 +79,20 @@ export const getAllDetails = async (req, res) => {
 // Get the default shipping detail
 export const getDefaultDetail = async (req, res) => {
   try {
-    const detail = await userDetail.findOne({ userId: req.params.userId, isDefault: true });
-    res.status(200).json(detail || {});
+    const detail = await userDetail.aggregate([
+      { $match: { userId: req.user.id } },
+      { $unwind: "$item" },
+      { $match: { "item.isDefault": true } },
+      { $project: { _id: 0, item: 1 } },
+    ]);
+
+    res.status(200).json(detail[0]?.item || {});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
+
 
 // Update shipping detail
 export const updateDetail = async (req, res) => {

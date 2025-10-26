@@ -3,7 +3,7 @@ import axios from "axios";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
-  const [UserInfo, setUserInfo] = useState(null);
+  // const [UserInfo, setUserInfo] = useState(null);
   const [userDetail, setUserDetail] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
@@ -117,7 +117,7 @@ const UserDashboard = () => {
         );
       case "logout":
         localStorage.removeItem("token");
-        window.location.href = "/";
+        globalThis.location.href = "/";
         return null;
       default:
         return null;

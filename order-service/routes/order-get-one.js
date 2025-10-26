@@ -1,6 +1,6 @@
 import express from 'express';
-import OrderModel from '../../models/order-model.js';
-import { verifyToken } from '../../controllers/auth/jwt-verify.js';
+import OrderModel from '../models/order-model.js';
+import { verifyToken } from '../controllers/jwt-verify.js';
 import axios from 'axios';
 
 const router = express.Router();
@@ -23,7 +23,7 @@ router.get('/:orderid', verifyToken, async (req, res) => {
       order.items.map(async (item) => {
         try {
           const productRes = await axios.get(
-            `http://localhost:6001/api/products/get-one/${item.productId}`
+            `http://localhost:4000/api/products/get-one/${item.productId}`
           );
           return {
             ...item.toObject(),

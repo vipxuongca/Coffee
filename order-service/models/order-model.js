@@ -1,39 +1,54 @@
 import mongoose from "mongoose";
 
-// --- Order Item  ---
+// --- Order Item ---
 const orderItemSchema = new mongoose.Schema({
   productId: { type: mongoose.Schema.Types.ObjectId, required: true },
   name: { type: String, required: true },
-  description: { type: String, required: true },
-  image: { type: [String], required: true },
-  category: { type: String, required: true },
+  description: { type: String },
+  price: { type: Number, required: true },
+  image: { type: [String], default: [] },
+  category: { type: String },
   subCategory: { type: String },
-  variant: { type: [String] },
-  brand: { type: String, required: true },
+  variant: { type: [String], default: [] },
+  brand: { type: String },
   discount: { type: Number, default: 0 },
+  stock: { type: Number }, // useful for historical data integrity
   quantity: { type: Number, required: true },
+});
+
+// --- Shipping / User Detail ---
+const orderUserSchema = new mongoose.Schema({
+  receiverName: { type: String, required: true },
+  phone: { type: String, required: true },
+  addressLine1: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String },
+  postalCode: { type: String },
+  country: { type: String, required: true },
 });
 
 // --- Order Schema ---
 const orderSchema = new mongoose.Schema(
   {
-    userId: { type: String, required: true },
-    userName: { type: String, required: true },
-    phone: { type: String, required: true },
-    address: { type: String, required: true },
-    receiverName: { type: String, required: true },
-
+    userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    userEmail: { type: String, required: true },
+    userDetail: { type: orderUserSchema, required: true },
     items: { type: [orderItemSchema], required: true },
+
     total: { type: Number, required: true },
-    paymentMethod: { type: String, enum: ["COD", "CARD", "TRANSFER"], default: "COD" },
     shippingFee: { type: Number, default: 0 },
+    paymentMethod: {
+      type: String,
+      enum: ["COD", "CARD", "TRANSFER"],
+      default: "COD",
+    },
     notes: { type: String },
 
     status: {
       type: String,
       enum: ["PENDING_PAYMENT", "PAID", "FAILED", "CANCELLED"],
-      default: "PENDING_PAYMENT"
-    }
+      default: "PENDING_PAYMENT",
+    },
   },
   { timestamps: true }
 );

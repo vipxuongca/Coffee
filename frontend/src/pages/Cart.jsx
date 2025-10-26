@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const Cart = () => {
+const Cart = ({ token }) => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token") || "";
+  // const [selectedItems, setSelectedItems] = useState([]);
 
   // Fetch cart data
   useEffect(() => {
@@ -84,8 +87,8 @@ const Cart = () => {
 
   // Manual quantity change (optional)
   const handleQtyChange = (id, value) => {
-    const qty = parseInt(value, 10);
-    if (!isNaN(qty) && qty > 0) {
+    const qty = Number.parseInt(value, 10);
+    if (!Number.isNaN(qty) && qty > 0) {
       setCartItems((prev) =>
         prev.map((item) => (item.id === id ? { ...item, quantity: qty } : item))
       );
@@ -119,6 +122,45 @@ const Cart = () => {
       setCartItems([]); // Clear UI
     } catch (err) {
       console.error("Error clearing cart:", err);
+    }
+  };
+
+  const handleOrderPlacement = async () => {
+    try {
+      if (!token) return toast.error("Bạn cần đăng nhập để đặt hàng.");
+
+      // Everything in cart = selected items
+      const orderPayload = {
+        items: cartItems.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+      };
+
+      console.log(token);
+
+      const res = await axios.post(
+        "http://localhost:4004/api/order/create",
+        orderPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        toast.success("Đặt hàng thành công!");
+        setCartItems([]);
+        navigate(`/place-order/${res.data.orderId}`);
+      } else {
+        toast.error(
+          "Đặt hàng thất bại: " + (res.data.message || "Lỗi không xác định.")
+        );
+      }
+    } catch (err) {
+      console.error("Error placing order:", err);
+      toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
     }
   };
 
@@ -202,7 +244,10 @@ const Cart = () => {
               >
                 Xóa toàn bộ
               </button>
-              <button className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800">
+              <button
+                className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800"
+                onClick={handleOrderPlacement}
+              >
                 Thanh toán
               </button>
             </div>
