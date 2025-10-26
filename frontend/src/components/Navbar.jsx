@@ -43,7 +43,7 @@ const Navbar = ({ backendCartUrl }) => {
   return (
     <div className="flex items-center justify-between py-3 px-4 md:px-8 sticky top-0 z-50 bg-[#3e2723] text-white shadow-lg">
       <Link to="/">
-        <img src={assets.logo} alt="Logo" className="w-24 h-auto" />
+        <img src={assets.logo} alt="Logo" className="w-28 h-auto" />
       </Link>
 
       {/* Company title and nav */}
