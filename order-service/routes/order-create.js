@@ -11,6 +11,11 @@ router.post("/", verifyToken, async (req, res) => {
     const { items, paymentMethod, notes } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
 
+    // it is working up to this verifyToken. So the token is successfully passed to this point. At least in Postman
+
+    // So it is entirely front end error. Backend works. Front end never send tokens
+    // console.log("token for order is: " + token);
+
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,

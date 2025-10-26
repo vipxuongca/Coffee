@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const Cart = () => {
+const Cart = ({ token }) => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token") || "";
   // const [selectedItems, setSelectedItems] = useState([]);
 
   // Fetch cart data
@@ -123,9 +125,9 @@ const Cart = () => {
     }
   };
 
-  const handleOrderPlacement = async (token) => {
+  const handleOrderPlacement = async () => {
     try {
-      if (!token) return alert("Bạn cần đăng nhập để đặt hàng.");
+      if (!token) return toast.error("Bạn cần đăng nhập để đặt hàng.");
 
       // Everything in cart = selected items
       const orderPayload = {
@@ -134,6 +136,8 @@ const Cart = () => {
           quantity: item.quantity,
         })),
       };
+
+      console.log(token);
 
       const res = await axios.post(
         "http://localhost:4004/api/order/create",
@@ -146,16 +150,17 @@ const Cart = () => {
       );
 
       if (res.data.success) {
-        alert("Đặt hàng thành công!");
-        setCartItems([]); // Optional: clear cart after success
+        toast.success("Đặt hàng thành công!");
+        setCartItems([]);
+        navigate(`/place-order/${res.data.orderId}`);
       } else {
-        alert(
+        toast.error(
           "Đặt hàng thất bại: " + (res.data.message || "Lỗi không xác định.")
         );
       }
     } catch (err) {
       console.error("Error placing order:", err);
-      alert("Không thể đặt hàng. Vui lòng thử lại sau.");
+      toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
     }
   };
 

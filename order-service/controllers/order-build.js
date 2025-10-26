@@ -44,7 +44,7 @@ async function fetchProducts(items, token) {
       `Product ${item.productId}`
     );
 
-    console.log(`${SERVICE_URLS.product}/api/product/fetch/${item.productId}`);
+    // console.log(`${SERVICE_URLS.product}/api/product/fetch/${item.productId}`);
 
     if (!product) return null;
 

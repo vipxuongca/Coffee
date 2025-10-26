@@ -1,17 +1,7 @@
 // environment
-import dotenv from "dotenv";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-// Ensure correct directory resolution (important if server runs from another location)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const envFile = path.resolve(__dirname, `.env.${process.env.NODE_ENV || "development"}`);
+import dotenv from 'dotenv';
+const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
 dotenv.config({ path: envFile });
-
-console.log("Loaded PORT:", process.env.PORT);
-
 
 //tools
 import express from 'express';
@@ -44,18 +34,20 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+
 connectDB();
 
 // use json for the whole application, this automatically parse JSON into objects
 app.use(bodyParser.json());
-// http://localhost:4004
+
+
 // Routes listing
-// POST /api/order/create
-app.use('/api/order/create', orderCreate);
-// GET /api/order/get-one/:orderId
-app.use('/api/order/get-one', orderGetOne);
-// GET /api/order/get-user (via token)
-app.use('/api/order/get-user', orderGetUser);
+// http://localhost:4004
+
+app.use('/api/order/create', orderCreate); // POST /api/order/create
+app.use('/api/order/get-one', orderGetOne); // GET /api/order/get-one/:orderId
+app.use('/api/order/get-user', orderGetUser); // GET /api/order/get-user (via token)
 
 //listen
 app.listen(PORT, () => console.log(`Server running on port: http://localhost:${PORT}`));
