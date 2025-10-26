@@ -2,6 +2,7 @@ import express from "express";
 import Order from "../models/order-model.js";
 import { verifyToken } from "../controllers/jwt-verify.js";
 import { buildOrderData } from "../controllers/order-build.js";
+import axios from 'axios'
 
 const router = express.Router();
 
@@ -70,6 +71,18 @@ router.post("/", verifyToken, async (req, res) => {
     });
 
     await newOrder.save();
+
+    // --- Clear user's cart after successful order creation ---
+    try {
+      await axios.delete("http://localhost:4003/api/cart/clear", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (cartErr) {
+      console.error("Failed to clear cart after order:", cartErr.message);
+      // Do not fail the whole request if cart removal fails
+    }
 
     res.status(201).json({
       success: true,

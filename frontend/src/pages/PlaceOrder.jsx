@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
-const PlaceOrder = () => {
+const PlaceOrder = ({ token }) => {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -11,11 +11,12 @@ const PlaceOrder = () => {
     const fetchOrder = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:4004/api/order/${orderId}`
+          `http://localhost:4004/api/order/get-one/${orderId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
-        if (res.data.success) {
-          setOrder(res.data.order);
-        }
+        setOrder(res.data);
       } catch (err) {
         console.error("Failed to fetch order:", err);
       } finally {
@@ -36,31 +37,22 @@ const PlaceOrder = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-2xl font-semibold mb-4 text-center">
-        Xác nhận đơn hàng
+      <h1 className="text-2xl font-semibold mb-4 text-center text-green-600">
+        ✅ Đặt hàng thành công!
       </h1>
+
       <div className="bg-white shadow rounded-lg p-6 space-y-6">
-        {/* --- User Detail --- */}
+        {/* --- Order Info --- */}
         <section>
           <h2 className="text-lg font-medium border-b pb-2 mb-2">
-            Thông tin giao hàng
+            Mã đơn hàng: {order.orderId}
           </h2>
-          <div className="text-gray-700 space-y-1">
-            <p>
-              <strong>Tên người nhận:</strong> {order.userDetail.receiverName}
-            </p>
-            <p>
-              <strong>Số điện thoại:</strong> {order.userDetail.phone}
-            </p>
-            <p>
-              <strong>Địa chỉ:</strong> {order.userDetail.addressLine1},{" "}
-              {order.userDetail.city}, {order.userDetail.state},{" "}
-              {order.userDetail.country}, {order.userDetail.postalCode}
-            </p>
-            <p>
-              <strong>Email:</strong> {order.userEmail}
-            </p>
-          </div>
+          <p className="text-gray-600">
+            Ngày tạo: {new Date(order.createdAt).toLocaleString()}
+          </p>
+          <p className="text-gray-700 font-medium">
+            Trạng thái: <span className="text-yellow-600">{order.status}</span>
+          </p>
         </section>
 
         {/* --- Order Items --- */}
@@ -71,7 +63,7 @@ const PlaceOrder = () => {
           <div className="divide-y">
             {order.items.map((item) => (
               <div
-                key={item.productId}
+                key={item._id}
                 className="py-3 flex items-center justify-between"
               >
                 <div className="flex items-center space-x-4">
@@ -100,33 +92,10 @@ const PlaceOrder = () => {
 
         {/* --- Summary --- */}
         <section className="border-t pt-4">
-          <div className="flex justify-between text-gray-700">
-            <span>Tổng cộng:</span>
-            <span>{order.total.toLocaleString()} ₫</span>
-          </div>
-          <div className="flex justify-between text-gray-700">
-            <span>Phí vận chuyển:</span>
-            <span>{order.shippingFee.toLocaleString()} ₫</span>
-          </div>
           <div className="flex justify-between text-lg font-semibold mt-2">
             <span>Thành tiền:</span>
-            <span>{(order.total + order.shippingFee).toLocaleString()} ₫</span>
+            <span>{order.total.toLocaleString()} ₫</span>
           </div>
-        </section>
-
-        {/* --- Payment and Status --- */}
-        <section className="border-t pt-4">
-          <p>
-            <strong>Phương thức thanh toán:</strong> {order.paymentMethod}
-          </p>
-          <p>
-            <strong>Trạng thái:</strong> {order.status}
-          </p>
-          {order.notes && (
-            <p>
-              <strong>Ghi chú:</strong> {order.notes}
-            </p>
-          )}
         </section>
 
         <div className="text-center mt-6">

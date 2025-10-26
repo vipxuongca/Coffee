@@ -5,6 +5,7 @@ TOKEN
 
 SYSTEM
 - [ ] upon deleting or update products/categories that have image, must DELETE that from the cloud to save storage.
+- [ ] Tất cả các loại ID phải có ID công ty k dùng của mongo
 
 PRODUCT
 - [ ] sửa việc cho nhập số lượng hàng tồn là số âm. Kiểm tra các biến khác
@@ -27,3 +28,4 @@ CART
 
 ORDER
 - [ ] controller order, that is using hard-coded links, must be fixed, and move to environment file. env cannot be imported for that specific place, reason remains unknown.
+- [ ] Chỉnh sửa mã đơn hàng thành dạng ORD-0001 (hoặc tương tự)
