@@ -8,13 +8,39 @@ import { toast } from "react-toastify";
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, backendCartUrl, fetchCartCount, token } = useContext(ShopContext);
+  const {
+    products,
+    currency,
+    backendCartUrl,
+    backendUrl,
+    fetchCartCount,
+    token,
+  } = useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [quantity, setQuantity] = useState(1);
 
+  const verifyStockCount = async (productId, quantity) => {
+    try {
+      const res = await axios.post(
+        `${backendUrl}/api/product/stock/${productId}`,
+        { quantity },
+        {}
+      );
+      console.log("message:", res.data.message);
+      return res.data;
+    } catch (err) {
+      console.error("Cart API error:", err.response?.data || err.message);
+    }
+  };
+
   // Add to cart API
   const cartAdd = async (productId, quantity) => {
+    const stockAvailable = await verifyStockCount(productId, quantity);
+    if (!stockAvailable.success) {
+      toast.error("Không đủ hàng trong kho");
+      return;
+    }
     try {
       const res = await axios.post(
         `${backendCartUrl}/api/cart/add/${productId}`,
@@ -95,7 +121,12 @@ const Product = () => {
 
           <div className="flex items-center gap-1 mt-3">
             {[...Array(5)].map((_, i) => (
-              <img key={i} src={assets.star_icon} alt="star" className="w-4 h-4" />
+              <img
+                key={i}
+                src={assets.star_icon}
+                alt="star"
+                className="w-4 h-4"
+              />
             ))}
             <p className="pl-2 text-gray-600 text-sm">(120 đánh giá)</p>
           </div>
@@ -109,12 +140,12 @@ const Product = () => {
           </p>
 
           <p className="mt-8 font-medium text-gray-500 text-sm">
-            {productData.stock} sản phẩm có sẵn
+            Trong Giỏ hàng: {productData.stock} sản phẩm
           </p>
 
           {/* Quantity Selector */}
           <div className="mt-4 flex items-center gap-3">
-            <span className="text-sm text-gray-700 font-medium">Số lượng:</span>
+            <strong className="text-sm text-gray-700 font-medium">SỐ LƯỢNG:</strong>
             <div className="flex items-center border rounded-lg">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -125,16 +156,14 @@ const Product = () => {
               <span className="px-4 text-gray-800 select-none">{quantity}</span>
               <button
                 onClick={() =>
-                  setQuantity((q) =>
-                    Math.min(productData.stock || 99, q + 1)
-                  )
-                  
+                  setQuantity((q) => Math.min(productData.stock || 99, q + 1))
                 }
                 className="px-3 py-1 text-gray-700 hover:bg-gray-100"
               >
                 +
               </button>
             </div>
+            <p>{productData.stock} sản phẩm có sẵn</p>
           </div>
 
           {/* Add to Cart */}

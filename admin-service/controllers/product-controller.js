@@ -62,6 +62,23 @@ const getProducts = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+const getOneStockProduct = async (req, res) => {
+  try {
+    const { id } = req.params; // get id from URL path
+    const { quantity } = req.body;
+    const product = await productModel.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    } else if (product.stock < quantity) {
+      return res.status(404).json({ success: false, message: 'Not enough stock' });
+    }
+    res.json({ success: true, message: "Stock check successful" });
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 const removeProduct = async (req, res) => {
   try {
@@ -142,5 +159,11 @@ const updateProduct = async (req, res) => {
   }
 };
 
-
-export { addProduct, getProducts, removeProduct, getOneProduct, updateProduct };
+export {
+  addProduct,
+  getProducts,
+  removeProduct,
+  getOneProduct,
+  updateProduct,
+  getOneStockProduct
+};
