@@ -5,12 +5,15 @@ import adminAuth from '../middleware/admin-auth.js';
 
 const router = express.Router();
 
+// /api/category
 router.post('/add', adminAuth, upload.fields([
   { name: "image1", maxCount: 1 },
 ]), addCategory);
 router.get('/get', getCategory);
 router.get('/fetch/:id', getOneCategory);
-router.put('/update', adminAuth, updateCategory);
+router.put('/edit/:id', adminAuth, upload.fields([
+  { name: "image1", maxCount: 1 },
+]), updateCategory);
 router.delete('/delete', adminAuth, removeCategory);
 
 export default router;

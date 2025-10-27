@@ -1,214 +1,156 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendUrl } from "../App";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import { AdminContext } from "../../context/AdminContext";
 
-const Edit = () => {
+const EditCategory = () => {
+  const { categoryId } = useParams();
+  const { token, setLoading } = useContext(AdminContext);
+
   const [image1, setImage1] = useState(false);
-  const [image2, setImage2] = useState(false);
-  const [image3, setImage3] = useState(false);
-  const [image4, setImage4] = useState(false);
-
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [stock, setStock] = useState("");
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
-  const [bestseller, setBestseller] = useState(false);
-  const [variants, setVariants] = useState([]);
+
+  const fetchCategory = async () => {
+    try {
+      const res = await axios.get(
+        `${backendUrl}/api/category/fetch/${categoryId}`
+      );
+      if (res.data.success) {
+        const cat = res.data.category;
+
+        setName(cat.name);
+        setDescription(cat.description);
+
+        if (Array.isArray(cat.image)) {
+          setImage1(cat.image[0] || false);
+        }
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (categoryId) fetchCategory();
+  }, [categoryId]);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
-      formData.append("price", price);
-      formData.append("category", category);
-      formData.append("subCategory", subCategory);
-      formData.append("variants", variants);
-      formData.append("bestseller", bestseller);
-
       image1 && formData.append("image1", image1);
-      image2 && formData.append("image2", image2);
-      image3 && formData.append("image3", image3);
-      image4 && formData.append("image4", image4);
 
-      const response = await axios.post(backendUrl + "/api/product/add");
-      console.log(response.data);
-    } catch (error) {}
+      const response = await axios.put(
+        `${backendUrl}/api/category/edit/` + categoryId,
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setName("");
+        setDescription("");
+        setImage1(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      <h1>Add Product</h1>
+    <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-2xl mx-auto">
+      <h1 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">
+        Chỉnh Sửa Phân Loại
+      </h1>
+
       <form
         onSubmit={onSubmitHandler}
-        className="flex flex-col w-full items-start gap-3"
+        className="flex flex-col gap-6 text-gray-700"
       >
-        <div>
-          <p className="mb-2">Upload Image</p>
-
-          <div className="flex gap-2">
-            <label htmlFor="image1">
-              <img
-                className="w-20"
-                src={!image1 ? assets.upload_area : URL.createObjectURL(image1)}
-                alt=""
-              />
-              <input
-                onChange={(e) => setImage1(e.target.files[0])}
-                type="file"
-                id="image1"
-                hidden
-              />
-            </label>
-
-            <label htmlFor="image2">
-              <img
-                className="w-20"
-                src={!image2 ? assets.upload_area : URL.createObjectURL(image2)}
-                alt=""
-              />
-              <input
-                onChange={(e) => setImage2(e.target.files[0])}
-                type="file"
-                id="image2"
-                hidden
-              />
-            </label>
-
-            <label htmlFor="image3">
-              <img
-                className="w-20"
-                src={!image3 ? assets.upload_area : URL.createObjectURL(image3)}
-                alt=""
-              />
-              <input
-                onChange={(e) => setImage3(e.target.files[0])}
-                type="file"
-                id="image3"
-                hidden
-              />
-            </label>
-
-            <label htmlFor="image4">
-              <img
-                className="w-20"
-                src={!image4 ? assets.upload_area : URL.createObjectURL(image4)}
-                alt=""
-              />
-              <input
-                onChange={(e) => setImage4(e.target.files[0])}
-                type="file"
-                id="image4"
-                hidden
-              />
-            </label>
+        {/* Upload Image */}
+        <div className="w-full">
+          <p className="mb-2 font-medium">Tải Lên Hình Ảnh</p>
+          <div className="flex gap-3 flex-wrap">
+            {(Array.isArray([image1]) ? [image1] : []).map((img, i) => (
+              <label key={i} htmlFor={`image${i + 1}`}>
+                <img
+                  className="w-24 h-24 object-cover rounded-md border border-gray-300 cursor-pointer hover:opacity-80"
+                  src={
+                    !img
+                      ? assets.upload_area
+                      : img instanceof File
+                      ? URL.createObjectURL(img)
+                      : typeof img === "string"
+                      ? img
+                      : assets.upload_area
+                  }
+                  alt="Upload preview"
+                />
+                <input
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (i === 0) setImage1(file);
+                  }}
+                  type="file"
+                  id={`image${i + 1}`}
+                  hidden
+                />
+              </label>
+            ))}
           </div>
         </div>
 
-        <div className="w-full">
-          <p className="mb-2">Product Name</p>
+        {/* Category Name */}
+        <div>
+          <p className="mb-2 font-medium">Tên Phân Loại</p>
           <input
             onChange={(e) => setName(e.target.value)}
             value={name}
-            className="w-full max-w-[500px] px-3 py-2"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
             type="text"
-            placeholder="Product Name"
+            placeholder="Enter category name"
+            required
           />
         </div>
 
-        <div className="w-full">
-          <p className="mb-2">Product Description</p>
+        {/* Category Description */}
+        <div>
+          <p className="mb-2 font-medium">Mô Tả Phân Loại</p>
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
-            className="w-full max-w-[500px] px-3 py-2"
-            type="text"
-            placeholder="Product Description"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
+            rows="3"
+            placeholder="Enter category description"
+            required
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
-          <div>
-            <p className="mb-2">Category</p>
-            <select
-              className="w-full px-3 py-2"
-              onChange={(e) => setCategory(e.target.value)}
-              value={category}
-            >
-              <option value="Arabica">Arabica</option>
-              <option value="Robusta">Robusta</option>
-            </select>
-          </div>
-
-          <div>
-            <p className="mb-2"> SubCategory</p>
-            <select
-              className="w-full px-3 py-2"
-              onChange={(e) => setSubCategory(e.target.value)}
-              value={subCategory}
-            >
-              <option value="Roasted">d</option>
-              <option value="Raw">d</option>
-            </select>
-          </div>
-
-          <div>
-            <p className="mb-2">Price</p>
-            <input
-              onChange={(e) => setPrice(e.target.value)}
-              value={price}
-              className="w-full px-3 py-2 sm:w-[120px]"
-              type="Number"
-              placeholder="0"
-            />
-          </div>
-          <div>
-            <p className="mb-2">Stock</p>
-            <input
-              onChange={(e) => setStock(e.target.value)}
-              value={stock}
-              className="w-full px-3 py-2 sm:w-[120px]"
-              type="Number"
-              placeholder="0"
-            />
-          </div>
-        </div>
-
-        <div>
-          <p className="mb-2">Variants</p>
-          <div className="flex gap-3">
-            <p className="bg-slate-200 px-3 py-1 cursor-pointer">?</p>
-            <p className="bg-slate-200 px-3 py-1 cursor-pointer">?</p>
-            <p className="bg-slate-200 px-3 py-1 cursor-pointer">?</p>
-            <p className="bg-slate-200 px-3 py-1 cursor-pointer">?</p>
-          </div>
-        </div>
-
-        <div className="flex gap-2 mt-2">
-          <input type="checkbox" id="bestseller" />
-          <label
-            className="cursor-pointer"
-            htmlFor="bestseller"
-            onChange={(e) => setBestseller(e.target.value)}
-            value={bestseller}
-          >
-            Hàng Bán Chạy
-          </label>
-        </div>
-
+        {/* Submit */}
         <button
           type="submit"
-          className="w-28 py-3 mt-4 bg-[#3e2723] text-white"
+          className="w-40 py-2.5 bg-[#3e2723] text-white rounded-lg hover:bg-[#4e342e] transition-colors"
         >
-          ADD
+          Chỉnh Sửa Phân Loại
         </button>
       </form>
     </div>
   );
 };
 
-export default Edit;
+export default EditCategory;

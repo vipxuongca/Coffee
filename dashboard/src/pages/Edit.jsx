@@ -82,6 +82,7 @@ const Edit = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -121,12 +122,16 @@ const Edit = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6 mt-6">
-      <h1 className="text-2xl font-semibold mb-6 text-[#3e2723]">Chỉnh Sửa Sản Phẩm<menu type="toolbar"></menu></h1>
+      <h1 className="text-2xl font-semibold mb-6 text-[#3e2723]">
+        Chỉnh Sửa Sản Phẩm<menu type="toolbar"></menu>
+      </h1>
 
       <form
         onSubmit={onSubmitHandler}
