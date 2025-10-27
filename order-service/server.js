@@ -13,9 +13,8 @@ import connectDB from './config/mongodb.js'
 
 //routing modules
 // routing for
-import orderCreate from './routes/order-create.js';
-import orderGetOne from './routes/order-get-one.js';
-import orderGetUser from './routes/order-get-user.js';
+import orderRouter from './routes/order-route.js';
+import orderAdminRouter from './routes/order-admin-route.js';
 
 //initialisation
 const app = express();
@@ -45,9 +44,8 @@ app.use(bodyParser.json());
 // Routes listing
 // http://localhost:4004
 
-app.use('/api/order/create', orderCreate); // POST /api/order/create
-app.use('/api/order/get-one', orderGetOne); // GET /api/order/get-one/:orderId
-app.use('/api/order/get-user', orderGetUser); // GET /api/order/get-user (via token)
+app.use('/api/order', orderRouter);
+app.use('/api/order/admin', orderAdminRouter);
 
 //listen
 app.listen(PORT, () => console.log(`Server running on port: http://localhost:${PORT}`));

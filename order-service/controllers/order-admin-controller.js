@@ -1,18 +1,18 @@
-import express from 'express';
-import OrderModel from '../models/order-model.js';
-import { verifyToken } from '../controllers/jwt-verify.js';
 import axios from 'axios';
+import OrderModel from '../models/order-model.js';
 
-const router = express.Router();
+const orderGet = async (req, res) => {
+// GET  http://localhost:4004/order/admin/get
+// with JWT of ADMIN
 
-// GET /api/order/get-user
-router.get('', verifyToken, async (req, res) => {
   try {
-    const userId = req.user.id;
-    console.log(userId);
+    const adminId = req.admin.id;
+    console.log(adminId);
+
+    // some authorisation here
 
     // 1️⃣ Find all orders for this user
-    const orders = await OrderModel.find({ userId });
+    const orders = await OrderModel.find();
     if (!orders || orders.length === 0) {
       return res.status(404).json({ error: 'Không tìm thấy đơn hàng.' });
     }
@@ -24,7 +24,7 @@ router.get('', verifyToken, async (req, res) => {
           order.items.map(async (item) => {
             try {
               const productRes = await axios.get(
-                `http://localhost:6001/api/products/get-one/${item.productId}`
+                `${process.env.PRODUCT_URL}/api/products/get-one/${item.productId}`
               );
               return {
                 ...item.toObject(),
@@ -59,6 +59,6 @@ router.get('', verifyToken, async (req, res) => {
     console.error(err);
     res.status(500).json({ error: 'Không thể tải đơn hàng.' });
   }
-});
+};
 
-export default router;
+export {orderGet};
