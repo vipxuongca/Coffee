@@ -8,7 +8,7 @@ import { AdminContext } from "../../context/AdminContext";
 
 const Edit = () => {
   const { id } = useParams();
-  const { token } = useContext(AdminContext);
+  const { token, setLoading } = useContext(AdminContext);
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
