@@ -144,9 +144,9 @@ const EditCategory = () => {
         {/* Submit */}
         <button
           type="submit"
-          className="w-40 py-2.5 bg-[#3e2723] text-white rounded-lg hover:bg-[#4e342e] transition-colors"
+          className="w-32 py-2.5 bg-[#3e2723] text-white rounded-lg hover:bg-[#4e342e] transition-colors"
         >
-          Chỉnh Sửa Phân Loại
+          CHỈNH SỬA
         </button>
       </form>
     </div>
