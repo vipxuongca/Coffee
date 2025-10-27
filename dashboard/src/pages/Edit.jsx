@@ -69,9 +69,6 @@ const Edit = () => {
         if (response.data.success) {
           const categories = response.data.category || [];
           setCategoryList(categories);
-          if (categories.length > 0) setCategory(categories[0].name);
-        } else {
-          console.error(response.data.message);
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
