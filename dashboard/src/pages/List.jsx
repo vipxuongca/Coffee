@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AdminContext } from "../../context/AdminContext";
+import { Edit, Trash } from "lucide-react";
 
 const List = () => {
   const { token, currency, setLoading } = useContext(AdminContext);
@@ -97,16 +98,16 @@ const List = () => {
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => editProduct(item._id)}
-                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="p-2 text-blue-600 hover:text-blue-800"
               >
-                Sửa
+                <Edit size={18} />
               </button>
-              <button
+              {/* <button
                 onClick={() => removeProduct(item._id)}
-                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                className="p-2 text-red-600 hover:text-red-800"
               >
-                Xóa
-              </button>
+                <Trash size={18} />
+              </button> */}
             </div>
           </div>
         ))}
