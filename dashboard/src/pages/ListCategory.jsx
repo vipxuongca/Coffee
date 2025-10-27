@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { backendUrl, currency } from "../App";
+import React, { useEffect, useState, useContext } from "react";
+import { backendUrl } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { AdminContext } from "../../context/AdminContext";
+import { Edit, Trash } from "lucide-react";
 
-const ListCategory = ({ token }) => {
-  const API_get = backendUrl + "/api/category/get";
-  const API_delete = backendUrl + "/api/category/delete";
-  const API_edit = backendUrl + "/api/category/get";
-  // console.log(API);
+const ListCategory = () => {
+  const { token } = useContext(AdminContext);
+  const navigate = useNavigate();
+  const API_get = `${backendUrl}/api/category/get`;
+  const API_delete = `${backendUrl}/api/category/delete`;
   const [list, setList] = useState([]);
+
   const fetchList = async () => {
     try {
       const response = await axios.get(API_get);
@@ -27,7 +31,7 @@ const ListCategory = ({ token }) => {
     try {
       const response = await axios.delete(API_delete, {
         headers: { Authorization: `Bearer ${token}` },
-        data: { id }, // `data` must be nested under config for DELETE
+        data: { id },
       });
 
       if (response.data.success) {
@@ -42,23 +46,8 @@ const ListCategory = ({ token }) => {
     }
   };
 
-  const editCategory = async (id) => {
-    try {
-      const response = await axios.delete(API_delete, {
-        headers: { Authorization: `Bearer ${token}` },
-        data: { id }, // `data` must be nested under config for DELETE
-      });
-
-      if (response.data.success) {
-        toast.success(response.data.message);
-        await fetchList();
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
+  const editCategory = (id) => {
+    navigate(`/edit-category/${id}`);
   };
 
   useEffect(() => {
@@ -66,57 +55,58 @@ const ListCategory = ({ token }) => {
   }, []);
 
   return (
-    <div>
-      <>
-        <p className="mb-2">CATEGORY LIST</p>
-        <div className="flex flex-col gap-2 w-full border rounded-lg overflow-hidden">
-          {/* List table */}
-          <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center bg-gray-100 text-gray-800 font-semibold rounded-lg px-4 py-2 shadow-sm">
-            <span>Image</span>
-            <span>Name</span>
-            <span>Description</span>
-            <span className="text-center">Action</span>
-          </div>
+    <div className="p-4">
+      <p className="mb-3 text-lg font-semibold text-gray-800">
+        Danh Mục Phân Loại
+      </p>
 
-          {/* Items */}
-          {list.map((item, index) => (
-            <div
-              key={index}
-              className="grid grid-cols-[100px_2fr_1fr_1fr_150px] items-center"
-            >
-              <div className="border-r border-b border-gray-400 flex justify-center p-2">
-                <img
-                  src={item.image[0]}
-                  alt={item.name}
-                  className="w-14 h-14 object-cover rounded"
-                />
-              </div>
-              <div className="border-r border-b border-gray-400 p-2">
-                {item.name}
-              </div>
-
-              <div className="border-r border-b border-gray-400 p-2">
-                {item.description}
-              </div>
-
-              <div className="border-b border-gray-400 flex justify-center gap-2 p-2">
-                <button
-                  onClick={() => editCategory(item._id)}
-                  className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => removeCategory(item._id)}
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+      <div className="w-full border rounded-lg overflow-hidden shadow-sm">
+        {/* Header */}
+        <div className="hidden md:grid grid-cols-[120px_2fr_3fr_150px] bg-gray-100 text-gray-800 font-semibold px-4 py-2">
+          <span>Hình Ảnh</span>
+          <span>Tên Phân Loại</span>
+          <span>Mô Tả</span>
+          <span className="text-center">Thao Tác</span>
         </div>
-      </>
+
+        {/* Rows */}
+        {list.map((item) => (
+          <div
+            key={item._id}
+            className="grid grid-cols-[120px_2fr_3fr_150px] items-center border-t"
+          >
+            <div className="flex justify-center p-2">
+              <img
+                src={item.image?.[0]}
+                alt={item.name}
+                className="w-14 h-14 object-cover rounded"
+              />
+            </div>
+
+            <div className="p-2 font-medium">{item.name}</div>
+            <div className="p-2 text-gray-700 text-sm">{item.description}</div>
+
+            <div className="flex justify-center gap-2 p-2">
+              <button
+                onClick={() => editCategory(item._id)}
+                className="p-2 text-blue-600 hover:text-blue-800"
+              >
+                <Edit size={18} />
+              </button>
+              {/* <button
+                onClick={() => removeCategory(item._id)}
+                className="p-2 text-red-600 hover:text-red-800"
+              >
+                <Trash size={18} />
+              </button> */}
+            </div>
+          </div>
+        ))}
+
+        {list.length === 0 && (
+          <p className="text-center text-gray-500 py-4">No categories found.</p>
+        )}
+      </div>
     </div>
   );
 };

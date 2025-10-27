@@ -3,51 +3,70 @@ import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 
 const Sidebar = () => {
+  const baseLinkStyle =
+    "flex items-center gap-3 px-4 py-2 rounded-lg border border-[#d7ccc8] bg-[#fffaf7] text-[#3e2723] font-medium transition-all duration-300 hover:bg-[#f3e5ab] hover:shadow-md";
+  const activeLinkStyle =
+    "bg-[#d7ccc8] text-[#3e2723] shadow-inner border-[#a1887f]";
+
   return (
-    <div className="w-[18%] min-h-screen border-r-2 border-[#a1887f] bg-[#f8f3ef] shadow-inner">
-      <div className="flex flex-col gap-4 pt-8 pl-[15%] text-[15px] font-serif text-[#3e2723]">
-        <h2 className="text-lg font-bold mb-4 tracking-wide text-[#4e342e]">
+    <div className="w-[18%] min-h-screen border-r border-[#a1887f] bg-[#f8f3ef] shadow-inner flex flex-col">
+      {/* Header */}
+      <div className="p-6 pb-4 border-b border-[#d7ccc8]">
+        <h2 className="text-xl font-semibold tracking-wide text-[#4e342e] font-serif">
           Dashboard
         </h2>
+      </div>
 
+      {/* Nav Section */}
+      <div className="flex flex-col gap-3 px-4 pt-6 text-sm font-serif">
         <NavLink
-          className="flex items-center gap-3 border border-[#d7ccc8] bg-[#ffd4b3] hover:bg-[#efebe9] transition-all duration-300 border-r-0 px-3 py-2 rounded-md shadow-sm hover:shadow-md"
           to="/list"
+          className={({ isActive }) =>
+            `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+          }
         >
           <img className="w-5 h-5 opacity-80" src={assets.order_icon} alt="" />
-          <p className="hidden md:block">All Products</p>
+          <span className="hidden md:block">Danh Mục SP</span>
         </NavLink>
 
         <NavLink
-          className="flex items-center gap-3 border border-[#d7ccc8] bg-[#ffd4b3] hover:bg-[#efebe9] transition-all duration-300 border-r-0 px-3 py-2 rounded-md shadow-sm hover:shadow-md"
           to="/add"
+          className={({ isActive }) =>
+            `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+          }
         >
           <img className="w-5 h-5 opacity-80" src={assets.add_icon} alt="" />
-          <p className="hidden md:block">Add Product</p>
+          <span className="hidden md:block">Thêm SP</span>
         </NavLink>
 
         <NavLink
-          className="flex items-center gap-3 border border-[#d7ccc8] bg-[#ffd4b3] hover:bg-[#efebe9] transition-all duration-300 border-r-0 px-3 py-2 rounded-md shadow-sm hover:shadow-md"
           to="/list-category"
+          className={({ isActive }) =>
+            `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+          }
         >
           <img className="w-5 h-5 opacity-80" src={assets.order_icon} alt="" />
-          <p className="hidden md:block">All Categories</p>
+          <span className="hidden md:block">Danh Mục Phân Loại</span>
         </NavLink>
 
         <NavLink
-          className="flex items-center gap-3 border border-[#d7ccc8] bg-[#ffd4b3] hover:bg-[#efebe9] transition-all duration-300 border-r-0 px-3 py-2 rounded-md shadow-sm hover:shadow-md"
           to="/add-category"
+          className={({ isActive }) =>
+            `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+          }
         >
           <img className="w-5 h-5 opacity-80" src={assets.add_icon} alt="" />
-          <p className="hidden md:block">Add Categories</p>
+          <span className="hidden md:block">Thêm Phân Loại</span>
         </NavLink>
 
         <NavLink
-          className="flex items-center gap-3 border border-[#d7ccc8] bg-[#ffd4b3] hover:bg-[#efebe9] transition-all duration-300 border-r-0 px-3 py-2 rounded-md shadow-sm hover:shadow-md"
           to="/orders"
+          className={({ isActive }) =>
+            `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+          }
         >
           <img className="w-5 h-5 opacity-80" src={assets.order_icon} alt="" />
-          <p className="hidden md:block">Orders</p>
+          <span className="hidden md:block">Danh Sách Đơn Hàng</span>
         </NavLink>
       </div>
     </div>

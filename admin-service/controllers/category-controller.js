@@ -76,35 +76,43 @@ const getOneCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
   try {
+    const { id } = req.params;
+    const existingCategory = await categoryModel.findById(id);
+    if (!existingCategory) return res.status(404).json({ success: false, message: "Category not found" });
+
     const { name, description } = req.body;
 
-    const image1 = req.files.image1 && req.files.image1[0];
+    const imageFiles = [req.files?.image1?.[0]];
+    const newImage = []; // set up a blank array for new image
 
-    // cloudinary logic
-    const images = [image1].filter((item) => item !== undefined);
-
-    let imagesUrl = await Promise.all(
-      images.map(async (item) => {
-        let result = await cloudinary.uploader.upload(item.path, { resource_type: 'image' });
-        return result.secure_url;
-      })
-    );
-
-    const categoryData = {
-      name,
-      description,
-      image: imagesUrl
+    // Upload new image if binary, otherwise keep the existing URL
+    for (let i = 0; i < imageFiles.length; i++) {
+      const file = imageFiles[i];
+      if (file) {
+        // delete old image if exists
+        if (existingCategory.image[i]) {
+          const publicId = existingCategory.image[i].split('/').pop().split('.')[0];
+          await cloudinary.uploader.destroy(publicId);
+        }
+        const upload = await cloudinary.uploader.upload(file.path, { resource_type: "image" });
+        newImage.push(upload.secure_url);
+      } else if (existingCategory.image[i]) {
+        newImage.push(existingCategory.image[i]);
+      }
     }
 
-    console.log(categoryData);
+    const updatedData = {
+      name,
+      description,
+      image: newImage
+    };
 
-    const category = new categoryModel(categoryData);
-    await category.save();
+    await categoryModel.findByIdAndUpdate(id, updatedData, { new: true });
 
-    res.json({ success: true, message: 'Category edited successfully' });
+    res.json({ success: true, message: "Category updated successfully" });
   } catch (error) {
-    console.error('Error fetching category:', error);
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 

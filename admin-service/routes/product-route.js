@@ -14,7 +14,13 @@ router.post('/add', adminAuth, upload.fields([
 ]), addProduct);
 router.get('/get', getProducts);
 router.get('/fetch/:id', getOneProduct);
-router.put('/edit/:id', adminAuth, updateProduct);
+router.put('/edit/:id', adminAuth, upload.fields([
+  { name: "image1", maxCount: 1 },
+  { name: "image2", maxCount: 1 },
+  { name: "image3", maxCount: 1 },
+  { name: "image4", maxCount: 1 }
+]), updateProduct);
+
 router.delete('/delete', adminAuth, removeProduct);
 
 export default router;

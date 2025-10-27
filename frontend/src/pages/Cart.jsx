@@ -7,14 +7,11 @@ import { ShopContext } from "../context/ShopContext";
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const { token, fetchCartCount } = useContext(ShopContext);
+  const { token, fetchCartCount, setLoading } = useContext(ShopContext);
 
-  // const [selectedItems, setSelectedItems] = useState([]);
-
-  // Fetch cart data
   useEffect(() => {
     const fetchCart = async () => {
+      setLoading(true);
       try {
         const res = await axios.get("http://localhost:4003/api/cart", {
           headers: { Authorization: `Bearer ${token}` },
@@ -40,24 +37,21 @@ const Cart = () => {
     if (token) fetchCart();
   }, [token]);
 
-  // Increase quantity (+)
   const increaseQty = async (cartId) => {
     try {
       const item = cartItems.find((i) => i.cartId === cartId);
       if (!item) return;
 
-      // Optimistic UI update
       setCartItems((prev) =>
-        prev.map((i) => (i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i))
+        prev.map((i) =>
+          i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i
+        )
       );
 
-      // Backend call (productId in URL)
       await axios.put(
         `http://localhost:4003/api/cart/update/${item.productId}`,
         {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       await fetchCartCount();
     } catch (err) {
@@ -65,24 +59,21 @@ const Cart = () => {
     }
   };
 
-  // Decrease quantity (-)
   const decreaseQty = async (cartId) => {
     try {
       const item = cartItems.find((i) => i.cartId === cartId);
       if (!item || item.quantity <= 1) return;
 
-      // Optimistic UI update
       setCartItems((prev) =>
-        prev.map((i) => (i.cartId === cartId ? { ...i, quantity: i.quantity - 1 } : i))
+        prev.map((i) =>
+          i.cartId === cartId ? { ...i, quantity: i.quantity - 1 } : i
+        )
       );
 
-      // Backend call (productId in URL)
       await axios.put(
         `http://localhost:4003/api/cart/update/decrease/${item.productId}`,
         {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       await fetchCartCount();
     } catch (err) {
@@ -90,17 +81,17 @@ const Cart = () => {
     }
   };
 
-  // Manual quantity change (optional)
   const handleQtyChange = (cartId, value) => {
     const qty = Number.parseInt(value, 10);
     if (!Number.isNaN(qty) && qty > 0) {
       setCartItems((prev) =>
-        prev.map((item) => (item.cartId === cartId ? { ...item, quantity: qty } : item))
+        prev.map((item) =>
+          item.cartId === cartId ? { ...item, quantity: qty } : item
+        )
       );
     }
   };
 
-  // Remove item
   const removeItem = async (cartId) => {
     try {
       const item = cartItems.find((i) => i.cartId === cartId);
@@ -125,7 +116,7 @@ const Cart = () => {
       await axios.delete("http://localhost:4003/api/cart/clear", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCartItems([]); // Clear UI
+      setCartItems([]);
       await fetchCartCount();
     } catch (err) {
       console.error("Error clearing cart:", err);
@@ -134,9 +125,9 @@ const Cart = () => {
 
   const handleOrderPlacement = async () => {
     try {
+      setLoading(true);
       if (!token) return toast.error("Bạn cần đăng nhập để đặt hàng.");
 
-      // Everything in cart = selected items
       const orderPayload = {
         items: cartItems.map((item) => ({
           productId: item.productId,
@@ -144,15 +135,11 @@ const Cart = () => {
         })),
       };
 
-      console.log(token);
-
       const res = await axios.post(
         "http://localhost:4004/api/order/create",
         orderPayload,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
@@ -168,6 +155,8 @@ const Cart = () => {
     } catch (err) {
       console.error("Error placing order:", err);
       toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -176,33 +165,33 @@ const Cart = () => {
     0
   );
 
-  if (loading) return <p className="text-center p-6">Đang tải...</p>;
-
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Giỏ hàng</h1>
+    <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8]">
+      <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2">
+        Giỏ hàng
+      </h1>
 
       {cartItems.length === 0 ? (
-        <p className="text-gray-600">Giỏ hàng trống.</p>
+        <p className="text-[#6d4c41] italic">Giỏ hàng trống.</p>
       ) : (
         <div className="space-y-4">
           {cartItems.map((item) => (
             <div
               key={item.cartId}
-              className="flex items-center justify-between bg-white shadow-md rounded-xl p-4"
+              className="flex items-center justify-between bg-[#fff8f0] border border-[#d7ccc8] shadow-sm rounded-xl p-4 hover:shadow-md transition"
             >
-              <Link to={"/product/" + item.productId}>
+              <Link to={`/product/${item.productId}`}>
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-20 h-20 object-cover rounded-lg mr-4"
+                  className="w-20 h-20 object-cover rounded-lg border border-[#bcaaa4]"
                 />
               </Link>
 
-              <div className="flex-1">
-                <Link to={"/product/" + item.productId}>
-                  <h2 className="font-semibold">{item.name}</h2>
-                  <p className="text-gray-600 text-sm">
+              <div className="flex-1 ml-4">
+                <Link to={`/product/${item.productId}`}>
+                  <h2 className="font-semibold text-[#4e342e]">{item.name}</h2>
+                  <p className="text-sm text-[#6d4c41]">
                     {item.price.toLocaleString()}₫
                   </p>
                 </Link>
@@ -211,7 +200,7 @@ const Cart = () => {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => decreaseQty(item.cartId)}
-                  className="bg-gray-200 rounded-full w-7 h-7 text-center"
+                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 text-[#4e342e] hover:bg-[#d7ccc8]"
                 >
                   -
                 </button>
@@ -220,23 +209,23 @@ const Cart = () => {
                   min="1"
                   value={item.quantity}
                   onChange={(e) => handleQtyChange(item.cartId, e.target.value)}
-                  className="w-12 text-center border rounded-md"
+                  className="w-12 text-center border border-[#bcaaa4] rounded-md bg-[#fbe9e7] text-[#3e2723]"
                 />
                 <button
                   onClick={() => increaseQty(item.cartId)}
-                  className="bg-gray-200 rounded-full w-7 h-7 text-center"
+                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 text-[#4e342e] hover:bg-[#d7ccc8]"
                 >
                   +
                 </button>
               </div>
 
               <div className="flex items-center space-x-4 ml-6">
-                <p className="font-semibold w-20 text-right">
+                <p className="font-semibold w-20 text-right text-[#3e2723]">
                   {(item.price * item.quantity).toLocaleString()}₫
                 </p>
                 <button
                   onClick={() => removeItem(item.cartId)}
-                  className="text-red-500 hover:underline text-sm"
+                  className="text-[#b71c1c] hover:underline text-sm"
                 >
                   Xóa
                 </button>
@@ -244,19 +233,19 @@ const Cart = () => {
             </div>
           ))}
 
-          <div className="text-right mt-6 border-t pt-4">
-            <p className="text-lg font-semibold">
+          <div className="text-right mt-6 border-t border-[#a1887f] pt-4">
+            <p className="text-lg font-semibold text-[#3e2723]">
               Tổng cộng: {total.toLocaleString()}₫
             </p>
             <div className="mt-4 space-x-3">
               <button
                 onClick={clearCart}
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                className="bg-[#6d4c41] text-white px-4 py-2 rounded-md hover:bg-[#5d4037]"
               >
                 Xóa toàn bộ
               </button>
               <button
-                className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800"
+                className="bg-[#3e2723] text-white px-4 py-2 rounded-md hover:bg-[#4e342e]"
                 onClick={handleOrderPlacement}
               >
                 Thanh toán

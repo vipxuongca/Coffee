@@ -9,7 +9,7 @@ SYSTEM
 
 PRODUCT
 - [ ] sửa việc cho nhập số lượng hàng tồn là số âm. Kiểm tra các biến khác
-- [ ] edit sản phẩm chưa chạy
+- [x] edit sản phẩm chưa chạy
 - [ ] Không cho xóa sản phẩm. Xóa sản phẩm chỉ thực hiện khi có flag isDelete = true.
 
 
