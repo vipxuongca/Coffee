@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
+import { AdminContext } from "../../context/AdminContext";
 
-const Add = ({ token }) => {
+const Add = () => {
+  const { token, setLoading } = useContext(AdminContext);//for the loading screen
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
@@ -24,6 +27,7 @@ const Add = ({ token }) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(`${backendUrl}/api/category/get`);
         if (response.data.success) {
@@ -35,6 +39,8 @@ const Add = ({ token }) => {
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchCategories();
@@ -42,6 +48,7 @@ const Add = ({ token }) => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -80,12 +87,16 @@ const Add = ({ token }) => {
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6 mt-6">
-      <h1 className="text-2xl font-semibold mb-6 text-[#3e2723]">Thêm Sản Phẩm</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-[#3e2723]">
+        Thêm Sản Phẩm
+      </h1>
 
       <form
         onSubmit={onSubmitHandler}

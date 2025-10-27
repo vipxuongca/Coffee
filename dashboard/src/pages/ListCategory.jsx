@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { backendUrl } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { AdminContext } from "../../context/AdminContext";
 
-const ListCategory = ({ token }) => {
+const ListCategory = () => {
+  const { token } = useContext(AdminContext);
+  const navigate = useNavigate();
   const API_get = `${backendUrl}/api/category/get`;
   const API_delete = `${backendUrl}/api/category/delete`;
   const [list, setList] = useState([]);
@@ -42,7 +46,7 @@ const ListCategory = ({ token }) => {
   };
 
   const editCategory = (id) => {
-    toast.info(`Edit category ${id} (to be implemented)`);
+    navigate(`/edit-category/${id}`);
   };
 
   useEffect(() => {
@@ -51,7 +55,9 @@ const ListCategory = ({ token }) => {
 
   return (
     <div className="p-4">
-      <p className="mb-3 text-lg font-semibold text-gray-800">Danh Mục Phân Loại</p>
+      <p className="mb-3 text-lg font-semibold text-gray-800">
+        Danh Mục Phân Loại
+      </p>
 
       <div className="w-full border rounded-lg overflow-hidden shadow-sm">
         {/* Header */}

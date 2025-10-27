@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useContext } from "react";
+import { AdminContext } from "../../context/AdminContext";
 
 const Orders = () => {
-  return (
-    <div>Orders</div>
-  )
-}
+  const { token } = useContext(AdminContext);
+  return <div>Orders</div>;
+};
 
-export default Orders
+export default Orders;

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
+import { AdminContext } from "../../context/AdminContext";
 
-const AddCategory = ({ token }) => {
+const AddCategory = () => {
+  const { token } = useContext(AdminContext);
   const [image1, setImage1] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");

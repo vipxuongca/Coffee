@@ -7,11 +7,11 @@ import { ShopContext } from "../context/ShopContext";
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const { token, fetchCartCount } = useContext(ShopContext);
+  const { token, fetchCartCount, setLoading } = useContext(ShopContext);
 
   useEffect(() => {
     const fetchCart = async () => {
+      setLoading(true);
       try {
         const res = await axios.get("http://localhost:4003/api/cart", {
           headers: { Authorization: `Bearer ${token}` },
@@ -43,7 +43,9 @@ const Cart = () => {
       if (!item) return;
 
       setCartItems((prev) =>
-        prev.map((i) => (i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i))
+        prev.map((i) =>
+          i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i
+        )
       );
 
       await axios.put(
@@ -63,7 +65,9 @@ const Cart = () => {
       if (!item || item.quantity <= 1) return;
 
       setCartItems((prev) =>
-        prev.map((i) => (i.cartId === cartId ? { ...i, quantity: i.quantity - 1 } : i))
+        prev.map((i) =>
+          i.cartId === cartId ? { ...i, quantity: i.quantity - 1 } : i
+        )
       );
 
       await axios.put(
@@ -81,7 +85,9 @@ const Cart = () => {
     const qty = Number.parseInt(value, 10);
     if (!Number.isNaN(qty) && qty > 0) {
       setCartItems((prev) =>
-        prev.map((item) => (item.cartId === cartId ? { ...item, quantity: qty } : item))
+        prev.map((item) =>
+          item.cartId === cartId ? { ...item, quantity: qty } : item
+        )
       );
     }
   };
@@ -93,9 +99,12 @@ const Cart = () => {
 
       setCartItems((prev) => prev.filter((i) => i.cartId !== cartId));
 
-      await axios.delete(`http://localhost:4003/api/cart/remove/${item.productId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `http://localhost:4003/api/cart/remove/${item.productId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       await fetchCartCount();
     } catch (err) {
       console.error("Error removing item from cart:", err);
@@ -116,6 +125,7 @@ const Cart = () => {
 
   const handleOrderPlacement = async () => {
     try {
+      setLoading(true);
       if (!token) return toast.error("Bạn cần đăng nhập để đặt hàng.");
 
       const orderPayload = {
@@ -125,26 +135,35 @@ const Cart = () => {
         })),
       };
 
-      const res = await axios.post("http://localhost:4004/api/order/create", orderPayload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        "http://localhost:4004/api/order/create",
+        orderPayload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (res.data.success) {
         toast.success("Đặt hàng thành công!");
         setCartItems([]);
         navigate(`/place-order/${res.data.orderId}`);
       } else {
-        toast.error("Đặt hàng thất bại: " + (res.data.message || "Lỗi không xác định."));
+        toast.error(
+          "Đặt hàng thất bại: " + (res.data.message || "Lỗi không xác định.")
+        );
       }
     } catch (err) {
       console.error("Error placing order:", err);
       toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  if (loading) return <p className="text-center p-6 text-[#5d4037]">Đang tải...</p>;
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8]">

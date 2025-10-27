@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import { AdminContext } from "../../context/AdminContext";
 
-const Edit = ({ token }) => {
+const Edit = () => {
   const { id } = useParams();
-
+  const { token } = useContext(AdminContext);
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);

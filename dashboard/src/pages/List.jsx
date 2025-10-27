@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { backendUrl, currency } from "../App";
+import React, { useEffect, useState, useContext } from "react";
+import { backendUrl } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { AdminContext } from "../../context/AdminContext";
 
-const List = ({ token }) => {
+const List = () => {
+  const { token, currency, setLoading } = useContext(AdminContext);
   const navigate = useNavigate();
   const API_get = backendUrl + "/api/product/get";
   const API_delete = backendUrl + "/api/product/delete";
@@ -13,6 +15,7 @@ const List = ({ token }) => {
 
   const fetchList = async () => {
     try {
+      // setLoading(true);
       const response = await axios.get(API_get);
       if (response.data.success) {
         setList(response.data.products);
@@ -22,11 +25,14 @@ const List = ({ token }) => {
     } catch (error) {
       console.error(error);
       toast.error(error.message);
+    } finally {
+      // setLoading(false);
     }
   };
 
   const removeProduct = async (id) => {
     try {
+      setLoading(true);
       const response = await axios.delete(API_delete, {
         headers: { Authorization: `Bearer ${token}` },
         data: { id },
@@ -41,6 +47,8 @@ const List = ({ token }) => {
     } catch (error) {
       console.error(error);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,7 +112,9 @@ const List = ({ token }) => {
         ))}
 
         {list.length === 0 && (
-          <p className="text-center text-gray-500 py-6">Không tìm thấy sản phẩm nào</p>
+          <p className="text-center text-gray-500 py-6">
+            Không tìm thấy sản phẩm nào
+          </p>
         )}
       </div>
     </div>
