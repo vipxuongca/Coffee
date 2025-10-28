@@ -170,23 +170,23 @@ const cartUpdateItemDecrease = async (req, res) => {
     const userId = req.user.id;
     const { productId } = req.params;
 
-    let cart = await CartModel.findOne({ userId });
+    const cart = await CartModel.findOne({ userId });
     if (!cart) return res.status(404).json({ error: 'Giỏ hàng trống.' });
 
-    const item = cart.items.find(i => i.productId === productId);
-    if (!item) return res.status(404).json({ error: 'Sản phẩm không có trong giỏ hàng.' });
+    // Find item by matching ObjectId correctly
+    const item = cart.items.find(i => i.productId.toString() === productId);
+    if (!item)
+      return res.status(404).json({ error: 'Sản phẩm không có trong giỏ hàng.' });
 
+    // If quantity is 1 or less, remove the item
     if (item.quantity <= 1) {
-      // Optionally remove item
-      cart.items = cart.items.filter(i => i.productId !== productId);
+      cart.items = cart.items.filter(i => i.productId.toString() !== productId);
     } else {
       item.quantity -= 1;
     }
 
     await cart.save();
-
     res.json({ message: 'Giảm số lượng sản phẩm thành công.', cart });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Giảm số lượng thất bại.' });
@@ -229,6 +229,7 @@ const cartUpdateItemIncrease = async (req, res) => {
 const cartUpdateQuantity = async (req, res) => {
   try {
     const userId = req.user.id;
+    const { quantity } = req.body
     const { productId } = req.params;
 
     let cart = await CartModel.findOne({ userId });
@@ -236,18 +237,9 @@ const cartUpdateQuantity = async (req, res) => {
 
     const item = cart.items.find(i => i.productId === productId);
     if (!item) return res.status(404).json({ error: 'Sản phẩm không có trong giỏ hàng.' });
-
-    if (item.quantity <= 1) {
-      // Optionally remove item
-      cart.items = cart.items.filter(i => i.productId !== productId);
-    } else {
-      item.quantity -= 1;
-    }
-
+    item.quantity = quantity;
     await cart.save();
-
     res.json({ message: 'Thay đổi số lượng sản phẩm thành công.', cart });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Thay đổi số lượng thất bại.' });

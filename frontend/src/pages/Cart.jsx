@@ -81,14 +81,28 @@ const Cart = () => {
     }
   };
 
-  const handleQtyChange = (cartId, value) => {
-    const qty = Number.parseInt(value, 10);
-    if (!Number.isNaN(qty) && qty > 0) {
-      setCartItems((prev) =>
-        prev.map((item) =>
-          item.cartId === cartId ? { ...item, quantity: qty } : item
-        )
+  const handleQtyChange = async (cartId, value) => {
+    try {
+      const item = cartItems.find((i) => i.cartId === cartId);
+      const quantity = Number.parseInt(value, 10);
+      if (!item) return;
+      if (!Number.isNaN(quantity) & (quantity > 0)) {
+        setCartItems((prev) =>
+          prev.map((item) =>
+            item.cartId === cartId ? { ...item, quantity: quantity } : item
+          )
+        );
+      }
+
+      await axios.put(
+        `http://localhost:4003/api/cart/update/quantity/${item.productId}`,
+        { quantity },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
+      await fetchCartCount();
+    } catch (err) {
+      toast.error("Có lỗi xảy ra khi thay đổi số lượng");
+      console.error("Error changing quantity:", err);
     }
   };
 
@@ -209,7 +223,9 @@ const Cart = () => {
                   min="1"
                   value={item.quantity}
                   onChange={(e) => handleQtyChange(item.cartId, e.target.value)}
-                  className="w-12 text-center border border-[#bcaaa4] rounded-md bg-[#fbe9e7] text-[#3e2723]"
+                  className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723] 
+             [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none 
+             [&::-webkit-outer-spin-button]:appearance-none"
                 />
                 <button
                   onClick={() => increaseQty(item.cartId)}
