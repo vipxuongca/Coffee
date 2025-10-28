@@ -85,7 +85,7 @@ const Cart = () => {
     try {
       const item = cartItems.find((i) => i.cartId === cartId);
       const quantity = Number.parseInt(value, 10);
-      if (!item || item.quantity <= 1) return;
+      if (!item ) return;
       if (!Number.isNaN(quantity) & (quantity > 0)) {
         setCartItems((prev) =>
           prev.map((item) =>
