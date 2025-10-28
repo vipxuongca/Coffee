@@ -75,6 +75,25 @@ const Product = () => {
     await cartAdd(productData._id, quantity);
   };
 
+  const handleQuantityChange = (e) => {
+    const value = Number.parseInt(e.target.value, 10);
+
+    // Reject invalid or NaN input
+    if (Number.isNaN(value) || value < 1) {
+      setQuantity(1);
+      return;
+    }
+
+    // Enforce stock limit
+    if (productData?.stock && value > productData.stock) {
+      setQuantity(productData.stock);
+      toast.warn("Số lượng vượt quá tồn kho");
+      return;
+    }
+
+    setQuantity(value);
+  };
+
   if (!productData) {
     return (
       <div className="text-center py-20 text-gray-500 animate-pulse">
@@ -145,7 +164,9 @@ const Product = () => {
 
           {/* Quantity Selector */}
           <div className="mt-4 flex items-center gap-3">
-            <strong className="text-sm text-gray-700 font-medium">SỐ LƯỢNG:</strong>
+            <strong className="text-sm text-gray-700 font-medium">
+              SỐ LƯỢNG:
+            </strong>
             <div className="flex items-center border rounded-lg">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -153,7 +174,17 @@ const Product = () => {
               >
                 -
               </button>
-              <span className="px-4 text-gray-800 select-none">{quantity}</span>
+              <input
+                type="number"
+                min="1"
+                value={quantity}
+                onChange={(e) =>
+                  handleQuantityChange(e)
+                }
+                className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723] 
+             [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none 
+             [&::-webkit-outer-spin-button]:appearance-none"
+              />
               <button
                 onClick={() =>
                   setQuantity((q) => Math.min(productData.stock || 99, q + 1))
