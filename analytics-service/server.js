@@ -4,9 +4,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
-import adminRouter from './routes/admin-route.js';
-import productRouter from './routes/product-route.js';
-import categoryRouter from './routes/category-route.js';
+// import adminRouter from './routes/admin-route.js';
+// import productRouter from './routes/product-route.js';
+// import categoryRouter from './routes/category-route.js';
 
 //initialisation
 dotenv.config({ path: '.env.development' });
@@ -24,9 +24,9 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //api endpoint
-app.use('/api/admin', adminRouter);
-app.use('/api/product', productRouter);
-app.use('/api/category', categoryRouter);
+// app.use('/api/admin', adminRouter);
+// app.use('/api/product', productRouter);
+// app.use('/api/category', categoryRouter);
 
 
 //start the server
