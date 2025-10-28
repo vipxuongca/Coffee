@@ -44,5 +44,5 @@ app.use('/api/user-detail', userDetailRouter);
 
 //start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`USER-DETAILS is running on http://localhost:${PORT}`);
 }); 

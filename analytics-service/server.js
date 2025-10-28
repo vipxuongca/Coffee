@@ -13,7 +13,7 @@ dotenv.config({ path: '.env.development' });
 
 // configuration
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4007;
 connectDB();
 connectCloudinary();
 
@@ -31,5 +31,5 @@ app.use('/api/category', categoryRouter);
 
 //start the server
 app.listen(PORT, () => {
-    console.log(`ADMIN is running on http://localhost:${PORT}`);
+    console.log(`ANALYTICS is running on http://localhost:${PORT}`);
 }); 

@@ -48,4 +48,4 @@ app.use('/api/order', orderRouter);
 app.use('/api/order/admin', orderAdminRouter);
 
 //listen
-app.listen(PORT, () => console.log(`Server running on port: http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`ORDER running on port: http://localhost:${PORT}`));

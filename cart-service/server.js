@@ -54,4 +54,4 @@ app.use('/api/cart/remove/', cartRemoveProductRoutes);
 app.use('/api/cart/clear', cartClearRoutes);
 
 //listen
-app.listen(PORT, () => console.log(`Server running on port: http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`CART running on port: http://localhost:${PORT}`));

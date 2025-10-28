@@ -18,7 +18,7 @@ import connectDB from './config/db.js'
 //initialisation
 
 const app = express();
-const PORT = process.env.PORT || 6003;
+const PORT = process.env.PORT || 4008;
 connectDB();
 
 // use json for the whole application, this automatically parse JSON into objects
@@ -28,4 +28,4 @@ app.use(bodyParser.json());
 
 
 
-app.listen(PORT, () => console.log(`Server running on port: http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`PAYMENT running on port: http://localhost:${PORT}`));
