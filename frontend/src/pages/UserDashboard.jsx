@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import UserOrders from "../components/UserOrder";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -40,7 +41,7 @@ const UserDashboard = () => {
             </p>
           </div>
         );
-      case "shipping":
+      case "details":
         return (
           <div className="bg-white shadow rounded-2xl p-6">
             <h2 className="text-xl font-semibold mb-4">Thông Tin Người Nhận</h2>
@@ -121,6 +122,8 @@ const UserDashboard = () => {
             </form>
           </div>
         );
+      case "orders":
+        return <UserOrders />;
       case "logout":
         localStorage.removeItem("token");
         globalThis.location.href = "/";
@@ -136,7 +139,7 @@ const UserDashboard = () => {
       <aside className="w-64 bg-white shadow-md p-6 space-y-4">
         <h1 className="text-2xl font-semibold mb-6">Tài Khoản</h1>
         <nav className="space-y-2">
-          {["profile", "shipping", "orders", "password", "logout"].map(
+          {["profile", "details", "orders", "password", "logout"].map(
             (tab) => (
               <button
                 key={tab}
@@ -148,7 +151,7 @@ const UserDashboard = () => {
                 }`}
               >
                 {tab === "profile" && "Thông Tin Tài Khoản"}
-                {tab === "shipping" && "Thông Tin Người Nhận"}
+                {tab === "details" && "Thông Tin Người Nhận"}
                 {tab === "orders" && "Danh Sách Đơn Hàng"}
                 {tab === "password" && "Thay Đổi Mật Khẩu"}
                 {tab === "logout" && "Đăng Xuất"}

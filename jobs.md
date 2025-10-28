@@ -2,6 +2,7 @@ Việc cần làm
 TOKEN
 - [ ] Chỉnh sửa front end để phản ứng với việc hết hạn token => yêu cầu đăng nhập lại
 - [ ] Thêm chức năng và database để xử lý refresh token
+- [ ] Phân trang trong: Shop, order (tất cả các danh sách)
 
 SYSTEM
 - [ ] upon deleting or update products/categories that have image, must DELETE that from the cloud to save storage.
@@ -14,7 +15,7 @@ PRODUCT
 
 
 SHOP
-- [ ] Phân trang trong shop. Hiển thị khoảng 10 đến 12
+
 
 CART
 - [ ] cart front end page use hard coded APIs

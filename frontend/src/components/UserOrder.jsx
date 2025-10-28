@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AdminContext } from "../../context/AdminContext";
+import { ShopContext } from "../context/ShopContext";
 
-const Orders = () => {
-  const { token } = useContext(AdminContext);
+const UserOrders = () => {
+  const { token } = useContext(ShopContext);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:4004/api/order/admin/get", {
+        const res = await fetch("http://localhost:4004/api/order/get-user/", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -49,7 +49,7 @@ const Orders = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Order Management</h2>
+      <h2 className="text-2xl font-semibold mb-4">Your Orders</h2>
 
       <div className="overflow-x-auto shadow rounded-lg">
         <table className="min-w-full text-sm text-left border-collapse">
@@ -70,9 +70,7 @@ const Orders = () => {
                 key={order.orderId}
                 className="border-b hover:bg-gray-50 transition-colors"
               >
-                <td className="px-4 py-3 text-gray-600 font-medium">
-                  {index + 1}
-                </td>
+                <td className="px-4 py-3 text-gray-600">{index + 1}</td>
                 <td className="px-4 py-3 font-mono text-xs">
                   {order.orderId.slice(0, 10)}...
                 </td>
@@ -130,4 +128,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default UserOrders;

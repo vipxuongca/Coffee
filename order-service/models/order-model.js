@@ -30,6 +30,7 @@ const orderUserSchema = new mongoose.Schema({
 // --- Order Schema ---
 const orderSchema = new mongoose.Schema(
   {
+    orderBusinessCode: { type: String, unique: true },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
     userEmail: { type: String, required: true },
     userDetail: { type: orderUserSchema, required: true },
