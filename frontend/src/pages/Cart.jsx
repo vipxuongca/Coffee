@@ -81,14 +81,28 @@ const Cart = () => {
     }
   };
 
-  const handleQtyChange = (cartId, value) => {
-    const qty = Number.parseInt(value, 10);
-    if (!Number.isNaN(qty) && qty > 0) {
-      setCartItems((prev) =>
-        prev.map((item) =>
-          item.cartId === cartId ? { ...item, quantity: qty } : item
-        )
+  const handleQtyChange = async (cartId, value) => {
+    try {
+      const item = cartItems.find((i) => i.cartId === cartId);
+      const quantity = Number.parseInt(value, 10);
+      if (!item || item.quantity <= 1) return;
+      if (!Number.isNaN(quantity) & (quantity > 0)) {
+        setCartItems((prev) =>
+          prev.map((item) =>
+            item.cartId === cartId ? { ...item, quantity: quantity } : item
+          )
+        );
+      }
+
+      await axios.put(
+        `http://localhost:4003/api/cart/update/quantity/${item.productId}`,
+        { quantity },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
+      await fetchCartCount();
+    } catch (err) {
+      toast.error("Có lỗi xảy ra khi thay đổi số lượng");
+      console.error("Error changing quantity:", err);
     }
   };
 
