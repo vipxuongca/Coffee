@@ -11,15 +11,8 @@ import cors from "cors";
 //modules
 import connectDB from './config/mongodb.js'
 
-//routing modules
 // routing for cart
-import cartRoutes from './routes/cart-get.js';
-import cartAddRoutes from './routes/cart-add-product.js';
-import cartUpdateProductIncreaseQuantity from './routes/cart-update-product-increase-quantity.js';
-import cartUpdateProductDecreaseQuantity from './routes/cart-update-product-decrease-quantity.js';
-import cartUpdateQuantity from './routes/cart-update-quantity.js';
-import cartRemoveProductRoutes from './routes/cart-remove-product.js';
-import cartClearRoutes from './routes/cart-clear.js';
+import cartRoutes from './routes/cart-route.js';
 
 //initialisation
 const app = express();
@@ -46,12 +39,6 @@ app.use(bodyParser.json());
 // Routes listing
 // CART
 app.use('/api/cart', cartRoutes);
-app.use('/api/cart/add', cartAddRoutes); // with body of quantity
-app.use('/api/cart/update/', cartUpdateProductIncreaseQuantity);
-app.use('/api/cart/update/decrease/', cartUpdateProductDecreaseQuantity);
-app.use('/api/cart/update/quantity/', cartUpdateQuantity);
-app.use('/api/cart/remove/', cartRemoveProductRoutes);
-app.use('/api/cart/clear', cartClearRoutes);
 
 //listen
 app.listen(PORT, () => console.log(`CART running on port: http://localhost:${PORT}`));
