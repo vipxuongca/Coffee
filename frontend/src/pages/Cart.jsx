@@ -85,7 +85,7 @@ const Cart = () => {
     try {
       const item = cartItems.find((i) => i.cartId === cartId);
       const quantity = Number.parseInt(value, 10);
-      if (!item ) return;
+      if (!item) return;
       if (!Number.isNaN(quantity) & (quantity > 0)) {
         setCartItems((prev) =>
           prev.map((item) =>
@@ -223,7 +223,9 @@ const Cart = () => {
                   min="1"
                   value={item.quantity}
                   onChange={(e) => handleQtyChange(item.cartId, e.target.value)}
-                  className="w-12 text-center border border-[#bcaaa4] rounded-md bg-[#fbe9e7] text-[#3e2723]"
+                  className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723] 
+             [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none 
+             [&::-webkit-outer-spin-button]:appearance-none"
                 />
                 <button
                   onClick={() => increaseQty(item.cartId)}
