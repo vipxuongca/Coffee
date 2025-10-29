@@ -28,7 +28,7 @@ const Edit = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/product/fetch/${id}`);
+      const response = await axios.get(`http://localhost:4000/api/product/fetch/${id}`);
       if (response.data.success) {
         const product = response.data.product;
 
@@ -65,7 +65,7 @@ const Edit = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/category/get`);
+        const response = await axios.get(`http://localhost:4000/api/category/get`);
         if (response.data.success) {
           const categories = response.data.category || [];
           setCategoryList(categories);
@@ -99,7 +99,7 @@ const Edit = () => {
       image4 && formData.append("image4", image4);
 
       const response = await axios.put(
-        backendUrl + "/api/product/edit/" + id,
+        "http://localhost:4000/api/product/edit/" + id,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
