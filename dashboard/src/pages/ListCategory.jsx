@@ -9,8 +9,8 @@ import { Edit, Trash } from "lucide-react";
 const ListCategory = () => {
   const { token } = useContext(AdminContext);
   const navigate = useNavigate();
-  const API_get = `${backendUrl}/api/category/get`;
-  const API_delete = `${backendUrl}/api/category/delete`;
+  const API_get = `http://localhost:4000/api/category/get`;
+  const API_delete = `http://localhost:4000/api/category/delete`;
   const [list, setList] = useState([]);
 
   const fetchList = async () => {

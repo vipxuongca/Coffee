@@ -2,26 +2,37 @@ import React, { useState } from "react";
 import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
+import { AdminContext } from "../../context/AdminContext";
+import { useContext } from "react";
 
-const Login = ({ setToken }) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setLoading, setToken } = useContext(AdminContext);
+
   const onSubmitHandler = async (e) => {
+    setLoading(true);
     try {
       e.preventDefault();
-      const response = await axios.post(backendUrl + "/api/admin/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:4000/api/admin/login",
+        {
+          email,
+          password,
+        }
+      );
 
       if (response.data.success) {
         setToken(response.data.token);
+        toast.success("Đăng nhập Admin thành công");
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -23,7 +23,7 @@ const Product = () => {
   const verifyStockCount = async (productId, quantity) => {
     try {
       const res = await axios.post(
-        `${backendUrl}/api/product/stock/${productId}`,
+        `http://localhost:4000/api/product/stock/${productId}`,
         { quantity },
         {}
       );
@@ -43,7 +43,7 @@ const Product = () => {
     }
     try {
       const res = await axios.post(
-        `${backendCartUrl}/api/cart/add/${productId}`,
+        `http://localhost:4003/api/cart/add/${productId}`,
         { quantity },
         {
           headers: {
@@ -178,9 +178,7 @@ const Product = () => {
                 type="number"
                 min="1"
                 value={quantity}
-                onChange={(e) =>
-                  handleQuantityChange(e)
-                }
+                onChange={(e) => handleQuantityChange(e)}
                 className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723] 
              [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none 
              [&::-webkit-outer-spin-button]:appearance-none"

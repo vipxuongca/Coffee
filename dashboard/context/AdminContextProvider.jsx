@@ -8,6 +8,7 @@ const AdminContextProvider = (props) => {
   const [loading, setLoading] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
 
+  // Effect for show loading
   useEffect(() => {
     let timer;
     if (loading) {
@@ -17,6 +18,10 @@ const AdminContextProvider = (props) => {
     }
     return () => clearTimeout(timer);
   }, [loading]);
+
+  useEffect(() => {
+    localStorage.setItem("token", token);
+  }, [token]);
 
   const value = {
     currency,
