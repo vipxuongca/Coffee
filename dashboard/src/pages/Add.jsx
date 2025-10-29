@@ -29,7 +29,7 @@ const Add = () => {
     const fetchCategories = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${backendUrl}/api/category/get`);
+        const response = await axios.get(`http://localhost:4000/api/category/get`);
         if (response.data.success) {
           const categories = response.data.category || [];
           setCategoryList(categories);

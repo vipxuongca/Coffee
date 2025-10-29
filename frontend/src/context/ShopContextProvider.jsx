@@ -37,7 +37,7 @@ const ShopContextProvider = (props) => {
 
   const getProductsData = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/product/get`);
+      const response = await axios.get(`http://localhost:4000/api/product/get`);
       if (response.data.success) {
         setProducts(response.data.products);
       } else {
@@ -50,7 +50,7 @@ const ShopContextProvider = (props) => {
   };
   const getCategoriesData = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/category/get`);
+      const response = await axios.get(`http://localhost:4000/api/category/get`);
       if (response.data.success) {
         setCategories(response.data.category);
       } else {
