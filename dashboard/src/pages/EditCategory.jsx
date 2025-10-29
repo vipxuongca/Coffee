@@ -17,7 +17,7 @@ const EditCategory = () => {
   const fetchCategory = async () => {
     try {
       const res = await axios.get(
-        `${backendUrl}/api/category/fetch/${categoryId}`
+        `http://localhost:4000/api/category/fetch/${categoryId}`
       );
       if (res.data.success) {
         const cat = res.data.category;
@@ -51,7 +51,7 @@ const EditCategory = () => {
       image1 && formData.append("image1", image1);
 
       const response = await axios.put(
-        `${backendUrl}/api/category/edit/` + categoryId,
+        `http://localhost:4000/api/category/edit/` + categoryId,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
