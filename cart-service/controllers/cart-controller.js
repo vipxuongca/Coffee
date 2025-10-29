@@ -1,5 +1,6 @@
 import CartModel from '../models/cart-model.js';
 import axios from 'axios';
+import { productApi } from '../config/api.js';
 
 const cartGet = async (req, res) => {
   try {
@@ -15,7 +16,7 @@ const cartGet = async (req, res) => {
     const itemsWithDetails = await Promise.all(
       cart.items.map(async (item) => {
         try {
-          const fetchURI = `${process.env.PRODUCT_GET_ONE}/${item.productId}`;
+          const fetchURI = `${productApi.getOneProduct}/${item.productId}`;
           const productRes = await axios.get(fetchURI);
           // console.log('Fetched product:', productRes.data);
           return {
@@ -64,7 +65,7 @@ const cartAdd = async (req, res) => {
       return res.status(400).json({ error: 'Số lượng sản phẩm không hợp lệ.' });
     }
 
-    const fetchURI = `${process.env.PRODUCT_GET_ONE}/${productId}`;
+    const fetchURI = `${productApi.getOneProduct}/${productId}`;
     console.log('Fetch URI:', fetchURI);
     const productResponse = await axios.get(fetchURI);
     const productData = productResponse.data;
