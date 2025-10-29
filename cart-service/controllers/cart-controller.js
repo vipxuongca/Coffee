@@ -200,7 +200,7 @@ const cartUpdateItemIncrease = async (req, res) => {
     const { productId } = req.params;
 
     // Check product exists and stock
-    const productResponse = await axios.get(`${process.env.PRODUCT_GET_ONE}/${productId}`);
+    const productResponse = await axios.get(`http://localhost:4000/api/product/fetch/${productId}`);
     const productData = productResponse.data;
     if (!productData) {
       return res.status(404).json({ error: 'Không có sản phẩm này.' });
