@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -16,7 +16,14 @@ const Cart = () => {
     clearCart,
     cartItems,
     totalAmount,
+    setCartItems,
   } = useContext(CartContext);
+
+  const [tempQty, setTempQty] = useState({});
+
+  const handleLocalChange = (cartId, value) => {
+    setTempQty((prev) => ({ ...prev, [cartId]: value }));
+  };
 
   const handleQtyChange = async (cartId, value) => {
     try {
@@ -80,8 +87,6 @@ const Cart = () => {
     }
   };
 
-  console.log("this is cart: ", cartItems);
-
   return (
     <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8]">
       <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2">
@@ -124,12 +129,16 @@ const Cart = () => {
                 <input
                   type="number"
                   min="1"
-                  value={item.quantity}
-                  onChange={(e) => handleQtyChange(item.cartId, e.target.value)}
-                  className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723] 
-             [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none 
-             [&::-webkit-outer-spin-button]:appearance-none"
+                  value={tempQty[item.cartId] ?? item.quantity}
+                  onChange={(e) =>
+                    handleLocalChange(item.cartId, e.target.value)
+                  }
+                  onBlur={(e) => handleQtyChange(item.cartId, e.target.value)}
+                  className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723]
+     [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none
+     [&::-webkit-outer-spin-button]:appearance-none"
                 />
+
                 <button
                   onClick={() => increaseQty(item.cartId)}
                   className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 text-[#4e342e] hover:bg-[#d7ccc8]"
