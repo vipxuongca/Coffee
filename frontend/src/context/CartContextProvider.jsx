@@ -2,6 +2,7 @@ import { CartContext } from "./CartContext";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { ShopContext } from "./ShopContext";
+import { toast } from "react-toastify";
 
 const CartContextProvider = (props) => {
   // import context
@@ -21,42 +22,11 @@ const CartContextProvider = (props) => {
       // console.log("message:", res.data.message);
       return res.data;
     } catch (err) {
-      console.error("Cart API error:", err.response?.data || err.message);
+      // console.error("Cart API error:", err.response?.data || err.message);
+      return err.response?.data;
     }
   };
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get("http://localhost:4003/api/cart", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const data = res.data.items.map((item) => ({
-          cartId: item._id,
-          productId: item.product.product._id,
-          name: item.product.product.name,
-          price: item.product.product.price,
-          quantity: item.quantity,
-          image: item.product.product.image[0],
-        }));
-
-        setCartItems(data);
-      } catch (err) {
-        console.error("Error fetching cart:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (token) fetchCart();
-  }, [token]);
-
-  const totalAmount = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
   const getQuantityByProductId = (productId) => {
     // console.log("function input productId:", productId);
     // console.log("typeof input:", typeof productId);
@@ -100,10 +70,6 @@ const CartContextProvider = (props) => {
       setCartItems([]);
     }
   };
-
-  //   useEffect(() => {
-  //   console.log("cartItems updated:", cartItems);
-  // }, [cartItems]);
 
   const increaseQty = async (cartId) => {
     try {
@@ -181,9 +147,24 @@ const CartContextProvider = (props) => {
   };
 
   const cartAdd = async (productId, quantity) => {
-    const stockAvailable = await verifyStockCount(productId, quantity);
+    const currentQty = getQuantityByProductId(productId);
+    const totalQty = currentQty + quantity;
+    const stockAvailable = await verifyStockCount(productId, totalQty);
+    // console.log("stocka",stockAvailable)
     if (!stockAvailable.success) {
-      toast.error("Không đủ hàng trong kho");
+      if (currentQty == 0) {
+        toast.warning("Không đủ hàng trong kho");
+      } else {
+        toast.warning(
+          `Bạn đang có ${currentQty} sản phẩm trong giỏ. Không thể thêm ${quantity} vì không đủ hàng trong kho`,
+          {
+            autoClose: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          }
+        );
+      }
       return;
     }
     try {
@@ -200,7 +181,7 @@ const CartContextProvider = (props) => {
       await updateCartContext();
       toast.success("Thêm vào giỏ hàng thành công");
     } catch (err) {
-      console.error("Cart API error:", err.response?.data || err.message);
+      // console.error("Cart API error:", err.response?.data || err.message);
       toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
     }
   };
@@ -208,6 +189,43 @@ const CartContextProvider = (props) => {
   useEffect(() => {
     updateCartContext();
   }, [token]);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get("http://localhost:4003/api/cart", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = res.data.items.map((item) => ({
+          cartId: item._id,
+          productId: item.product.product._id,
+          name: item.product.product.name,
+          price: item.product.product.price,
+          quantity: item.quantity,
+          image: item.product.product.image[0],
+        }));
+
+        setCartItems(data);
+      } catch (err) {
+        console.error("Error fetching cart:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) fetchCart();
+  }, [token]);
+
+  //   useEffect(() => {
+  //   console.log("cartItems updated:", cartItems);
+  // }, [cartItems]);
+
+  const totalAmount = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   const value = {
     cartCountTotal,

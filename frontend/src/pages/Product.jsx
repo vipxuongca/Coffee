@@ -3,15 +3,14 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import RelatedProducts from "../components/RelatedProducts";
 import { assets } from "../assets/assets";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { CartContext } from "../context/CartContext";
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, backendCartUrl, backendUrl, token } =
-    useContext(ShopContext);
 
+  // contexts
+  const { products, currency } = useContext(ShopContext);
   const { getQuantityByProductId, cartAdd } = useContext(CartContext);
 
   // states
