@@ -7,81 +7,16 @@ import { CartContext } from "../context/CartContext";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
   const { token, setLoading } = useContext(ShopContext);
-  const { updateCartContext } = useContext(CartContext);
-
-  useEffect(() => {
-    const fetchCart = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get("http://localhost:4003/api/cart", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const data = res.data.items.map((item) => ({
-          cartId: item._id,
-          productId: item.product.product._id,
-          name: item.product.product.name,
-          price: item.product.product.price,
-          quantity: item.quantity,
-          image: item.product.product.image[0],
-        }));
-
-        setCartItems(data);
-      } catch (err) {
-        console.error("Error fetching cart:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (token) fetchCart();
-  }, [token]);
-
-  const increaseQty = async (cartId) => {
-    try {
-      const item = cartItems.find((i) => i.cartId === cartId);
-      if (!item) return;
-
-      setCartItems((prev) =>
-        prev.map((i) =>
-          i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i
-        )
-      );
-
-      await axios.put(
-        `http://localhost:4003/api/cart/update/${item.productId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      await updateCartContext();
-    } catch (err) {
-      console.error("Error increasing quantity:", err);
-    }
-  };
-
-  const decreaseQty = async (cartId) => {
-    try {
-      const item = cartItems.find((i) => i.cartId === cartId);
-      if (!item || item.quantity <= 1) return;
-
-      setCartItems((prev) =>
-        prev.map((i) =>
-          i.cartId === cartId ? { ...i, quantity: i.quantity - 1 } : i
-        )
-      );
-
-      await axios.put(
-        `http://localhost:4003/api/cart/update/decrease/${item.productId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      await updateCartContext();
-    } catch (err) {
-      console.error("Error decreasing quantity:", err);
-    }
-  };
+  const {
+    updateCartContext,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+    clearCart,
+    cartItems,
+    totalAmount,
+  } = useContext(CartContext);
 
   const handleQtyChange = async (cartId, value) => {
     try {
@@ -105,37 +40,6 @@ const Cart = () => {
     } catch (err) {
       toast.error("Có lỗi xảy ra khi thay đổi số lượng");
       console.error("Error changing quantity:", err);
-    }
-  };
-
-  const removeItem = async (cartId) => {
-    try {
-      const item = cartItems.find((i) => i.cartId === cartId);
-      if (!item) return;
-
-      setCartItems((prev) => prev.filter((i) => i.cartId !== cartId));
-
-      await axios.delete(
-        `http://localhost:4003/api/cart/remove/${item.productId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      await updateCartContext();
-    } catch (err) {
-      console.error("Error removing item from cart:", err);
-    }
-  };
-
-  const clearCart = async () => {
-    try {
-      await axios.delete("http://localhost:4003/api/cart/clear", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCartItems([]);
-      await updateCartContext();
-    } catch (err) {
-      console.error("Error clearing cart:", err);
     }
   };
 
@@ -176,10 +80,7 @@ const Cart = () => {
     }
   };
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  console.log("this is cart: ", cartItems);
 
   return (
     <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8]">
@@ -253,7 +154,7 @@ const Cart = () => {
 
           <div className="text-right mt-6 border-t border-[#a1887f] pt-4">
             <p className="text-lg font-semibold text-[#3e2723]">
-              Tổng cộng: {total.toLocaleString()}₫
+              Tổng cộng: {totalAmount.toLocaleString()}₫
             </p>
             <div className="mt-4 space-x-3">
               <button

@@ -5,11 +5,44 @@ import { ShopContext } from "./ShopContext";
 
 const CartContextProvider = (props) => {
   // import context
-  const { token, backendCartUrl } = useContext(ShopContext);
+  const { token, backendCartUrl, setLoading } = useContext(ShopContext);
 
   // states
   const [cartCountTotal, setCartCountTotal] = useState(0); // nav bar show
   const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get("http://localhost:4003/api/cart", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = res.data.items.map((item) => ({
+          cartId: item._id,
+          productId: item.product.product._id,
+          name: item.product.product.name,
+          price: item.product.product.price,
+          quantity: item.quantity,
+          image: item.product.product.image[0],
+        }));
+
+        setCartItems(data);
+      } catch (err) {
+        console.error("Error fetching cart:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) fetchCart();
+  }, [token]);
+
+  const totalAmount = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   //function
   const updateCartContext = async () => {
@@ -20,21 +53,101 @@ const CartContextProvider = (props) => {
       });
 
       const items = res.data.items || [];
+      console.log("item is: ", items);
 
       // total number of all products in the cart
       const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
       setCartCountTotal(totalItems);
 
-      // store structured cart item count list
+      //store structured cart item count list
       const itemList = items.map((item) => ({
+        cartId: item._id,
         productId: item.productId,
-        count: item.quantity,
+        name: item.product.product.name,
+        quantity: item.quantity,
+        image: item.product.product.image[0],
+        price: item.product.product.price,
       }));
       setCartItems(itemList);
     } catch (err) {
       console.error("Failed to fetch cart count:", err.message);
       setCartCountTotal(0);
       setCartItems([]);
+    }
+  };
+
+  const increaseQty = async (cartId) => {
+    try {
+      const item = cartItems.find((i) => i.cartId === cartId);
+      if (!item) return;
+
+      setCartItems((prev) =>
+        prev.map((i) =>
+          i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i
+        )
+      );
+
+      await axios.put(
+        `http://localhost:4003/api/cart/update/${item.productId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      await updateCartContext();
+    } catch (err) {
+      console.error("Error increasing quantity:", err);
+    }
+  };
+
+  const decreaseQty = async (cartId) => {
+    try {
+      const item = cartItems.find((i) => i.cartId === cartId);
+      if (!item || item.quantity <= 1) return;
+
+      setCartItems((prev) =>
+        prev.map((i) =>
+          i.cartId === cartId ? { ...i, quantity: i.quantity - 1 } : i
+        )
+      );
+
+      await axios.put(
+        `http://localhost:4003/api/cart/update/decrease/${item.productId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      await updateCartContext();
+    } catch (err) {
+      console.error("Error decreasing quantity:", err);
+    }
+  };
+
+  const removeItem = async (cartId) => {
+    try {
+      const item = cartItems.find((i) => i.cartId === cartId);
+      if (!item) return;
+
+      setCartItems((prev) => prev.filter((i) => i.cartId !== cartId));
+
+      await axios.delete(
+        `http://localhost:4003/api/cart/remove/${item.productId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      await updateCartContext();
+    } catch (err) {
+      console.error("Error removing item from cart:", err);
+    }
+  };
+
+  const clearCart = async () => {
+    try {
+      await axios.delete("http://localhost:4003/api/cart/clear", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCartItems([]);
+      await updateCartContext();
+    } catch (err) {
+      console.error("Error clearing cart:", err);
     }
   };
 
@@ -48,6 +161,11 @@ const CartContextProvider = (props) => {
     updateCartContext,
     cartItems,
     setCartItems,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+    clearCart,
+    totalAmount,
   };
 
   return (
