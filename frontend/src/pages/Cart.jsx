@@ -17,37 +17,13 @@ const Cart = () => {
     cartItems,
     totalAmount,
     setCartItems,
+    handleQtyChange
   } = useContext(CartContext);
 
   const [tempQty, setTempQty] = useState({});
 
   const handleLocalChange = (cartId, value) => {
     setTempQty((prev) => ({ ...prev, [cartId]: value }));
-  };
-
-  const handleQtyChange = async (cartId, value) => {
-    try {
-      const item = cartItems.find((i) => i.cartId === cartId);
-      const quantity = Number.parseInt(value, 10);
-      if (!item) return;
-      if (!Number.isNaN(quantity) & (quantity > 0)) {
-        setCartItems((prev) =>
-          prev.map((item) =>
-            item.cartId === cartId ? { ...item, quantity: quantity } : item
-          )
-        );
-      }
-
-      await axios.put(
-        `http://localhost:4003/api/cart/update/quantity/${item.productId}`,
-        { quantity },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      await updateCartContext();
-    } catch (err) {
-      toast.error("Có lỗi xảy ra khi thay đổi số lượng");
-      console.error("Error changing quantity:", err);
-    }
   };
 
   const handleOrderPlacement = async () => {
