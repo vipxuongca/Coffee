@@ -40,7 +40,7 @@ const orderSchema = new mongoose.Schema(
     shippingFee: { type: Number, default: 0 },
     paymentMethod: {
       type: String,
-      enum: ["COD", "CARD", "TRANSFER"],
+      enum: ["COD", "CARD", "TRANSFER", "PAYMENT_GATEWAY"],
       default: "COD",
     },
     notes: { type: String },

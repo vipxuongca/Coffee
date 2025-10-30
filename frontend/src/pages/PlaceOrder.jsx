@@ -55,6 +55,10 @@ const PlaceOrder = () => {
           <p className="text-gray-700 font-medium">
             Trạng thái: <span className="text-yellow-600">{order.status}</span>
           </p>
+          <p className="text-gray-700 font-medium">
+            Phương thức Thanh toán:{" "}
+            <span className="text-yellow-600">{order.paymentMethod}</span>
+          </p>
         </section>
 
         {/* --- Order Items --- */}

@@ -13,6 +13,7 @@ import {
   UserDashboard,
   NotFound,
   Policy,
+  ConfirmOrder
 } from "./pages";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -24,7 +25,7 @@ import { useContext } from "react";
 import TopScroll from "./components/TopScroll.jsx";
 
 const App = () => {
-  const { token, setToken } = useContext(ShopContext);
+  const { token } = useContext(ShopContext);
   return (
     <div className="px-4 lg:px-[9vw] relative">
       <ToastContainer position="top-left" autoClose={1500} />
@@ -48,6 +49,7 @@ const App = () => {
         <Route path="/order" element={<Order />} />
         <Route path="/policy" element={<Policy />} />
         <Route path="/user" element={<UserDashboard />} />
+        <Route path="/confirm-order" element={<ConfirmOrder />} />
 
         {/* Catch-all route for undefined paths */}
         <Route path="*" element={<NotFound />} />

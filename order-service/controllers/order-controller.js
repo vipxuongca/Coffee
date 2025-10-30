@@ -135,6 +135,7 @@ const orderGetOne = async (req, res) => {
       items: itemsWithDetails,
       total: order.total,
       status: order.status,
+      paymentMethod: order.paymentMethod,
       createdAt: order.createdAt
     });
 
