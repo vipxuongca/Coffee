@@ -57,6 +57,17 @@ const CartContextProvider = (props) => {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+  const getQuantityByProductId = (productId) => {
+    // console.log("function input productId:", productId);
+    // console.log("typeof input:", typeof productId);
+    // console.log("typeof item.productId:", typeof cartItems[0].productId);
+
+    const item = cartItems.find((i) => i.productId == productId);
+    // console.log("here is the current items: ", cartItems);
+    // console.log(item);
+
+    return item ? item.quantity : 0;
+  };
 
   //function
   const updateCartContext = async () => {
@@ -90,10 +101,9 @@ const CartContextProvider = (props) => {
     }
   };
 
-//   useEffect(() => {
-//   console.log("cartItems updated:", cartItems);
-// }, [cartItems]);
-
+  //   useEffect(() => {
+  //   console.log("cartItems updated:", cartItems);
+  // }, [cartItems]);
 
   const increaseQty = async (cartId) => {
     try {
@@ -170,6 +180,31 @@ const CartContextProvider = (props) => {
     }
   };
 
+  const cartAdd = async (productId, quantity) => {
+    const stockAvailable = await verifyStockCount(productId, quantity);
+    if (!stockAvailable.success) {
+      toast.error("Không đủ hàng trong kho");
+      return;
+    }
+    try {
+      const res = await axios.post(
+        `http://localhost:4003/api/cart/add/${productId}`,
+        { quantity },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log("Cart updated:", res.data);
+      await updateCartContext();
+      toast.success("Thêm vào giỏ hàng thành công");
+    } catch (err) {
+      console.error("Cart API error:", err.response?.data || err.message);
+      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
+    }
+  };
+
   useEffect(() => {
     updateCartContext();
   }, [token]);
@@ -185,7 +220,9 @@ const CartContextProvider = (props) => {
     removeItem,
     clearCart,
     totalAmount,
-    verifyStockCount
+    verifyStockCount,
+    getQuantityByProductId,
+    cartAdd,
   };
 
   return (

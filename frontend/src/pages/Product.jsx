@@ -12,51 +12,14 @@ const Product = () => {
   const { products, currency, backendCartUrl, backendUrl, token } =
     useContext(ShopContext);
 
-  const { updateCartContext, cartItems, verifyStockCount } =
-    useContext(CartContext);
+  const { getQuantityByProductId, cartAdd } = useContext(CartContext);
 
   // states
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [quantity, setQuantity] = useState(1);
 
-  const getQuantityByProductId = (cartItems, productId) => {
-    // console.log("function input productId:", productId);
-    // console.log("typeof input:", typeof productId);
-    // console.log("typeof item.productId:", typeof cartItems[0].productId);
-
-    const item = cartItems.find((i) => i.productId == productId);
-    // console.log("here is the current items: ", cartItems);
-    // console.log(item);
-
-    return item ? item.quantity : 0;
-  };
-
   // Add to cart API
-  const cartAdd = async (productId, quantity) => {
-    const stockAvailable = await verifyStockCount(productId, quantity);
-    if (!stockAvailable.success) {
-      toast.error("Không đủ hàng trong kho");
-      return;
-    }
-    try {
-      const res = await axios.post(
-        `http://localhost:4003/api/cart/add/${productId}`,
-        { quantity },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("Cart updated:", res.data);
-      await updateCartContext();
-      toast.success("Thêm vào giỏ hàng thành công");
-    } catch (err) {
-      console.error("Cart API error:", err.response?.data || err.message);
-      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
-    }
-  };
 
   // Load product data
   useEffect(() => {
@@ -157,8 +120,7 @@ const Product = () => {
           </p>
 
           <p className="mt-8 font-medium text-gray-500 text-sm">
-            Trong Giỏ hàng:{" "}
-            {getQuantityByProductId(cartItems, productId)} sản phẩm
+            Trong Giỏ hàng: {getQuantityByProductId(productId)} sản phẩm
           </p>
 
           {/* Quantity Selector */}
