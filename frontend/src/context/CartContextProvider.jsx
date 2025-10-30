@@ -203,30 +203,58 @@ const CartContextProvider = (props) => {
     }
   };
 
-  const handleQtyChange = async (cartId, value) => {
-    try {
-      const item = cartItems.find((i) => i.cartId === cartId);
-      const quantity = Number.parseInt(value, 10);
-      if (!item) return;
-      if (!Number.isNaN(quantity) & (quantity > 0)) {
-        setCartItems((prev) =>
-          prev.map((item) =>
-            item.cartId === cartId ? { ...item, quantity: quantity } : item
-          )
-        );
-      }
+const handleQtyChange = async (cartId, value) => {
+  try {
+    const item = cartItems.find((i) => i.cartId === cartId);
+    const quantity = Number.parseInt(value, 10);
+    if (!item) return;
+    if (Number.isNaN(quantity) || quantity <= 0) return;
 
+    const stockAvailable = await verifyStockCount(item.productId, quantity);
+
+    if (!stockAvailable.success) {
+      const maxStock = stockAvailable.stock || item.quantity;
+      toast.warning(
+        `Chỉ còn ${maxStock} sản phẩm trong kho. Số lượng đã được điều chỉnh.`,
+        {
+          autoClose: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+      setCartItems((prev) =>
+        prev.map((i) =>
+          i.cartId === cartId ? { ...i, quantity: maxStock } : i
+        )
+      );
       await axios.put(
         `http://localhost:4003/api/cart/update/quantity/${item.productId}`,
-        { quantity },
+        { quantity: maxStock },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       await updateCartContext();
-    } catch (err) {
-      toast.error("Có lỗi xảy ra khi thay đổi số lượng");
-      console.error("Error changing quantity:", err);
+      return;
     }
-  };
+
+    setCartItems((prev) =>
+      prev.map((i) =>
+        i.cartId === cartId ? { ...i, quantity } : i
+      )
+    );
+
+    await axios.put(
+      `http://localhost:4003/api/cart/update/quantity/${item.productId}`,
+      { quantity },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    await updateCartContext();
+  } catch (err) {
+    toast.error("Có lỗi xảy ra khi thay đổi số lượng");
+    console.error("Error changing quantity:", err);
+  }
+};
+
 
   useEffect(() => {
     updateCartContext();
