@@ -69,11 +69,11 @@ const getOneStockProduct = async (req, res) => {
     const product = await productModel.findById(id);
 
     if (!product) {
-      return res.status(404).json({ success: false, message: 'Product not found' });
+      return res.status(409).json({ success: false, message: 'Product not found' });
     } else if (product.stock < quantity) {
-      return res.status(404).json({ success: false, message: 'Not enough stock' });
+      return res.status(409).json({ success: false, message: 'Not enough stock', stock: stock });
     }
-    res.json({ success: true, message: "Stock check successful" });
+    res.json({ success: true, message: "Stock check successful", stock: stock });
   } catch (error) {
     console.error('Error fetching product:', error);
     res.status(500).json({ success: false, message: error.message });
