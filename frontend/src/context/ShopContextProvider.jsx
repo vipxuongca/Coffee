@@ -24,7 +24,7 @@ const ShopContextProvider = (props) => {
     let timer;
     if (loading) {
       timer = setTimeout(() => setShowLoading(true), 500);
-       // show spinner after 0.5s
+      // show spinner after 0.5s
     } else {
       setShowLoading(false);
     }
@@ -50,7 +50,9 @@ const ShopContextProvider = (props) => {
   };
   const getCategoriesData = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/category/get`);
+      const response = await axios.get(
+        `http://localhost:4000/api/category/get`
+      );
       if (response.data.success) {
         setCategories(response.data.category);
       } else {
@@ -90,7 +92,7 @@ const ShopContextProvider = (props) => {
   return (
     <ShopContext.Provider value={value}>
       {showLoading && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center">
             <ClipLoader color="#3e2723" size={60} />
             <p className="text-gray-700 font-medium mt-2">Loading...</p>

@@ -4,6 +4,15 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
+import EmptyCart from "../components/EmptyCart";
+import {
+  Trash2,
+  Plus,
+  Minus,
+  ShoppingBag,
+  ArrowLeft,
+  Package,
+} from "lucide-react";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -17,10 +26,11 @@ const Cart = () => {
     cartItems,
     totalAmount,
     setCartItems,
-    handleQtyChange
+    handleQtyChange,
   } = useContext(CartContext);
 
   const [tempQty, setTempQty] = useState({});
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleLocalChange = (cartId, value) => {
     setTempQty((prev) => ({ ...prev, [cartId]: value }));
@@ -65,12 +75,13 @@ const Cart = () => {
 
   return (
     <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8]">
-      <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2">
+      <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2 flex items-center gap-2">
+        <ShoppingBag className="w-6 h-6 text-[#4e342e]" />
         Giỏ hàng
       </h1>
 
       {cartItems.length === 0 ? (
-        <p className="text-[#6d4c41] italic">Giỏ hàng trống.</p>
+        <EmptyCart />
       ) : (
         <div className="space-y-4">
           {cartItems.map((item) => (
@@ -98,9 +109,9 @@ const Cart = () => {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => decreaseQty(item.cartId)}
-                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 text-[#4e342e] hover:bg-[#d7ccc8]"
+                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
                 >
-                  -
+                  <Minus size={14} />
                 </button>
                 <input
                   type="number"
@@ -117,9 +128,9 @@ const Cart = () => {
 
                 <button
                   onClick={() => increaseQty(item.cartId)}
-                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 text-[#4e342e] hover:bg-[#d7ccc8]"
+                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
                 >
-                  +
+                  <Plus size={14} />
                 </button>
               </div>
 
@@ -129,8 +140,9 @@ const Cart = () => {
                 </p>
                 <button
                   onClick={() => removeItem(item.cartId)}
-                  className="text-[#b71c1c] hover:underline text-sm"
+                  className="text-[#b71c1c] hover:text-[#d32f2f] flex items-center gap-1 text-sm"
                 >
+                  <Trash2 size={14} />
                   Xóa
                 </button>
               </div>
@@ -143,16 +155,48 @@ const Cart = () => {
             </p>
             <div className="mt-4 space-x-3">
               <button
-                onClick={clearCart}
+                onClick={() => setShowConfirm(true)}
                 className="bg-[#6d4c41] text-white px-4 py-2 rounded-md hover:bg-[#5d4037]"
               >
                 Xóa toàn bộ
               </button>
+
               <button
                 className="bg-[#3e2723] text-white px-4 py-2 rounded-md hover:bg-[#4e342e]"
                 onClick={handleOrderPlacement}
               >
                 Thanh toán
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-[#fff8f0] border border-[#bcaaa4] p-6 rounded-2xl shadow-lg text-center max-w-sm mx-auto">
+            <h2 className="text-lg font-semibold text-[#3e2723] mb-3">
+              Xóa toàn bộ giỏ hàng?
+            </h2>
+            <p className="text-sm text-[#6d4c41] mb-6">
+              Hành động này không thể hoàn tác.
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  clearCart();
+                  setShowConfirm(false);
+                  toast.info("Đã xóa toàn bộ giỏ hàng.");
+                }}
+                className="bg-[#b71c1c] text-white px-4 py-2 rounded-md hover:bg-[#d32f2f]"
+              >
+                Xóa
+              </button>
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="bg-[#efebe9] text-[#3e2723] px-4 py-2 rounded-md border border-[#bcaaa4] hover:bg-[#d7ccc8]"
+              >
+                Hủy
               </button>
             </div>
           </div>
