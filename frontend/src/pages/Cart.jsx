@@ -30,6 +30,7 @@ const Cart = () => {
   } = useContext(CartContext);
 
   const [tempQty, setTempQty] = useState({});
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleLocalChange = (cartId, value) => {
     setTempQty((prev) => ({ ...prev, [cartId]: value }));
@@ -154,16 +155,48 @@ const Cart = () => {
             </p>
             <div className="mt-4 space-x-3">
               <button
-                onClick={clearCart}
+                onClick={() => setShowConfirm(true)}
                 className="bg-[#6d4c41] text-white px-4 py-2 rounded-md hover:bg-[#5d4037]"
               >
                 Xóa toàn bộ
               </button>
+
               <button
                 className="bg-[#3e2723] text-white px-4 py-2 rounded-md hover:bg-[#4e342e]"
                 onClick={handleOrderPlacement}
               >
                 Thanh toán
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-[#fff8f0] border border-[#bcaaa4] p-6 rounded-2xl shadow-lg text-center max-w-sm mx-auto">
+            <h2 className="text-lg font-semibold text-[#3e2723] mb-3">
+              Xóa toàn bộ giỏ hàng?
+            </h2>
+            <p className="text-sm text-[#6d4c41] mb-6">
+              Hành động này không thể hoàn tác.
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  clearCart();
+                  setShowConfirm(false);
+                  toast.info("Đã xóa toàn bộ giỏ hàng.");
+                }}
+                className="bg-[#b71c1c] text-white px-4 py-2 rounded-md hover:bg-[#d32f2f]"
+              >
+                Xóa
+              </button>
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="bg-[#efebe9] text-[#3e2723] px-4 py-2 rounded-md border border-[#bcaaa4] hover:bg-[#d7ccc8]"
+              >
+                Hủy
               </button>
             </div>
           </div>
