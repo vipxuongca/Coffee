@@ -76,6 +76,22 @@ const CartContextProvider = (props) => {
       const item = cartItems.find((i) => i.cartId === cartId);
       if (!item) return;
 
+      const totalQty = item.quantity + 1;
+      const stockAvailable = await verifyStockCount(item.productId, totalQty);
+
+      if (!stockAvailable.success) {
+        toast.warning(
+          `Chỉ còn ${stockAvailable.stock} sản phẩm trong kho. Không thể tăng thêm.`,
+          {
+            autoClose: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          }
+        );
+        return;
+      }
+
       setCartItems((prev) =>
         prev.map((i) =>
           i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i
@@ -87,6 +103,7 @@ const CartContextProvider = (props) => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       await updateCartContext();
     } catch (err) {
       console.error("Error increasing quantity:", err);
