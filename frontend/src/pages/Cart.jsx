@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
+import EmptyCart from "../components/EmptyCart";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Cart = () => {
     cartItems,
     totalAmount,
     setCartItems,
-    handleQtyChange
+    handleQtyChange,
   } = useContext(CartContext);
 
   const [tempQty, setTempQty] = useState({});
@@ -70,7 +71,7 @@ const Cart = () => {
       </h1>
 
       {cartItems.length === 0 ? (
-        <p className="text-[#6d4c41] italic">Giỏ hàng trống.</p>
+        <EmptyCart />
       ) : (
         <div className="space-y-4">
           {cartItems.map((item) => (
