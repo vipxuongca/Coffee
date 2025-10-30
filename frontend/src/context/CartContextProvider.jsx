@@ -11,6 +11,20 @@ const CartContextProvider = (props) => {
   const [cartCountTotal, setCartCountTotal] = useState(0); // nav bar show
   const [cartItems, setCartItems] = useState([]);
 
+  const verifyStockCount = async (productId, quantity) => {
+    try {
+      const res = await axios.post(
+        `http://localhost:4000/api/product/stock/${productId}`,
+        { quantity },
+        {}
+      );
+      // console.log("message:", res.data.message);
+      return res.data;
+    } catch (err) {
+      console.error("Cart API error:", err.response?.data || err.message);
+    }
+  };
+
   useEffect(() => {
     const fetchCart = async () => {
       setLoading(true);
@@ -53,7 +67,7 @@ const CartContextProvider = (props) => {
       });
 
       const items = res.data.items || [];
-      console.log("item is: ", items);
+      // console.log("item is: ", items);
 
       // total number of all products in the cart
       const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -75,6 +89,11 @@ const CartContextProvider = (props) => {
       setCartItems([]);
     }
   };
+
+//   useEffect(() => {
+//   console.log("cartItems updated:", cartItems);
+// }, [cartItems]);
+
 
   const increaseQty = async (cartId) => {
     try {
@@ -166,6 +185,7 @@ const CartContextProvider = (props) => {
     removeItem,
     clearCart,
     totalAmount,
+    verifyStockCount
   };
 
   return (

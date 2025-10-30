@@ -12,25 +12,24 @@ const Product = () => {
   const { products, currency, backendCartUrl, backendUrl, token } =
     useContext(ShopContext);
 
-  const { updateCartContext } = useContext(CartContext);
+  const { updateCartContext, cartItems, verifyStockCount } =
+    useContext(CartContext);
 
   // states
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [quantity, setQuantity] = useState(1);
 
-  const verifyStockCount = async (productId, quantity) => {
-    try {
-      const res = await axios.post(
-        `http://localhost:4000/api/product/stock/${productId}`,
-        { quantity },
-        {}
-      );
-      console.log("message:", res.data.message);
-      return res.data;
-    } catch (err) {
-      console.error("Cart API error:", err.response?.data || err.message);
-    }
+  const getQuantityByProductId = (cartItems, productId) => {
+    // console.log("function input productId:", productId);
+    // console.log("typeof input:", typeof productId);
+    // console.log("typeof item.productId:", typeof cartItems[0].productId);
+
+    const item = cartItems.find((i) => i.productId == productId);
+    // console.log("here is the current items: ", cartItems);
+    // console.log(item);
+
+    return item ? item.quantity : 0;
   };
 
   // Add to cart API
@@ -50,7 +49,7 @@ const Product = () => {
           },
         }
       );
-      console.log("Cart updated:", res.data);
+      // console.log("Cart updated:", res.data);
       await updateCartContext();
       toast.success("Thêm vào giỏ hàng thành công");
     } catch (err) {
@@ -158,7 +157,8 @@ const Product = () => {
           </p>
 
           <p className="mt-8 font-medium text-gray-500 text-sm">
-            Trong Giỏ hàng: {productData.stock} sản phẩm
+            Trong Giỏ hàng:{" "}
+            {getQuantityByProductId(cartItems, productId)} sản phẩm
           </p>
 
           {/* Quantity Selector */}
