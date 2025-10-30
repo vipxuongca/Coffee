@@ -3,62 +3,22 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import RelatedProducts from "../components/RelatedProducts";
 import { assets } from "../assets/assets";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { CartContext } from "../context/CartContext";
 
 const Product = () => {
   const { productId } = useParams();
-  const {
-    products,
-    currency,
-    backendCartUrl,
-    backendUrl,
-    fetchCartCount,
-    token,
-  } = useContext(ShopContext);
+
+  // contexts
+  const { products, currency } = useContext(ShopContext);
+  const { getQuantityByProductId, cartAdd } = useContext(CartContext);
+
+  // states
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [quantity, setQuantity] = useState(1);
 
-  const verifyStockCount = async (productId, quantity) => {
-    try {
-      const res = await axios.post(
-        `http://localhost:4000/api/product/stock/${productId}`,
-        { quantity },
-        {}
-      );
-      console.log("message:", res.data.message);
-      return res.data;
-    } catch (err) {
-      console.error("Cart API error:", err.response?.data || err.message);
-    }
-  };
-
   // Add to cart API
-  const cartAdd = async (productId, quantity) => {
-    const stockAvailable = await verifyStockCount(productId, quantity);
-    if (!stockAvailable.success) {
-      toast.error("Không đủ hàng trong kho");
-      return;
-    }
-    try {
-      const res = await axios.post(
-        `http://localhost:4003/api/cart/add/${productId}`,
-        { quantity },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Cart updated:", res.data);
-      await fetchCartCount();
-      toast.success("Thêm vào giỏ hàng thành công");
-    } catch (err) {
-      console.error("Cart API error:", err.response?.data || err.message);
-      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
-    }
-  };
 
   // Load product data
   useEffect(() => {
@@ -159,7 +119,7 @@ const Product = () => {
           </p>
 
           <p className="mt-8 font-medium text-gray-500 text-sm">
-            Trong Giỏ hàng: {productData.stock} sản phẩm
+            Trong Giỏ hàng: {getQuantityByProductId(productId)} sản phẩm
           </p>
 
           {/* Quantity Selector */}

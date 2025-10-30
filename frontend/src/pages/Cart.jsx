@@ -1,140 +1,29 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ShopContext } from "../context/ShopContext";
+import { CartContext } from "../context/CartContext";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
-  const { token, fetchCartCount, setLoading } = useContext(ShopContext);
+  const { token, setLoading } = useContext(ShopContext);
+  const {
+    updateCartContext,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+    clearCart,
+    cartItems,
+    totalAmount,
+    setCartItems,
+    handleQtyChange
+  } = useContext(CartContext);
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get("http://localhost:4003/api/cart", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+  const [tempQty, setTempQty] = useState({});
 
-        const data = res.data.items.map((item) => ({
-          cartId: item._id,
-          productId: item.product.product._id,
-          name: item.product.product.name,
-          price: item.product.product.price,
-          quantity: item.quantity,
-          image: item.product.product.image[0],
-        }));
-
-        setCartItems(data);
-      } catch (err) {
-        console.error("Error fetching cart:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (token) fetchCart();
-  }, [token]);
-
-  const increaseQty = async (cartId) => {
-    try {
-      const item = cartItems.find((i) => i.cartId === cartId);
-      if (!item) return;
-
-      setCartItems((prev) =>
-        prev.map((i) =>
-          i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i
-        )
-      );
-
-      await axios.put(
-        `http://localhost:4003/api/cart/update/${item.productId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      await fetchCartCount();
-    } catch (err) {
-      console.error("Error increasing quantity:", err);
-    }
-  };
-
-  const decreaseQty = async (cartId) => {
-    try {
-      const item = cartItems.find((i) => i.cartId === cartId);
-      if (!item || item.quantity <= 1) return;
-
-      setCartItems((prev) =>
-        prev.map((i) =>
-          i.cartId === cartId ? { ...i, quantity: i.quantity - 1 } : i
-        )
-      );
-
-      await axios.put(
-        `http://localhost:4003/api/cart/update/decrease/${item.productId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      await fetchCartCount();
-    } catch (err) {
-      console.error("Error decreasing quantity:", err);
-    }
-  };
-
-  const handleQtyChange = async (cartId, value) => {
-    try {
-      const item = cartItems.find((i) => i.cartId === cartId);
-      const quantity = Number.parseInt(value, 10);
-      if (!item) return;
-      if (!Number.isNaN(quantity) & (quantity > 0)) {
-        setCartItems((prev) =>
-          prev.map((item) =>
-            item.cartId === cartId ? { ...item, quantity: quantity } : item
-          )
-        );
-      }
-
-      await axios.put(
-        `http://localhost:4003/api/cart/update/quantity/${item.productId}`,
-        { quantity },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      await fetchCartCount();
-    } catch (err) {
-      toast.error("Có lỗi xảy ra khi thay đổi số lượng");
-      console.error("Error changing quantity:", err);
-    }
-  };
-
-  const removeItem = async (cartId) => {
-    try {
-      const item = cartItems.find((i) => i.cartId === cartId);
-      if (!item) return;
-
-      setCartItems((prev) => prev.filter((i) => i.cartId !== cartId));
-
-      await axios.delete(
-        `http://localhost:4003/api/cart/remove/${item.productId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      await fetchCartCount();
-    } catch (err) {
-      console.error("Error removing item from cart:", err);
-    }
-  };
-
-  const clearCart = async () => {
-    try {
-      await axios.delete("http://localhost:4003/api/cart/clear", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCartItems([]);
-      await fetchCartCount();
-    } catch (err) {
-      console.error("Error clearing cart:", err);
-    }
+  const handleLocalChange = (cartId, value) => {
+    setTempQty((prev) => ({ ...prev, [cartId]: value }));
   };
 
   const handleOrderPlacement = async () => {
@@ -173,11 +62,6 @@ const Cart = () => {
       setLoading(false);
     }
   };
-
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
 
   return (
     <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8]">
@@ -221,12 +105,16 @@ const Cart = () => {
                 <input
                   type="number"
                   min="1"
-                  value={item.quantity}
-                  onChange={(e) => handleQtyChange(item.cartId, e.target.value)}
-                  className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723] 
-             [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none 
-             [&::-webkit-outer-spin-button]:appearance-none"
+                  value={tempQty[item.cartId] ?? item.quantity}
+                  onChange={(e) =>
+                    handleLocalChange(item.cartId, e.target.value)
+                  }
+                  onBlur={(e) => handleQtyChange(item.cartId, e.target.value)}
+                  className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723]
+     [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none
+     [&::-webkit-outer-spin-button]:appearance-none"
                 />
+
                 <button
                   onClick={() => increaseQty(item.cartId)}
                   className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 text-[#4e342e] hover:bg-[#d7ccc8]"
@@ -251,7 +139,7 @@ const Cart = () => {
 
           <div className="text-right mt-6 border-t border-[#a1887f] pt-4">
             <p className="text-lg font-semibold text-[#3e2723]">
-              Tổng cộng: {total.toLocaleString()}₫
+              Tổng cộng: {totalAmount.toLocaleString()}₫
             </p>
             <div className="mt-4 space-x-3">
               <button

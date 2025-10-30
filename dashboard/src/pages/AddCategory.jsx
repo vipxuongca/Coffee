@@ -6,13 +6,14 @@ import { toast } from "react-toastify";
 import { AdminContext } from "../../context/AdminContext";
 
 const AddCategory = () => {
-  const { token } = useContext(AdminContext);
+  const { token, setLoading } = useContext(AdminContext);
   const [image1, setImage1] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -20,7 +21,7 @@ const AddCategory = () => {
       image1 && formData.append("image1", image1);
 
       const response = await axios.post(
-        `${backendUrl}/api/category/add`,
+        `http://localhost:4000/api/category/add`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -36,6 +37,8 @@ const AddCategory = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 

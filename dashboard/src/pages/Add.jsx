@@ -7,7 +7,7 @@ import { ClipLoader } from "react-spinners";
 import { AdminContext } from "../../context/AdminContext";
 
 const Add = () => {
-  const { token, setLoading } = useContext(AdminContext);//for the loading screen
+  const { token, setLoading } = useContext(AdminContext); //for the loading screen
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
@@ -29,7 +29,9 @@ const Add = () => {
     const fetchCategories = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:4000/api/category/get`);
+        const response = await axios.get(
+          `http://localhost:4000/api/category/get`
+        );
         if (response.data.success) {
           const categories = response.data.category || [];
           setCategoryList(categories);
@@ -68,7 +70,7 @@ const Add = () => {
       image4 && formData.append("image4", image4);
 
       const response = await axios.post(
-        backendUrl + "/api/product/add",
+        "http://localhost:4000/api/product/add",
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
