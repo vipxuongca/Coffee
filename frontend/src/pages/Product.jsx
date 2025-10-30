@@ -5,17 +5,16 @@ import RelatedProducts from "../components/RelatedProducts";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { CartContext } from "../context/CartContext";
 
 const Product = () => {
   const { productId } = useParams();
-  const {
-    products,
-    currency,
-    backendCartUrl,
-    backendUrl,
-    fetchCartCount,
-    token,
-  } = useContext(ShopContext);
+  const { products, currency, backendCartUrl, backendUrl, token } =
+    useContext(ShopContext);
+
+  const { updateCartContext } = useContext(CartContext);
+
+  // states
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -52,7 +51,7 @@ const Product = () => {
         }
       );
       console.log("Cart updated:", res.data);
-      await fetchCartCount();
+      await updateCartContext();
       toast.success("Thêm vào giỏ hàng thành công");
     } catch (err) {
       console.error("Cart API error:", err.response?.data || err.message);

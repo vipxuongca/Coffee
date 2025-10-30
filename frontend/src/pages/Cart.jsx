@@ -3,11 +3,13 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ShopContext } from "../context/ShopContext";
+import { CartContext } from "../context/CartContext";
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
-  const { token, fetchCartCount, setLoading } = useContext(ShopContext);
+  const { token, setLoading } = useContext(ShopContext);
+  const { updateCartContext } = useContext(CartContext);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -53,7 +55,7 @@ const Cart = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      await fetchCartCount();
+      await updateCartContext();
     } catch (err) {
       console.error("Error increasing quantity:", err);
     }
@@ -75,7 +77,7 @@ const Cart = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      await fetchCartCount();
+      await updateCartContext();
     } catch (err) {
       console.error("Error decreasing quantity:", err);
     }
@@ -99,7 +101,7 @@ const Cart = () => {
         { quantity },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      await fetchCartCount();
+      await updateCartContext();
     } catch (err) {
       toast.error("Có lỗi xảy ra khi thay đổi số lượng");
       console.error("Error changing quantity:", err);
@@ -119,7 +121,7 @@ const Cart = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      await fetchCartCount();
+      await updateCartContext();
     } catch (err) {
       console.error("Error removing item from cart:", err);
     }
@@ -131,7 +133,7 @@ const Cart = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCartItems([]);
-      await fetchCartCount();
+      await updateCartContext();
     } catch (err) {
       console.error("Error clearing cart:", err);
     }

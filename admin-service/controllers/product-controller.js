@@ -71,9 +71,9 @@ const getOneStockProduct = async (req, res) => {
     if (!product) {
       return res.status(409).json({ success: false, message: 'Product not found' });
     } else if (product.stock < quantity) {
-      return res.status(409).json({ success: false, message: 'Not enough stock', stock: stock });
+      return res.status(409).json({ success: false, message: 'Not enough stock', stock: product.stock });
     }
-    res.json({ success: true, message: "Stock check successful", stock: stock });
+    res.json({ success: true, message: "Stock check successful", stock: product.stock });
   } catch (error) {
     console.error('Error fetching product:', error);
     res.status(500).json({ success: false, message: error.message });

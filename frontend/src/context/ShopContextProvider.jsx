@@ -16,7 +16,6 @@ const ShopContextProvider = (props) => {
   const [showSearch, setShowSearch] = useState(true);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
@@ -24,7 +23,8 @@ const ShopContextProvider = (props) => {
   useEffect(() => {
     let timer;
     if (loading) {
-      timer = setTimeout(() => setShowLoading(true), 500); // show spinner after 0.5s1s
+      timer = setTimeout(() => setShowLoading(true), 500);
+       // show spinner after 0.5s
     } else {
       setShowLoading(false);
     }
@@ -61,26 +61,6 @@ const ShopContextProvider = (props) => {
       toast.error(error.message);
     }
   };
-  const fetchCartCount = async () => {
-    if (!token) return;
-    try {
-      const res = await axios.get(`${backendCartUrl}/api/cart`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const totalItems = res.data.items.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
-      setCartCount(totalItems);
-    } catch (err) {
-      console.error("Failed to fetch cart count:", err.message);
-      setCartCount(0);
-    }
-  };
-
-  useEffect(() => {
-    fetchCartCount();
-  }, [token]);
 
   useEffect(() => {
     getProductsData();
@@ -102,11 +82,8 @@ const ShopContextProvider = (props) => {
     backendCartUrl,
     backendOrderUrl,
     backendUserUrl,
-    fetchCartCount,
     token,
     setToken,
-    cartCount,
-    setCartCount,
     setLoading,
   };
 
