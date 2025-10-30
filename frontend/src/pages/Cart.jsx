@@ -36,43 +36,6 @@ const Cart = () => {
     setTempQty((prev) => ({ ...prev, [cartId]: value }));
   };
 
-  const handleOrderPlacement = async () => {
-    try {
-      setLoading(true);
-      if (!token) return toast.error("Bạn cần đăng nhập để đặt hàng.");
-
-      const orderPayload = {
-        items: cartItems.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        })),
-      };
-
-      const res = await axios.post(
-        "http://localhost:4004/api/order/create",
-        orderPayload,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      if (res.data.success) {
-        toast.success("Đặt hàng thành công!");
-        setCartItems([]);
-        navigate(`/place-order/${res.data.orderId}`);
-      } else {
-        toast.error(
-          "Đặt hàng thất bại: " + (res.data.message || "Lỗi không xác định.")
-        );
-      }
-    } catch (err) {
-      console.error("Error placing order:", err);
-      toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8]">
       <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2 flex items-center gap-2">
@@ -163,7 +126,7 @@ const Cart = () => {
 
               <button
                 className="bg-[#3e2723] text-white px-4 py-2 rounded-md hover:bg-[#4e342e]"
-                onClick={handleOrderPlacement}
+                onClick={() => navigate("/confirm-order")}
               >
                 Thanh toán
               </button>
