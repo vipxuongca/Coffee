@@ -24,7 +24,7 @@ const Footer = () => {
           </p>
           <ul className="flex flex-col gap-1 text-amber-100">
             <li className="hover:text-amber-300 cursor-pointer">
-              <Link to="/about">Trang Chủ</Link>
+              <Link to="/">Trang Chủ</Link>
             </li>
             <li className="hover:text-amber-300 cursor-pointer">
               <Link to="/about">Giới Thiệu</Link>
@@ -35,7 +35,8 @@ const Footer = () => {
             <li className="hover:text-amber-300 cursor-pointer">
               Quyền Riêng Tư
             </li>
-            <li className="hover:text-amber-300 cursor-pointer">Chính sách</li>
+            <li className="hover:text-amber-300 cursor-pointer">
+              <Link to="/policy">Chính Sách</Link></li>
           </ul>
         </div>
 

@@ -5,6 +5,14 @@ import { toast } from "react-toastify";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
 import EmptyCart from "../components/EmptyCart";
+import {
+  Trash2,
+  Plus,
+  Minus,
+  ShoppingBag,
+  ArrowLeft,
+  Package,
+} from "lucide-react";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -66,7 +74,8 @@ const Cart = () => {
 
   return (
     <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8]">
-      <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2">
+      <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2 flex items-center gap-2">
+        <ShoppingBag className="w-6 h-6 text-[#4e342e]" />
         Giỏ hàng
       </h1>
 
@@ -99,9 +108,9 @@ const Cart = () => {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => decreaseQty(item.cartId)}
-                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 text-[#4e342e] hover:bg-[#d7ccc8]"
+                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
                 >
-                  -
+                  <Minus size={14} />
                 </button>
                 <input
                   type="number"
@@ -118,9 +127,9 @@ const Cart = () => {
 
                 <button
                   onClick={() => increaseQty(item.cartId)}
-                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 text-[#4e342e] hover:bg-[#d7ccc8]"
+                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
                 >
-                  +
+                  <Plus size={14} />
                 </button>
               </div>
 
@@ -130,8 +139,9 @@ const Cart = () => {
                 </p>
                 <button
                   onClick={() => removeItem(item.cartId)}
-                  className="text-[#b71c1c] hover:underline text-sm"
+                  className="text-[#b71c1c] hover:text-[#d32f2f] flex items-center gap-1 text-sm"
                 >
+                  <Trash2 size={14} />
                   Xóa
                 </button>
               </div>

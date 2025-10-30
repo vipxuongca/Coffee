@@ -10,3 +10,4 @@ export { default as Order } from "./Order.jsx";
 export { default as Register } from "./Register.jsx";
 export { default as UserDashboard } from "./UserDashboard.jsx";
 export { default as NotFound } from "./NotFound.jsx";
+export { default as Policy } from "./Policy.jsx";

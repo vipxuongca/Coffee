@@ -3,6 +3,7 @@ import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import ProductItem from "../components/ProductItem";
 import Title from "../components/Title";
+import { Filter } from "lucide-react";
 
 const Collection = () => {
   const { categories, products, search, showSearch } = useContext(ShopContext);
@@ -20,13 +21,13 @@ const Collection = () => {
     }
   };
 
-  const toggleSubCategory = (e) => {
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory((prev) => prev.filter((item) => item !== e.target.value));
-    } else {
-      setSubCategory((prev) => [...prev, e.target.value]);
-    }
-  };
+  // const toggleSubCategory = (e) => {
+  //   if (subCategory.includes(e.target.value)) {
+  //     setSubCategory((prev) => prev.filter((item) => item !== e.target.value));
+  //   } else {
+  //     setSubCategory((prev) => [...prev, e.target.value]);
+  //   }
+  // };
 
   const applyFilters = () => {
     let productsCopy = products.slice();
