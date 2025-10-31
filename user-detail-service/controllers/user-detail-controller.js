@@ -4,42 +4,45 @@ import userDetail from "../models/user-detail-model.js";
 // Create a new shipping detail
 export const addDetail = async (req, res) => {
   try {
-    const { receiverName, phone, addressLine1, addressLine2, city, state, postalCode, country, isDefault } = req.body;
+    const {
+      receiverName,
+      phone,
+      addressLine1,
+      ward,
+      city,
+      isDefault } = req.body;
 
     // Check if userDetail already exists for this user
     let userDetails = await userDetail.findOne({ userId: req.user.id });
 
     if (!userDetails) {
-      // Create new document for this user
       userDetails = new userDetail({
         userId: req.user.id,
         item: [{
           receiverName,
           phone,
           addressLine1,
-          addressLine2,
+          ward,
           city,
-          state,
-          postalCode,
-          country,
           isDefault,
         }],
       });
     } else {
-      // Append to existing items
+      if (isDefault) {
+        userDetails.item.forEach(entry => {
+          entry.isDefault = false;
+        });
+      }
+
       userDetails.item.push({
         receiverName,
         phone,
         addressLine1,
-        addressLine2,
+        ward,
         city,
-        state,
-        postalCode,
-        country,
         isDefault,
       });
     }
-
     await userDetails.save();
 
     res.status(201).json({
@@ -58,7 +61,7 @@ export const getAllDetails = async (req, res) => {
 
     const detail = await userDetail.findOne({ userId });
     if (!detail) {
-      return res.status(404).json({ error: "No shipping details found" });
+      return res.status(404).json({ error: "Không tìm thấy địa chỉ" });
     }
 
     // Sort the items by creation time (most recent first)

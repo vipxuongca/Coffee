@@ -14,7 +14,7 @@ const router = express.Router();
 // all user details must be accommodated with a middleware
 
 ///api/user-detail
-router.post("/", verifyToken, addDetail);
+router.post("/add", verifyToken, addDetail);
 /*
 payload: 
 {

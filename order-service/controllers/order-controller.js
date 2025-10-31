@@ -40,10 +40,9 @@ const orderCreate = async (req, res) => {
         receiverName: orderData.userDetail.receiverName,
         phone: orderData.userDetail.phone,
         addressLine1: orderData.userDetail.addressLine1,
+        ward: orderData.userDetail.ward,
         city: orderData.userDetail.city,
-        state: orderData.userDetail.state,
-        country: orderData.userDetail.country,
-        postalCode: orderData.userDetail.postalCode,
+        isDefault: orderData.userDetail.isDefault,
       },
       items: orderData.products.map((p) => ({
         productId: p._id,

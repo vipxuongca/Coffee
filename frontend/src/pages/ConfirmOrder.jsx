@@ -95,9 +95,8 @@ const ConfirmOrder = () => {
               {defaultAddress.receiverName} — {defaultAddress.phone}
             </p>
             <p className="text-[#5d4037] text-sm">
-              {defaultAddress.addressLine1}, {defaultAddress.city},{" "}
-              {defaultAddress.state}, {defaultAddress.postalCode},{" "}
-              {defaultAddress.country}
+              {defaultAddress.addressLine1}, {defaultAddress.ward},{" "}
+              {defaultAddress.city},{" "}
             </p>
           </div>
         )}

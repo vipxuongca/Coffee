@@ -21,10 +21,9 @@ const orderUserSchema = new mongoose.Schema({
   receiverName: { type: String, required: true },
   phone: { type: String, required: true },
   addressLine1: { type: String, required: true },
+  ward: { type: String, required: true },
   city: { type: String, required: true },
-  state: { type: String },
-  postalCode: { type: String },
-  country: { type: String, required: true },
+  isDefault: { type: Boolean, required: true }
 });
 
 // --- Order Schema ---
