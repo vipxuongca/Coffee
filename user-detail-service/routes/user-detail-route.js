@@ -24,7 +24,7 @@ payload:
 
 router.get("/", verifyToken, getAllDetails);
 router.get("/default", verifyToken, getDefaultDetail);
-router.put("/", verifyToken, updateDetail);
+router.post("/edit/:id", verifyToken, updateDetail);
 router.delete("/delete/:id", verifyToken, deleteDetail);
 router.patch("/default/:id", verifyToken, setDefaultDetail);
 

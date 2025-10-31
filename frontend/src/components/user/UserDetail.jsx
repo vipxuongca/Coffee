@@ -10,6 +10,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [userDetail, setUserDetail] = useState([]);
+  const [editDetail, setEditDetail] = useState(null);
   const [reload, setReload] = useState(0);
   const { token, setLoading } = useContext(ShopContext);
 
@@ -93,6 +94,12 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       setLoading(false);
     }
   };
+  const handleEdit = async (e, item) => {
+    e.preventDefault();
+    setEditDetail(item);
+    console.log(item)
+    setShowEditModal(true);
+  };
 
   const content = (
     <div className="card bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-inner">
@@ -157,9 +164,17 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
                         </button>
                       )}
                       <button
-                        onClick={() => setShowEditModal(true)}
-                        className="text-[#6d4c41] hover:text-[#3e2723]"
-                        title="Sửa"
+                        onClick={(e) =>
+                          handleEdit(e, {
+                            id: item._id,
+                            receiverName: item.receiverName,
+                            phone: item.phone,
+                            addressLine1: item.addressLine1,
+                            ward: item.ward,
+                            city: item.city,
+                            isDefault: item.isDefault,
+                          })
+                        }
                       >
                         ✎
                       </button>
@@ -189,9 +204,9 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       <UserEditModal
         showEditModal={showEditModal}
         setShowEditModal={setShowEditModal}
-        userDetail={userDetail}
         setUserDetail={setUserDetail}
         setReload={setReload}
+        editDetail={editDetail}
       />
     </div>
   );

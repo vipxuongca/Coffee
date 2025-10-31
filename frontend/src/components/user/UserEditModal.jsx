@@ -6,11 +6,12 @@ import { ShopContext } from "../../context/ShopContext";
 const UserEditModal = ({
   showEditModal,
   setShowEditModal,
-  userDetail,
   setUserDetail,
   setReload,
+  editDetail,
 }) => {
   const { setLoading } = useContext(ShopContext);
+
   const [newAddress, setNewAddress] = useState({
     receiverName: "",
     phone: "",
@@ -20,18 +21,22 @@ const UserEditModal = ({
     isDefault: false,
   });
 
+  // ✅ Populate modal fields when editDetail changes
   useEffect(() => {
-    if (userDetail) {
+    if (editDetail) {
       setNewAddress({
-        receiverName: userDetail.receiverName || "",
-        phone: userDetail.phone || "",
-        addressLine1: userDetail.addressLine1 || "",
-        ward: userDetail.ward || "",
-        city: userDetail.city || "",
-        isDefault: userDetail.isDefault || false,
+        receiverName: editDetail.receiverName || "",
+        phone: editDetail.phone || "",
+        addressLine1: editDetail.addressLine1 || "",
+        ward: editDetail.ward || "",
+        city: editDetail.city || "",
+        isDefault: editDetail.isDefault || false,
       });
     }
-  }, [userDetail]);
+  }, [editDetail]);
+
+  // const addressId = editDetail.id;
+  // console.log(addressId);
 
   const handleChange = (e) => {
     setNewAddress({ ...newAddress, [e.target.name]: e.target.value });
@@ -43,19 +48,17 @@ const UserEditModal = ({
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        `http://localhost:4010/api/user-detail/edit`,
-        { id: userDetail._id, ...newAddress },
+        `http://localhost:4010/api/user-detail/edit/${editDetail.id}`,
+        newAddress,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       if (!res.data.success) throw new Error("Chỉnh sửa không thành công");
       toast.success("Đã chỉnh sửa địa chỉ");
       setUserDetail(res.data);
-      setReload(prev => prev + 1);
+      setReload((prev) => prev + 1);
       setShowEditModal(false);
     } catch (err) {
       console.error(err);
@@ -90,7 +93,6 @@ const UserEditModal = ({
               name="receiverName"
               value={newAddress.receiverName}
               onChange={handleChange}
-              default={userDetail.receiverName}
               className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
