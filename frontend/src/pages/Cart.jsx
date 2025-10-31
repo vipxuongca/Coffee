@@ -126,7 +126,7 @@ const Cart = () => {
 
               <button
                 className="bg-[#3e2723] text-white px-4 py-2 rounded-md hover:bg-[#4e342e]"
-                onClick={() => navigate("/confirm-order")}
+                onClick={() => navigate("/checkout")}
               >
                 Thanh toán
               </button>
