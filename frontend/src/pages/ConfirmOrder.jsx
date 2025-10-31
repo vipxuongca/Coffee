@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
-import { PackageCheck, ShoppingCart, CreditCard, MapPin } from "lucide-react";
+import { PackageCheck, ShoppingCart, CreditCard, MapPin, Pencil } from "lucide-react";
+import UserDetail from "../components/user/UserDetail";
 
 const ConfirmOrder = () => {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ const ConfirmOrder = () => {
   const { cartItems, totalAmount, setCartItems } = useContext(CartContext);
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [defaultAddress, setDefaultAddress] = useState(null);
+  const [userDetail, setUserDetail] = useState(null);
+  const [showAddressModal, setShowAddressModal] = useState(false);
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -21,6 +24,7 @@ const ConfirmOrder = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.data.success) {
+          setUserDetail(res.data);
           const address = res.data.data.find((a) => a.isDefault);
           if (address) setDefaultAddress(address);
         }
@@ -84,9 +88,10 @@ const ConfirmOrder = () => {
         <PackageCheck className="w-6 h-6 text-[#4e342e]" />
         Xác nhận đơn hàng
       </h1>
+
       <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
         {defaultAddress && (
-          <div className="mb-6 bg-[#fff8f0] p-4 rounded-xl border border-[#d7ccc8]">
+          <div className="mb-6 bg-[#fff8f0] p-4 rounded-xl border border-[#d7ccc8] relative">
             <div className="flex items-center gap-2 text-[#4e342e] mb-2">
               <MapPin size={18} />
               <span className="font-semibold">Địa chỉ giao hàng</span>
@@ -96,8 +101,14 @@ const ConfirmOrder = () => {
             </p>
             <p className="text-[#5d4037] text-sm">
               {defaultAddress.addressLine1}, {defaultAddress.ward},{" "}
-              {defaultAddress.city},{" "}
+              {defaultAddress.city}
             </p>
+            <button
+              onClick={() => setShowAddressModal(true)}
+              className="absolute top-3 right-3 text-[#5d4037] hover:text-[#3e2723] flex items-center gap-1 text-sm"
+            >
+              <Pencil size={14} /> Sửa địa chỉ
+            </button>
           </div>
         )}
       </div>
@@ -136,6 +147,7 @@ const ConfirmOrder = () => {
           </span>
         </div>
       </div>
+
       <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
         <div className="mb-6">
           <label className="block text-[#4e342e] font-semibold mb-2">
@@ -153,6 +165,7 @@ const ConfirmOrder = () => {
           </select>
         </div>
       </div>
+
       <div className="mt-10 flex justify-end gap-3">
         <button
           onClick={() => navigate("/cart")}
@@ -168,6 +181,16 @@ const ConfirmOrder = () => {
           XÁC NHẬN ĐẶT HÀNG
         </button>
       </div>
+
+      {/* Address Edit Modal */}
+      {userDetail && (
+        <UserDetail
+          asModal={true}
+          showModal={showAddressModal}
+          setShowModal={setShowAddressModal}
+          userDetail={userDetail}
+        />
+      )}
     </div>
   );
 };

@@ -52,7 +52,6 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
     }
   };
 
-  // ✅ Must return JSX
   if (!showAddModal) return null;
 
   return (
@@ -61,14 +60,16 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
       onClick={() => setShowAddModal(false)}
     >
       <div
-        className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md border border-gray-300"
+        className="bg-[#f8f3ef] p-6 rounded-xl shadow-inner border border-[#d7ccc8] w-full max-w-md relative"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-xl font-semibold mb-4">Thêm Địa Chỉ Mới</h3>
+        <h3 className="text-xl font-bold text-[#3e2723] mb-4 border-b border-[#a1887f] pb-2">
+          Thêm Địa Chỉ Mới
+        </h3>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-[#4e342e] font-semibold mb-1">
               Tên người nhận <span className="text-red-500">*</span>
             </label>
             <input
@@ -76,12 +77,12 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
               name="receiverName"
               value={newAddress.receiverName}
               onChange={handleChange}
-              className="input input-bordered w-full"
+              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-[#4e342e] font-semibold mb-1">
               Số điện thoại <span className="text-red-500">*</span>
             </label>
             <input
@@ -89,12 +90,12 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
               name="phone"
               value={newAddress.phone}
               onChange={handleChange}
-              className="input input-bordered w-full"
+              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-[#4e342e] font-semibold mb-1">
               Địa chỉ cụ thể <span className="text-red-500">*</span>
             </label>
             <input
@@ -102,12 +103,12 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
               name="addressLine1"
               value={newAddress.addressLine1}
               onChange={handleChange}
-              className="input input-bordered w-full"
+              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-[#4e342e] font-semibold mb-1">
               Phường/Xã <span className="text-red-500">*</span>
             </label>
             <input
@@ -115,12 +116,12 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
               name="ward"
               value={newAddress.ward}
               onChange={handleChange}
-              className="input input-bordered w-full"
+              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-[#4e342e] font-semibold mb-1">
               Thành phố <span className="text-red-500">*</span>
             </label>
             <input
@@ -128,7 +129,7 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
               name="city"
               value={newAddress.city}
               onChange={handleChange}
-              className="input input-bordered w-full"
+              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
@@ -143,22 +144,24 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
                   isDefault: e.target.checked,
                 })
               }
-              className="checkbox checkbox-sm"
+              className="accent-[#5d4037]"
             />
-            <label className="text-sm">Đặt làm địa chỉ mặc định</label>
+            <label className="text-sm text-[#4e342e]">
+              Đặt làm địa chỉ mặc định
+            </label>
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"
-              className="btn px-5 bg-gray-200 hover:bg-gray-300 text-gray-800"
+              className="px-5 py-2 rounded-md bg-[#d7ccc8] hover:bg-[#bcaaa4] text-[#3e2723]"
               onClick={() => setShowAddModal(false)}
             >
               Hủy
             </button>
             <button
               type="submit"
-              className="btn px-5 bg-[#3e2723] hover:bg-[#5d4037] text-white border-none"
+              className="px-5 py-2 rounded-md bg-[#3e2723] hover:bg-[#4e342e] text-white font-medium"
             >
               Lưu
             </button>
