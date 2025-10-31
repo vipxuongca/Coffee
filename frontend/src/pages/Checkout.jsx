@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -11,16 +11,36 @@ import {
   MapPin,
   Pencil,
 } from "lucide-react";
-
-import DefaultAddress from "../components/checkout/DefaultAddress";
+import UserDetail from "../components/user/UserDetail";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { token, setLoading } = useContext(ShopContext);
   const { cartItems, totalAmount, setCartItems } = useContext(CartContext);
   const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [defaultAddress, setDefaultAddress] = useState(null);
+  const [userDetail, setUserDetail] = useState(null);
+  const [showAddressModal, setShowAddressModal] = useState(false);
 
-
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (!token) return;
+      try {
+        const res = await axios.get("http://localhost:4010/api/user-detail", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.data.success) {
+          setUserDetail(res.data);
+          const address = res.data.data.find((a) => a.isDefault);
+          if (address) setDefaultAddress(address);
+        }
+      } catch (err) {
+        console.error("Error fetching address:", err);
+        toast.error("Không thể tải địa chỉ giao hàng.");
+      }
+    };
+    fetchAddress();
+  }, [token]);
 
   const handleOrderPlacement = async () => {
     try {
@@ -75,11 +95,39 @@ const Checkout = () => {
         Xác nhận đơn hàng
       </h1>
 
-      <DefaultAddress
-        defaultAddress={defaultAddress}
-        setDefaultAddress={setDefaultAddress}
-      />
-      
+      <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
+        {defaultAddress ? (
+          <div className="mb-6 bg-[#fff8f0] p-4 rounded-xl border border-[#d7ccc8] relative">
+            <div className="flex items-center gap-2 text-[#4e342e] mb-2">
+              <MapPin size={18} />
+              <span className="font-semibold">Địa chỉ giao hàng</span>
+            </div>
+            <p className="text-[#3e2723] font-medium">
+              {defaultAddress.receiverName} — {defaultAddress.phone}
+            </p>
+            <p className="text-[#5d4037] text-sm">
+              {defaultAddress.addressLine1}, {defaultAddress.ward},{" "}
+              {defaultAddress.city}
+            </p>
+            <button
+              onClick={() => setShowAddressModal(true)}
+              className="absolute top-3 right-3 text-[#5d4037] hover:text-[#3e2723] flex items-center gap-1 text-sm"
+            >
+              <Pencil size={14} /> Sửa địa chỉ
+            </button>
+          </div>
+        ) : (
+          <div className="text-center text-[#5d4037] py-6 bg-[#fff8f0] rounded-xl border border-[#d7ccc8]">
+            <p>Bạn chưa có địa chỉ mặc định.</p>
+            <button
+              onClick={() => setShowAddressModal(true)}
+              className="mt-3 px-4 py-2 bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md text-sm"
+            >
+              Thêm địa chỉ mặc định
+            </button>
+          </div>
+        )}
+      </div>
 
       <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
         <div className="space-y-4">
@@ -150,7 +198,15 @@ const Checkout = () => {
         </button>
       </div>
 
-
+      {/* Address Edit Modal */}
+      {userDetail && (
+        <UserDetail
+          asModal={true}
+          showModal={showAddressModal}
+          setShowModal={setShowAddressModal}
+          userDetail={userDetail}
+        />
+      )}
     </div>
   );
 };
