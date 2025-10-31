@@ -4,14 +4,12 @@ import UserEditModal from "./UserEditModal";
 import { toast } from "react-toastify";
 import { ShopContext } from "../../context/ShopContext";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-
   const [userDetail, setUserDetail] = useState([]);
-  const [reload, setReload] = useState(0);
-
   const { token, setLoading } = useContext(ShopContext);
 
   useEffect(() => {
@@ -28,9 +26,45 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       }
     };
     fetchUserDetail();
-  }, [token, reload]);
+  }, [token, userDetail]);
 
-  const handleDelete = async (id) => toast.warn(`Xóa địa chỉ: ${id}`);
+  const handleDelete = async (e, itemId) => {
+    e.preventDefault();
+
+    const confirm = await Swal.fire({
+      title: "Xóa địa chỉ?",
+      text: "Bạn có chắc muốn xóa địa chỉ này không?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    });
+
+    if (!confirm.isConfirmed) return; // User cancelled
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.delete(
+        `http://localhost:4010/api/user-detail/delete/${itemId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (!res.data.success) throw new Error("Không thể xóa địa chỉ");
+      setUserDetail(res.data);
+      toast.success("Đã xóa địa chỉ thành công");
+      setShowAddModal(false);
+    } catch (err) {
+      console.error(err);
+      toast.error("Lỗi khi xóa địa chỉ.");
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleDefault = async (id) => toast.info(`Set Default: ${id}`);
 
   const content = (
@@ -103,7 +137,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
                         ✎
                       </button>
                       <button
-                        onClick={() => handleDelete(item._id)}
+                        onClick={(e) => handleDelete(e, item._id)}
                         className="text-[#8d6e63] hover:text-[#4e342e]"
                         title="Xóa"
                       >
@@ -123,14 +157,12 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
         showAddModal={showAddModal}
         setShowAddModal={setShowAddModal}
         setUserDetail={setUserDetail}
-        setReload={setReload}
       />
       <UserEditModal
         showEditModal={showEditModal}
         setShowEditModal={setShowEditModal}
         userDetail={userDetail}
         setUserDetail={setUserDetail}
-        setReload={setReload}
       />
     </div>
   );

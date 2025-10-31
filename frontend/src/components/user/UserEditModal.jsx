@@ -7,8 +7,7 @@ const UserEditModal = ({
   showEditModal,
   setShowEditModal,
   userDetail,
-  setUserDetail,
-  setReload,
+  setUserDetail
 }) => {
   const { setLoading } = useContext(ShopContext);
   const [newAddress, setNewAddress] = useState({
@@ -54,8 +53,7 @@ const UserEditModal = ({
 
       if (!res.data.success) throw new Error("Chỉnh sửa không thành công");
       toast.success("Đã chỉnh sửa địa chỉ");
-      setReload((prev) => prev + 1);
-
+      setUserDetail(res.data);
       setShowEditModal(false);
     } catch (err) {
       console.error(err);
@@ -90,6 +88,7 @@ const UserEditModal = ({
               name="receiverName"
               value={newAddress.receiverName}
               onChange={handleChange}
+              default = {userDetail.receiverName}
               className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
