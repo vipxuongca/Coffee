@@ -3,7 +3,13 @@ import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ShopContext } from "../../context/ShopContext";
 
-const UserEditModal = ({ showEditModal, setShowEditModal, detail }) => {
+const UserEditModal = ({
+  showEditModal,
+  setShowEditModal,
+  userDetail,
+  setUserDetail,
+  setReload,
+}) => {
   const { setLoading } = useContext(ShopContext);
   const [newAddress, setNewAddress] = useState({
     receiverName: "",
@@ -15,17 +21,17 @@ const UserEditModal = ({ showEditModal, setShowEditModal, detail }) => {
   });
 
   useEffect(() => {
-    if (detail) {
+    if (userDetail) {
       setNewAddress({
-        receiverName: detail.receiverName || "",
-        phone: detail.phone || "",
-        addressLine1: detail.addressLine1 || "",
-        ward: detail.ward || "",
-        city: detail.city || "",
-        isDefault: detail.isDefault || false,
+        receiverName: userDetail.receiverName || "",
+        phone: userDetail.phone || "",
+        addressLine1: userDetail.addressLine1 || "",
+        ward: userDetail.ward || "",
+        city: userDetail.city || "",
+        isDefault: userDetail.isDefault || false,
       });
     }
-  }, [detail]);
+  }, [userDetail]);
 
   const handleChange = (e) => {
     setNewAddress({ ...newAddress, [e.target.name]: e.target.value });
@@ -38,7 +44,7 @@ const UserEditModal = ({ showEditModal, setShowEditModal, detail }) => {
       const token = localStorage.getItem("token");
       const res = await axios.post(
         `http://localhost:4010/api/user-detail/edit`,
-        { id: detail._id, ...newAddress },
+        { id: userDetail._id, ...newAddress },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,6 +54,8 @@ const UserEditModal = ({ showEditModal, setShowEditModal, detail }) => {
 
       if (!res.data.success) throw new Error("Chỉnh sửa không thành công");
       toast.success("Đã chỉnh sửa địa chỉ");
+      setReload((prev) => prev + 1);
+
       setShowEditModal(false);
     } catch (err) {
       console.error(err);

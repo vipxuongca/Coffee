@@ -1,46 +1,21 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
 import UserOrders from "../components/user/UserOrder";
 import UserDetail from "../components/user/UserDetail";
 import UserProfile from "../components/user/UserProfile";
 import UserChangePassword from "../components/user/UserChangePassword";
 import { User, MapPin, Lock, List, LogOut } from "lucide-react";
+import { ShopContext } from "../context/ShopContext";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
-  const [userDetail, setUserDetail] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get("http://localhost:4010/api/user-detail", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUserDetail(res.data);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
-  }, [token]);
-
-  if (loading)
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
-      </div>
-    );
+  const { token } = useContext(ShopContext);
 
   const renderContent = () => {
     switch (activeTab) {
       case "profile":
-        return <UserProfile userDetail={userDetail} />;
+        return <UserProfile />;
       case "details":
-        return <UserDetail userDetail={userDetail} />;
+        return <UserDetail />;
       case "password":
         return <UserChangePassword />;
       case "orders":

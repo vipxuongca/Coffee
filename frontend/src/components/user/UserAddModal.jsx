@@ -3,7 +3,12 @@ import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { ShopContext } from "../../context/ShopContext";
 
-const UserAddModal = ({ showAddModal, setShowAddModal }) => {
+const UserAddModal = ({
+  showAddModal,
+  setShowAddModal,
+  setUserDetail,
+  setReload,
+}) => {
   const [newAddress, setNewAddress] = useState({
     receiverName: "",
     phone: "",
@@ -34,6 +39,7 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
       );
 
       if (!res.data.success) throw new Error("Failed to add address");
+      setUserDetail(res.data);
       toast.success("Đã thêm địa chỉ mới");
       setShowAddModal(false);
       setNewAddress({
@@ -44,6 +50,7 @@ const UserAddModal = ({ showAddModal, setShowAddModal }) => {
         city: "",
         isDefault: false,
       });
+      setReload((prev) => prev + 1);
     } catch (err) {
       console.error(err);
       toast.error("Lỗi khi thêm địa chỉ mới.");

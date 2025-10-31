@@ -1,16 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import UserAddModal from "./UserAddModal";
 import UserEditModal from "./UserEditModal";
 import { toast } from "react-toastify";
+import { ShopContext } from "../../context/ShopContext";
+import axios from "axios";
 
-const UserDetail = ({
-  userDetail,
-  asModal = false,
-  showModal,
-  setShowModal,
-}) => {
+const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+
+  const [userDetail, setUserDetail] = useState([]);
+  const [reload, setReload] = useState(0);
+
+  const { token, setLoading } = useContext(ShopContext);
+
+  useEffect(() => {
+    const fetchUserDetail = async () => {
+      try {
+        const res = await axios.get("http://localhost:4010/api/user-detail", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUserDetail(res.data);
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUserDetail();
+  }, [token, reload]);
 
   const handleDelete = async (id) => toast.warn(`Xóa địa chỉ: ${id}`);
   const handleDefault = async (id) => toast.info(`Set Default: ${id}`);
@@ -104,10 +122,15 @@ const UserDetail = ({
       <UserAddModal
         showAddModal={showAddModal}
         setShowAddModal={setShowAddModal}
+        setUserDetail={setUserDetail}
+        setReload={setReload}
       />
       <UserEditModal
         showEditModal={showEditModal}
         setShowEditModal={setShowEditModal}
+        userDetail={userDetail}
+        setUserDetail={setUserDetail}
+        setReload={setReload}
       />
     </div>
   );
