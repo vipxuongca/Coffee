@@ -10,6 +10,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [userDetail, setUserDetail] = useState([]);
+  const [reload, setReload] = useState(0);
   const { token, setLoading } = useContext(ShopContext);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       }
     };
     fetchUserDetail();
-  }, [token, userDetail]);
+  }, [token, reload]);
 
   const handleDelete = async (e, itemId) => {
     e.preventDefault();
@@ -58,6 +59,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       setUserDetail(res.data);
       toast.success("Đã xóa địa chỉ thành công");
       setShowAddModal(false);
+      setReload((prev) => prev + 1);
     } catch (err) {
       console.error(err);
       toast.error("Lỗi khi xóa địa chỉ.");
@@ -65,7 +67,32 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       setLoading(false);
     }
   };
-  const handleDefault = async (id) => toast.info(`Set Default: ${id}`);
+  const handleDefault = async (e, itemId) => {
+    e.preventDefault();
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.patch(
+        `http://localhost:4010/api/user-detail/default/${itemId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (!res.data.success) throw new Error("Không thể đặt địa chỉ mặc định");
+      setUserDetail(res.data);
+      toast.success("Đặt địa chỉ mặc định thành công");
+      setShowAddModal(false);
+      setReload((prev) => prev + 1);
+    } catch (err) {
+      console.error(err);
+      toast.error("Lỗi khi đặt địa chỉ mặc định.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const content = (
     <div className="card bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-inner">
@@ -122,7 +149,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
                     <div className="flex flex-col items-center gap-2 ml-3">
                       {!item.isDefault && (
                         <button
-                          onClick={() => handleDefault(item._id)}
+                          onClick={(e) => handleDefault(e, item._id)}
                           className="text-[#6d4c41] hover:text-[#3e2723]"
                           title="Đặt mặc định"
                         >
@@ -157,12 +184,14 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
         showAddModal={showAddModal}
         setShowAddModal={setShowAddModal}
         setUserDetail={setUserDetail}
+        setReload={setReload}
       />
       <UserEditModal
         showEditModal={showEditModal}
         setShowEditModal={setShowEditModal}
         userDetail={userDetail}
         setUserDetail={setUserDetail}
+        setReload={setReload}
       />
     </div>
   );

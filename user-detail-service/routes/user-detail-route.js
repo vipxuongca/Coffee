@@ -26,6 +26,6 @@ router.get("/", verifyToken, getAllDetails);
 router.get("/default", verifyToken, getDefaultDetail);
 router.put("/", verifyToken, updateDetail);
 router.delete("/delete/:id", verifyToken, deleteDetail);
-router.patch("/default", verifyToken, setDefaultDetail);
+router.patch("/default/:id", verifyToken, setDefaultDetail);
 
 export default router;
