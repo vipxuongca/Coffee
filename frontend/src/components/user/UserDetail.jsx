@@ -218,7 +218,8 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
         onClick={() => setShowModal(false)}
       >
         <div
-          className="modal-box bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto p-0"
+          className="modal-box bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-2xl w-full max-w-2xl h-[600px] md:h-[700px] lg:h-[750px]
+ overflow-y-auto p-0"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-6">{content}</div>
