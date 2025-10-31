@@ -7,10 +7,9 @@ const UserEditModal = ({
   showEditModal,
   setShowEditModal,
   setUserDetail,
-  setReload,
   editDetail,
 }) => {
-  const { setLoading } = useContext(ShopContext);
+  const { setLoading, setReloadAddress } = useContext(ShopContext);
 
   const [newAddress, setNewAddress] = useState({
     receiverName: "",
@@ -58,7 +57,7 @@ const UserEditModal = ({
       if (!res.data.success) throw new Error("Chỉnh sửa không thành công");
       toast.success("Đã chỉnh sửa địa chỉ");
       setUserDetail(res.data);
-      setReload((prev) => prev + 1);
+      setReloadAddress((prev) => prev + 1);
       setShowEditModal(false);
     } catch (err) {
       console.error(err);

@@ -3,12 +3,7 @@ import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { ShopContext } from "../../context/ShopContext";
 
-const UserAddModal = ({
-  showAddModal,
-  setShowAddModal,
-  setUserDetail,
-  setReload,
-}) => {
+const UserAddModal = ({ showAddModal, setShowAddModal, setUserDetail }) => {
   const [newAddress, setNewAddress] = useState({
     receiverName: "",
     phone: "",
@@ -17,7 +12,7 @@ const UserAddModal = ({
     city: "",
     isDefault: false,
   });
-  const { setLoading } = useContext(ShopContext);
+  const { setLoading, setReloadAddress } = useContext(ShopContext);
 
   const handleChange = (e) => {
     setNewAddress({ ...newAddress, [e.target.name]: e.target.value });
@@ -42,7 +37,7 @@ const UserAddModal = ({
       setUserDetail(res.data);
       toast.success("Đã thêm địa chỉ mới");
       setShowAddModal(false);
-      setReload((prev) => prev + 1);
+      setReloadAddress((prev) => prev + 1);
       setNewAddress({
         receiverName: "",
         phone: "",

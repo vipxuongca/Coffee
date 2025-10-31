@@ -11,8 +11,8 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [userDetail, setUserDetail] = useState([]);
   const [editDetail, setEditDetail] = useState(null);
-  const [reload, setReload] = useState(0);
-  const { token, setLoading } = useContext(ShopContext);
+  const { token, setLoading, reloadAddress, setReloadAddress } =
+    useContext(ShopContext);
 
   useEffect(() => {
     const fetchUserDetail = async () => {
@@ -28,7 +28,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       }
     };
     fetchUserDetail();
-  }, [token, reload]);
+  }, [token, reloadAddress]);
 
   const handleDelete = async (e, itemId) => {
     e.preventDefault();
@@ -60,7 +60,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       setUserDetail(res.data);
       toast.success("Đã xóa địa chỉ thành công");
       setShowAddModal(false);
-      setReload((prev) => prev + 1);
+      setReloadAddress((prev) => prev + 1);
     } catch (err) {
       console.error(err);
       toast.error("Lỗi khi xóa địa chỉ.");
@@ -86,7 +86,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       setUserDetail(res.data);
       toast.success("Đặt địa chỉ mặc định thành công");
       setShowAddModal(false);
-      setReload((prev) => prev + 1);
+      setReloadAddress((prev) => prev + 1);
     } catch (err) {
       console.error(err);
       toast.error("Lỗi khi đặt địa chỉ mặc định.");
@@ -97,7 +97,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   const handleEdit = async (e, item) => {
     e.preventDefault();
     setEditDetail(item);
-    console.log(item)
+    console.log(item);
     setShowEditModal(true);
   };
 
@@ -199,13 +199,11 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
         showAddModal={showAddModal}
         setShowAddModal={setShowAddModal}
         setUserDetail={setUserDetail}
-        setReload={setReload}
       />
       <UserEditModal
         showEditModal={showEditModal}
         setShowEditModal={setShowEditModal}
         setUserDetail={setUserDetail}
-        setReload={setReload}
         editDetail={editDetail}
       />
     </div>
