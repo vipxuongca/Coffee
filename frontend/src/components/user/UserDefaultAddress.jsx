@@ -27,7 +27,7 @@ const UserDetailAddress = () => {
         }
       } catch (err) {
         console.error("Error fetching default address:", err);
-        toast.error("Không thể tải địa chỉ mặc định.");
+        // toast.error("Không thể tải địa chỉ mặc định.");
       } finally {
         setLoading(false);
       }

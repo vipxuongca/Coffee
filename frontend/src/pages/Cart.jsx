@@ -1,39 +1,52 @@
 import { useContext, useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { ShopContext } from "../context/ShopContext";
+import Swal from "sweetalert2";
 import { CartContext } from "../context/CartContext";
 import EmptyCart from "../components/EmptyCart";
-import {
-  Trash2,
-  Plus,
-  Minus,
-  ShoppingBag,
-  ArrowLeft,
-  Package,
-} from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { token, setLoading } = useContext(ShopContext);
   const {
-    updateCartContext,
     increaseQty,
     decreaseQty,
     removeItem,
     clearCart,
     cartItems,
     totalAmount,
-    setCartItems,
     handleQtyChange,
   } = useContext(CartContext);
 
   const [tempQty, setTempQty] = useState({});
-  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleLocalChange = (cartId, value) => {
     setTempQty((prev) => ({ ...prev, [cartId]: value }));
+  };
+
+  const handleClearCart = () => {
+    Swal.fire({
+      title: "Xóa toàn bộ giỏ hàng?",
+      text: "Hành động này không thể hoàn tác.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+      confirmButtonColor: "#b71c1c",
+      cancelButtonColor: "#6d4c41",
+      width: "320px",
+      customClass: {
+        title: "text-base",
+        popup: "p-4",
+        confirmButton: "text-sm px-3 py-2",
+        cancelButton: "text-sm px-3 py-2",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        clearCart();
+        toast.info("Đã xóa toàn bộ giỏ hàng.");
+      }
+    });
   };
 
   return (
@@ -88,7 +101,6 @@ const Cart = () => {
      [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none
      [&::-webkit-outer-spin-button]:appearance-none"
                 />
-
                 <button
                   onClick={() => increaseQty(item.cartId)}
                   className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
@@ -118,7 +130,7 @@ const Cart = () => {
             </p>
             <div className="mt-4 space-x-3">
               <button
-                onClick={() => setShowConfirm(true)}
+                onClick={handleClearCart}
                 className="bg-[#6d4c41] text-white px-4 py-2 rounded-md hover:bg-[#5d4037]"
               >
                 Xóa toàn bộ
@@ -129,37 +141,6 @@ const Cart = () => {
                 onClick={() => navigate("/checkout")}
               >
                 Thanh toán
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showConfirm && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-[#fff8f0] border border-[#bcaaa4] p-6 rounded-2xl shadow-lg text-center max-w-sm mx-auto">
-            <h2 className="text-lg font-semibold text-[#3e2723] mb-3">
-              Xóa toàn bộ giỏ hàng?
-            </h2>
-            <p className="text-sm text-[#6d4c41] mb-6">
-              Hành động này không thể hoàn tác.
-            </p>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() => {
-                  clearCart();
-                  setShowConfirm(false);
-                  toast.info("Đã xóa toàn bộ giỏ hàng.");
-                }}
-                className="bg-[#b71c1c] text-white px-4 py-2 rounded-md hover:bg-[#d32f2f]"
-              >
-                Xóa
-              </button>
-              <button
-                onClick={() => setShowConfirm(false)}
-                className="bg-[#efebe9] text-[#3e2723] px-4 py-2 rounded-md border border-[#bcaaa4] hover:bg-[#d7ccc8]"
-              >
-                Hủy
               </button>
             </div>
           </div>

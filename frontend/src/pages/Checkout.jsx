@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
+import Swal from "sweetalert2";
 import {
   PackageCheck,
   ShoppingCart,
@@ -24,6 +25,21 @@ const Checkout = () => {
     try {
       setLoading(true);
       if (!token) return toast.error("Bạn cần đăng nhập để đặt hàng.");
+
+      if (!defaultAddress) {
+        Swal.fire({
+          icon: "warning",
+          title: "Bạn chưa thêm địa chỉ mặc định",
+          confirmButtonColor: "#3e2723",
+          width: "300px", // default is ~500px
+          customClass: {
+            title: "text-sm", // smaller font
+            popup: "p-2", // reduce padding
+          },
+        });
+
+        return;
+      }
 
       const orderPayload = {
         items: cartItems.map((item) => ({
