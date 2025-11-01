@@ -14,7 +14,7 @@ const router = express.Router();
 // all user details must be accommodated with a middleware
 
 ///api/user-detail
-router.post("/", verifyToken, addDetail);
+router.post("/add", verifyToken, addDetail);
 /*
 payload: 
 {
@@ -24,8 +24,8 @@ payload:
 
 router.get("/", verifyToken, getAllDetails);
 router.get("/default", verifyToken, getDefaultDetail);
-router.put("/", verifyToken, updateDetail);
-router.delete("/", verifyToken, deleteDetail);
-router.patch("/default", verifyToken, setDefaultDetail);
+router.post("/edit/:id", verifyToken, updateDetail);
+router.delete("/delete/:id", verifyToken, deleteDetail);
+router.patch("/default/:id", verifyToken, setDefaultDetail);
 
 export default router;

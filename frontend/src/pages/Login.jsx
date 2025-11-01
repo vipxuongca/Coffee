@@ -27,55 +27,59 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error("Lỗi khi đăng nhập. Vui lòng thử lại.");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center w-full">
-      <div className="bg-white shadow-md rounded-lg px-8 py-6 max-w-md">
-        <h1 className="text-2xl font-bold mb-4 text-center">ĐĂNG NHẬP</h1>
+    <div className="min-h-screen flex items-center justify-center bg-[#f8f3ef] px-4">
+      <div className="bg-[#fff8f0] border border-[#d7ccc8] rounded-xl shadow-inner w-full max-w-md p-8">
+        <h1 className="text-2xl font-bold text-center text-[#3e2723] mb-6 border-b border-[#a1887f] pb-2">
+          ĐĂNG NHẬP
+        </h1>
 
-        <form onSubmit={onSubmitHandler}>
-          <div className="mb-3 min-w-72">
-            <p className="text-sm font-medium text-gray-700 mb-2">
-              Email Address
-            </p>
+        <form onSubmit={onSubmitHandler} className="space-y-5">
+          <div>
+            <label className="block text-[#4e342e] font-semibold mb-1">
+              Email <span className="text-red-500">*</span>
+            </label>
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-              className="rounded-md w-full px-3 py-2 border border-gray-300 outline-none"
+              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
               type="email"
               placeholder="your@email.com"
               required
             />
           </div>
 
-          <div className="mb-3 min-w-72">
-            <p className="text-sm font-medium text-gray-700 mb-2">Password</p>
+          <div>
+            <label className="block text-[#4e342e] font-semibold mb-1">
+              Mật khẩu <span className="text-red-500">*</span>
+            </label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              className="rounded-md w-full px-3 py-2 border border-gray-300 outline-none"
+              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
               type="password"
-              placeholder="Password"
+              placeholder="Nhập mật khẩu"
               required
             />
           </div>
 
           <button
-            className="mt-2 w-full py-2 px-4 rounded-md text-white bg-black hover:bg-gray-800"
+            className="w-full py-2 rounded-md bg-[#3e2723] hover:bg-[#4e342e] text-white font-medium transition-all"
             type="submit"
           >
-            Login
+            Đăng nhập
           </button>
 
           <button
             type="button"
             onClick={() => navigate("/register")}
-            className="mt-3 w-full py-2 px-4 rounded-md text-black border border-gray-400 hover:bg-gray-100"
+            className="w-full py-2 rounded-md bg-[#d7ccc8] hover:bg-[#bcaaa4] text-[#3e2723] font-medium transition-all"
           >
-            Register
+            Đăng ký tài khoản
           </button>
         </form>
       </div>

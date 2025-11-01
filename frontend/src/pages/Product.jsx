@@ -99,7 +99,7 @@ const Product = () => {
           </h1>
 
           <div className="flex items-center gap-1 mt-3">
-            {[...Array(5)].map((_, i) => (
+            {/* {[...Array(5)].map((_, i) => (
               <img
                 key={i}
                 src={assets.star_icon}
@@ -107,7 +107,7 @@ const Product = () => {
                 className="w-4 h-4"
               />
             ))}
-            <p className="pl-2 text-gray-600 text-sm">(120 đánh giá)</p>
+            <p className="pl-2 text-gray-600 text-sm">(120 đánh giá)</p> */}
           </div>
 
           <p className="mt-5 text-3xl font-semibold text-gray-900">
@@ -174,9 +174,9 @@ const Product = () => {
       <div className="mt-20">
         <div className="flex border-b">
           <b className="border px-5 py-3 text-sm bg-gray-100">Mô tả</b>
-          <p className="border px-5 py-3 text-sm text-gray-500">
+          {/* <p className="border px-5 py-3 text-sm text-gray-500">
             Đánh giá (122)
-          </p>
+          </p> */}
         </div>
         <div className="border-x border-b px-6 py-6 text-sm text-gray-600 space-y-3 leading-relaxed">
           <p>{productData.description || "Không có mô tả chi tiết."}</p>

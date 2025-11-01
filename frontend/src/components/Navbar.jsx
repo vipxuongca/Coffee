@@ -10,7 +10,7 @@ const Navbar = ({ backendCartUrl }) => {
   const [visible, setVisible] = useState(false);
   const { setShowSearch, cartCount, setCartCount, token } =
     useContext(ShopContext);
-  const { cartCountTotal, updateCartContext } = useContext(CartContext);
+  const { cartCountTotal } = useContext(CartContext);
 
   return (
     <div className="flex items-center justify-between py-3 px-4 md:px-8 sticky top-0 z-50 bg-[#3e2723] text-white shadow-lg">
@@ -51,12 +51,12 @@ const Navbar = ({ backendCartUrl }) => {
       {/* Icons */}
       <div className="flex items-center gap-6">
         {/* Search */}
-        <button
+        {/* <button
           onClick={() => setShowSearch(true)}
           className="w-5 cursor-pointer invert brightness-0 saturate-0"
         >
           <img src={assets.search_icon} alt="search" />
-        </button>
+        </button> */}
 
         {/* Profile */}
         <Link to={!token ? "/login" : "/user"} className="relative">

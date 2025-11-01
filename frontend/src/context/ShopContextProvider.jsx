@@ -13,12 +13,13 @@ const ShopContextProvider = (props) => {
   const backendOrderUrl = import.meta.env.VITE_BACKEND_ORDER_URL;
   const backendUserUrl = import.meta.env.VITE_BACKEND_USER_URL;
   const [search, setSearch] = useState("");
-  const [showSearch, setShowSearch] = useState(true);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [reloadAddress, setReloadAddress] = useState(0);
+  const [defaultAddress, setDefaultAddress] = useState(null);
 
   useEffect(() => {
     let timer;
@@ -78,8 +79,6 @@ const ShopContextProvider = (props) => {
     delivery_fee,
     search,
     setSearch,
-    showSearch,
-    setShowSearch,
     backendUrl,
     backendCartUrl,
     backendOrderUrl,
@@ -87,6 +86,10 @@ const ShopContextProvider = (props) => {
     token,
     setToken,
     setLoading,
+    reloadAddress,
+    setReloadAddress,
+    defaultAddress,
+    setDefaultAddress,
   };
 
   return (

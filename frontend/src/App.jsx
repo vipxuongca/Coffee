@@ -13,7 +13,7 @@ import {
   UserDashboard,
   NotFound,
   Policy,
-  ConfirmOrder
+  Checkout
 } from "./pages";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -49,7 +49,7 @@ const App = () => {
         <Route path="/order" element={<Order />} />
         <Route path="/policy" element={<Policy />} />
         <Route path="/user" element={<UserDashboard />} />
-        <Route path="/confirm-order" element={<ConfirmOrder />} />
+        <Route path="/checkout" element={<Checkout />} />
 
         {/* Catch-all route for undefined paths */}
         <Route path="*" element={<NotFound />} />
