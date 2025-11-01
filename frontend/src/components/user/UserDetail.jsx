@@ -42,6 +42,11 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Xóa",
       cancelButtonText: "Hủy",
+      width: "300px",
+      customClass: {
+        title: "text-sm", 
+        popup: "p-2", 
+      },
     });
 
     if (!confirm.isConfirmed) return; // User cancelled
