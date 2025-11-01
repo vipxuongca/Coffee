@@ -3,10 +3,13 @@ import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { ShopContext } from "./ShopContext";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const CartContextProvider = (props) => {
   // import context
   const { token, backendCartUrl, setLoading } = useContext(ShopContext);
+  const navigate = useNavigate();
 
   // states
   const [cartCountTotal, setCartCountTotal] = useState(0); // nav bar show
@@ -168,6 +171,23 @@ const CartContextProvider = (props) => {
     const totalQty = currentQty + quantity;
     const stockAvailable = await verifyStockCount(productId, totalQty);
     // console.log("stocka",stockAvailable)
+    if (!token) {
+      Swal.fire({
+        icon: "warning",
+        title: "Xin đăng nhập để sử dụng giỏ hàng",
+        confirmButtonText: "Chuyển tới đăng nhập",
+        confirmButtonColor: "#3e2723",
+        width: "300px", // default is ~500px
+        customClass: {
+          title: "text-sm", // smaller font
+          popup: "p-2", // reduce padding
+        },
+      }).then((result) => {
+        if (result.isConfirmed) navigate("/login");
+      });
+      return;
+    }
+
     if (!stockAvailable.success) {
       if (currentQty == 0) {
         toast.warning("Không đủ hàng trong kho");
