@@ -15,10 +15,11 @@ import UserDefaultAddress from "../components/user/UserDefaultAddress";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { token, setLoading } = useContext(ShopContext);
-  const { cartItems, totalAmount, setCartItems } = useContext(CartContext);
+  const { token, setLoading, defaultAddress } = useContext(ShopContext);
+  const { cartItems, totalAmount, clearCart } = useContext(CartContext);
   const [paymentMethod, setPaymentMethod] = useState("COD");
 
+  // console.log(defaultAddress);
   const handleOrderPlacement = async () => {
     try {
       setLoading(true);
@@ -30,7 +31,7 @@ const Checkout = () => {
           quantity: item.quantity,
         })),
         paymentMethod,
-        addressId: defaultAddress?._id,
+        defaultAddress,
       };
 
       const res = await axios.post(
@@ -41,7 +42,7 @@ const Checkout = () => {
 
       if (res.data.success) {
         toast.success("Đặt hàng thành công!");
-        setCartItems([]);
+        clearCart();
         navigate(`/place-order/${res.data.orderId}`);
       } else {
         toast.error(

@@ -6,8 +6,9 @@ import { toast } from "react-toastify";
 import UserDetail from "./UserDetail";
 
 const UserDetailAddress = () => {
-  const { token, setLoading, reloadAddress } = useContext(ShopContext);
-  const [defaultAddress, setDefaultAddress] = useState(null);
+  const { token, setLoading, reloadAddress, setDefaultAddress, defaultAddress } =
+    useContext(ShopContext);
+  // const [defaultAddress, setDefaultAddress] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
   useEffect(() => {

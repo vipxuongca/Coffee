@@ -20,6 +20,7 @@ const ShopContextProvider = (props) => {
   const [showLoading, setShowLoading] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [reloadAddress, setReloadAddress] = useState(0);
+  const [defaultAddress, setDefaultAddress] = useState(null);
 
   useEffect(() => {
     let timer;
@@ -90,6 +91,8 @@ const ShopContextProvider = (props) => {
     setLoading,
     reloadAddress,
     setReloadAddress,
+    defaultAddress,
+    setDefaultAddress,
   };
 
   return (
