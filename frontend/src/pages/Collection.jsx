@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
-import ProductItem from "../components/ProductItem";
 import Title from "../components/Title";
 
 const Collection = () => {
-  const { categories, products, search, showSearch } = useContext(ShopContext);
+  const { categories, products, search } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setcategory] = useState([]);
@@ -20,18 +19,18 @@ const Collection = () => {
     }
   };
 
-  const toggleSubCategory = (e) => {
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory((prev) => prev.filter((item) => item !== e.target.value));
-    } else {
-      setSubCategory((prev) => [...prev, e.target.value]);
-    }
-  };
+  // const toggleSubCategory = (e) => {
+  //   if (subCategory.includes(e.target.value)) {
+  //     setSubCategory((prev) => prev.filter((item) => item !== e.target.value));
+  //   } else {
+  //     setSubCategory((prev) => [...prev, e.target.value]);
+  //   }
+  // };
 
   const applyFilters = () => {
     let productsCopy = products.slice();
 
-    if (showSearch && search) {
+    if (search) {
       productsCopy = productsCopy.filter((item) =>
         item.name.toLowerCase().includes(search.toLowerCase())
       );
@@ -73,7 +72,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [category, subCategory, search, showSearch, products]);
+  }, [category, subCategory, search, products]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">

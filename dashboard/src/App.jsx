@@ -17,16 +17,16 @@ import { AdminContext } from "../context/AdminContext.jsx";
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const App = () => {
-  const { token, setToken } = useContext(AdminContext);
+  const { token } = useContext(AdminContext);
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <ToastContainer position="top-left" autoClose={1200} />
       {token === "" ? (
-        <Login setToken={setToken} />
+        <Login />
       ) : (
         <>
-          <Navbar setToken={setToken} />
+          <Navbar />
           <hr />
           <div className="flex w-full">
             <Sidebar />

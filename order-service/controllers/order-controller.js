@@ -3,9 +3,37 @@ import { buildOrderData } from "../controllers/order-build.js";
 import Order from '../models/order-model.js';
 
 const orderCreate = async (req, res) => {
+  /*
+Expected payload:
+{
+    "items": [
+        {
+            "productId": "68fa0a785133d49b973c6ebe",
+            "quantity": 2
+        },
+        {
+            "productId": "68fb9ed13bc55427516ccd8d",
+            "quantity": 3
+        }
+    ],
+    "paymentMethod": "COD",
+      "defaultAddress": {
+        "receiverName": "Gustavo Fring",
+        "phone": "01245488196",
+        "addressLine1": "12000 – 12100 Coors Rd SW",
+        "ward": "Albuquerque",
+        "city": "New Mexico",
+        "isDefault": true,
+        "_id": "6904f29f50b891bed59020c0"
+    }
+}
+
+   */
   try {
-    const { items, paymentMethod, notes } = req.body;
+    const { items, paymentMethod, defaultAddress, notes } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
+
+    console.log(defaultAddress)
 
     // it is working up to this verifyToken. So the token is successfully passed to this point. At least in Postman
 
@@ -37,13 +65,12 @@ const orderCreate = async (req, res) => {
       userId: orderData.user._id,
       userEmail: orderData.user.email,
       userDetail: {
-        receiverName: orderData.userDetail.receiverName,
-        phone: orderData.userDetail.phone,
-        addressLine1: orderData.userDetail.addressLine1,
-        city: orderData.userDetail.city,
-        state: orderData.userDetail.state,
-        country: orderData.userDetail.country,
-        postalCode: orderData.userDetail.postalCode,
+        receiverName: defaultAddress.receiverName,
+        phone: defaultAddress.phone,
+        addressLine1: defaultAddress.addressLine1,
+        ward: defaultAddress.ward,
+        city: defaultAddress.city,
+        isDefault: defaultAddress.isDefault,
       },
       items: orderData.products.map((p) => ({
         productId: p._id,
@@ -135,6 +162,7 @@ const orderGetOne = async (req, res) => {
       items: itemsWithDetails,
       total: order.total,
       status: order.status,
+      paymentMethod: order.paymentMethod,
       createdAt: order.createdAt
     });
 

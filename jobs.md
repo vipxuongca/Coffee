@@ -30,3 +30,6 @@ CART
 ORDER
 - [ ] controller order, that is using hard-coded links, must be fixed, and move to environment file. env cannot be imported for that specific place, reason remains unknown.
 - [ ] Chỉnh sửa mã đơn hàng thành dạng ORD-0001 (hoặc tương tự)
+
+EMAIL SERVICE
+- [ ] Thêm email service để người dùng liên hệ cửa hàng

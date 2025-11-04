@@ -2,63 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import RelatedProducts from "../components/RelatedProducts";
-import { assets } from "../assets/assets";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { CartContext } from "../context/CartContext";
 
 const Product = () => {
   const { productId } = useParams();
-  const {
-    products,
-    currency,
-    backendCartUrl,
-    backendUrl,
-    fetchCartCount,
-    token,
-  } = useContext(ShopContext);
+
+  // contexts
+  const { products, currency } = useContext(ShopContext);
+  const { getQuantityByProductId, cartAdd } = useContext(CartContext);
+
+  // states
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [quantity, setQuantity] = useState(1);
 
-  const verifyStockCount = async (productId, quantity) => {
-    try {
-      const res = await axios.post(
-        `${backendUrl}/api/product/stock/${productId}`,
-        { quantity },
-        {}
-      );
-      console.log("message:", res.data.message);
-      return res.data;
-    } catch (err) {
-      console.error("Cart API error:", err.response?.data || err.message);
-    }
-  };
-
   // Add to cart API
-  const cartAdd = async (productId, quantity) => {
-    const stockAvailable = await verifyStockCount(productId, quantity);
-    if (!stockAvailable.success) {
-      toast.error("Không đủ hàng trong kho");
-      return;
-    }
-    try {
-      const res = await axios.post(
-        `${backendCartUrl}/api/cart/add/${productId}`,
-        { quantity },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Cart updated:", res.data);
-      await fetchCartCount();
-      toast.success("Thêm vào giỏ hàng thành công");
-    } catch (err) {
-      console.error("Cart API error:", err.response?.data || err.message);
-      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
-    }
-  };
 
   // Load product data
   useEffect(() => {
@@ -73,6 +32,25 @@ const Product = () => {
   const handleAddToCart = async () => {
     if (!productData?._id) return;
     await cartAdd(productData._id, quantity);
+  };
+
+  const handleQuantityChange = (e) => {
+    const value = Number.parseInt(e.target.value, 10);
+
+    // Reject invalid or NaN input
+    if (Number.isNaN(value) || value < 1) {
+      setQuantity(1);
+      return;
+    }
+
+    // Enforce stock limit
+    if (productData?.stock && value > productData.stock) {
+      setQuantity(productData.stock);
+      toast.warn("Số lượng vượt quá tồn kho");
+      return;
+    }
+
+    setQuantity(value);
   };
 
   if (!productData) {
@@ -120,7 +98,7 @@ const Product = () => {
           </h1>
 
           <div className="flex items-center gap-1 mt-3">
-            {[...Array(5)].map((_, i) => (
+            {/* {[...Array(5)].map((_, i) => (
               <img
                 key={i}
                 src={assets.star_icon}
@@ -128,7 +106,7 @@ const Product = () => {
                 className="w-4 h-4"
               />
             ))}
-            <p className="pl-2 text-gray-600 text-sm">(120 đánh giá)</p>
+            <p className="pl-2 text-gray-600 text-sm">(120 đánh giá)</p> */}
           </div>
 
           <p className="mt-5 text-3xl font-semibold text-gray-900">
@@ -140,12 +118,14 @@ const Product = () => {
           </p>
 
           <p className="mt-8 font-medium text-gray-500 text-sm">
-            Trong Giỏ hàng: {productData.stock} sản phẩm
+            Trong Giỏ hàng: {getQuantityByProductId(productId)} sản phẩm
           </p>
 
           {/* Quantity Selector */}
           <div className="mt-4 flex items-center gap-3">
-            <strong className="text-sm text-gray-700 font-medium">SỐ LƯỢNG:</strong>
+            <strong className="text-sm text-gray-700 font-medium">
+              SỐ LƯỢNG:
+            </strong>
             <div className="flex items-center border rounded-lg">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -153,7 +133,15 @@ const Product = () => {
               >
                 -
               </button>
-              <span className="px-4 text-gray-800 select-none">{quantity}</span>
+              <input
+                type="number"
+                min="1"
+                value={quantity}
+                onChange={(e) => handleQuantityChange(e)}
+                className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723] 
+             [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none 
+             [&::-webkit-outer-spin-button]:appearance-none"
+              />
               <button
                 onClick={() =>
                   setQuantity((q) => Math.min(productData.stock || 99, q + 1))
@@ -185,9 +173,9 @@ const Product = () => {
       <div className="mt-20">
         <div className="flex border-b">
           <b className="border px-5 py-3 text-sm bg-gray-100">Mô tả</b>
-          <p className="border px-5 py-3 text-sm text-gray-500">
+          {/* <p className="border px-5 py-3 text-sm text-gray-500">
             Đánh giá (122)
-          </p>
+          </p> */}
         </div>
         <div className="border-x border-b px-6 py-6 text-sm text-gray-600 space-y-3 leading-relaxed">
           <p>{productData.description || "Không có mô tả chi tiết."}</p>

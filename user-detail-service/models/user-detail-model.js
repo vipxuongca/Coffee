@@ -3,11 +3,8 @@ const userDetailItemSchema = new mongoose.Schema({
   receiverName: { type: String, required: true },
   phone: { type: String, required: true },
   addressLine1: { type: String, required: true },
-  addressLine2: { type: String },
+  ward: { type: String, required: true},
   city: { type: String, required: true },
-  state: { type: String },
-  postalCode: { type: String, required: true },
-  country: { type: String, required: true, default: "Vietnam" },
   isDefault: { type: Boolean, default: false },
 })
 const userDetailSchema = new mongoose.Schema(

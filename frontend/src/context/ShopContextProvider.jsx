@@ -13,18 +13,19 @@ const ShopContextProvider = (props) => {
   const backendOrderUrl = import.meta.env.VITE_BACKEND_ORDER_URL;
   const backendUserUrl = import.meta.env.VITE_BACKEND_USER_URL;
   const [search, setSearch] = useState("");
-  const [showSearch, setShowSearch] = useState(true);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [reloadAddress, setReloadAddress] = useState(0);
+  const [defaultAddress, setDefaultAddress] = useState(null);
 
   useEffect(() => {
     let timer;
     if (loading) {
-      timer = setTimeout(() => setShowLoading(true), 500); // show spinner after 0.5s1s
+      timer = setTimeout(() => setShowLoading(true), 500);
+      // show spinner after 0.5s
     } else {
       setShowLoading(false);
     }
@@ -37,7 +38,7 @@ const ShopContextProvider = (props) => {
 
   const getProductsData = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/product/get`);
+      const response = await axios.get(`http://localhost:4000/api/product/get`);
       if (response.data.success) {
         setProducts(response.data.products);
       } else {
@@ -50,7 +51,9 @@ const ShopContextProvider = (props) => {
   };
   const getCategoriesData = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/category/get`);
+      const response = await axios.get(
+        `http://localhost:4000/api/category/get`
+      );
       if (response.data.success) {
         setCategories(response.data.category);
       } else {
@@ -61,26 +64,6 @@ const ShopContextProvider = (props) => {
       toast.error(error.message);
     }
   };
-  const fetchCartCount = async () => {
-    if (!token) return;
-    try {
-      const res = await axios.get(`${backendCartUrl}/api/cart`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const totalItems = res.data.items.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
-      setCartCount(totalItems);
-    } catch (err) {
-      console.error("Failed to fetch cart count:", err.message);
-      setCartCount(0);
-    }
-  };
-
-  useEffect(() => {
-    fetchCartCount();
-  }, [token]);
 
   useEffect(() => {
     getProductsData();
@@ -96,24 +79,23 @@ const ShopContextProvider = (props) => {
     delivery_fee,
     search,
     setSearch,
-    showSearch,
-    setShowSearch,
     backendUrl,
     backendCartUrl,
     backendOrderUrl,
     backendUserUrl,
-    fetchCartCount,
     token,
     setToken,
-    cartCount,
-    setCartCount,
     setLoading,
+    reloadAddress,
+    setReloadAddress,
+    defaultAddress,
+    setDefaultAddress,
   };
 
   return (
     <ShopContext.Provider value={value}>
       {showLoading && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center">
             <ClipLoader color="#3e2723" size={60} />
             <p className="text-gray-700 font-medium mt-2">Loading...</p>

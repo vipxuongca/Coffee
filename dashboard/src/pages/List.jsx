@@ -9,8 +9,8 @@ import { Edit, Trash } from "lucide-react";
 const List = () => {
   const { token, currency, setLoading } = useContext(AdminContext);
   const navigate = useNavigate();
-  const API_get = backendUrl + "/api/product/get";
-  const API_delete = backendUrl + "/api/product/delete";
+  const API_get = "http://localhost:4000/api/product/get";
+  const API_delete = "http://localhost:4000/api/product/delete";
 
   const [list, setList] = useState([]);
 

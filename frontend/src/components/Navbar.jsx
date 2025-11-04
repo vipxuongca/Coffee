@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { NavLink, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import { CartContext } from "../context/CartContext";
 import axios from "axios";
 
 const Navbar = ({ backendCartUrl }) => {
@@ -9,36 +10,7 @@ const Navbar = ({ backendCartUrl }) => {
   const [visible, setVisible] = useState(false);
   const { setShowSearch, cartCount, setCartCount, token } =
     useContext(ShopContext);
-
-  // Fetch and update cart count
-  const fetchCartCount = async () => {
-    if (!token) {
-      setCartCount(0);
-      return;
-    }
-    try {
-      const res = await axios.get(
-        `${backendCartUrl || "http://localhost:4003/api/cart"}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      const totalItems =
-        res.data.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
-      setCartCount(totalItems);
-    } catch (err) {
-      console.error("Error fetching cart count:", err.message);
-      setCartCount(0);
-    }
-  };
-
-  useEffect(() => {
-    fetchCartCount();
-
-    // Optional: listen to storage changes (e.g., another tab modifies the cart)
-    window.addEventListener("storage", fetchCartCount);
-    return () => window.removeEventListener("storage", fetchCartCount);
-  }, [token]);
+  const { cartCountTotal } = useContext(CartContext);
 
   return (
     <div className="flex items-center justify-between py-3 px-4 md:px-8 sticky top-0 z-50 bg-[#3e2723] text-white shadow-lg">
@@ -79,12 +51,12 @@ const Navbar = ({ backendCartUrl }) => {
       {/* Icons */}
       <div className="flex items-center gap-6">
         {/* Search */}
-        <button
+        {/* <button
           onClick={() => setShowSearch(true)}
           className="w-5 cursor-pointer invert brightness-0 saturate-0"
         >
           <img src={assets.search_icon} alt="search" />
-        </button>
+        </button> */}
 
         {/* Profile */}
         <Link to={!token ? "/login" : "/user"} className="relative">
@@ -104,9 +76,9 @@ const Navbar = ({ backendCartUrl }) => {
               alt="cart"
               className="invert brightness-0 saturate-0"
             />
-            {token && cartCount > 0 && (
+            {token && cartCountTotal > 0 && (
               <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px] z-10">
-                {cartCount}
+                {cartCountTotal}
               </p>
             )}
           </button>

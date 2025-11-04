@@ -21,16 +21,15 @@ const orderUserSchema = new mongoose.Schema({
   receiverName: { type: String, required: true },
   phone: { type: String, required: true },
   addressLine1: { type: String, required: true },
+  ward: { type: String, required: true },
   city: { type: String, required: true },
-  state: { type: String },
-  postalCode: { type: String },
-  country: { type: String, required: true },
+  isDefault: { type: Boolean, required: true }
 });
 
 // --- Order Schema ---
 const orderSchema = new mongoose.Schema(
   {
-    orderBusinessCode: { type: String, unique: true },
+    // orderBusinessCode: { type: String, unique: true },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
     userEmail: { type: String, required: true },
     userDetail: { type: orderUserSchema, required: true },
@@ -40,7 +39,7 @@ const orderSchema = new mongoose.Schema(
     shippingFee: { type: Number, default: 0 },
     paymentMethod: {
       type: String,
-      enum: ["COD", "CARD", "TRANSFER"],
+      enum: ["COD", "CARD", "TRANSFER", "PAYMENT_GATEWAY"],
       default: "COD",
     },
     notes: { type: String },
