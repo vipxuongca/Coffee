@@ -2,13 +2,8 @@ import userModel from '../models/user-model.js';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
 
-
-const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '1d',
-  });
-}
 
 const loginUser = async (req, res) => {
 
@@ -34,8 +29,17 @@ const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Thông tin đăng nhập không đúng' });
     } else {
-      const token = createToken(user._id);
-      return res.status(200).json({ success: true, token });
+      const accessToken = generateAccessToken({ id: user._id });
+      const refreshToken = generateRefreshToken({ id: user._id });
+
+      user.refreshToken = refreshToken;
+      await user.save();
+
+      return res.status(200).json({
+        success: true,
+        accessToken,
+        refreshToken,
+      });
     }
   }
   catch (error) {
