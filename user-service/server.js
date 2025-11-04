@@ -1,7 +1,9 @@
 // environment
 import dotenv from 'dotenv';
-const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
 dotenv.config({ path: envFile });
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
 
 import express from 'express';
@@ -15,6 +17,7 @@ import userRouter from './routes/user-route.js';
 // configuration
 const app = express();
 const PORT = process.env.PORT || 4002;
+const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
 
 const allowedOrigins = process.env.ALLOWED_ORIGIN
   ? process.env.ALLOWED_ORIGIN.split(',').map(o => o.trim())
@@ -38,6 +41,7 @@ connectCloudinary();
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
+app.use("/api/auth", authRoutes);
 
 //api endpoint
 app.use('/api/user', userRouter);
