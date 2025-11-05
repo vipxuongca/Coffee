@@ -33,18 +33,10 @@ const loginAdmin = async (req, res) => {
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
-    } 
-    const accessToken = generateAccessToken({ id: admin._id });
-    const refreshToken = generateRefreshToken({ id: admin._id });
-
-    admin.refreshToken = refreshToken;
-    await admin.save();
-
-    res.status(200).json({
-      success: true,
-      accessToken,
-      refreshToken,
-    });
+    } else {
+      const token = createToken(admin._id);
+      return res.status(200).json({ success: true, token });
+    }
   }
   catch (error) {
     console.error('Error logging in admin:', error);
