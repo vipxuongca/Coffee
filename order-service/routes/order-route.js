@@ -8,6 +8,6 @@ const router = express.Router();
 router.post('/create', verifyToken, orderCreate);
 router.get('/get-one/:orderid', verifyToken, orderGetOne);
 router.get('/get-user', verifyToken, orderGetUser);
-router.put("/cancel/:orderId", verifyToken, orderCancel);
+router.put("/cancel/:orderid", verifyToken, orderCancel);
 
 export default router;

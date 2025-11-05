@@ -232,18 +232,13 @@ const orderGetUser = async (req, res) => {
 const orderCancel = async (req, res) => {
   try {
     const { orderid } = req.params;
-    const userId = req.user.id;
+    console.log("orderid", orderid)
 
     // Find the user's order
-    const userOrders = await Order.findOne({ _id: orderid, userId });
-    if (!userOrders) {
-      return res.status(404).json({ success: false, error: 'Không tìm thấy đơn hàng.' });
-    }
-
-    // Locate order by ID
-    const order = userOrders.orders.find(o => o.orderId === orderId);
+    const order = await Order.findById(orderid);
+    console.log(order)
     if (!order) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy đơn hàng này." });
+      return res.status(404).json({ success: false, error: 'Không tìm thấy đơn hàng.' });
     }
 
     // Validate status
@@ -253,7 +248,7 @@ const orderCancel = async (req, res) => {
 
     // Update status
     order.status = "CANCELLED";
-    await userOrders.save();
+    await order.save();
 
     return res.status(200).json({
       success: true,
