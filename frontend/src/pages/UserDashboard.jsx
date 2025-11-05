@@ -5,10 +5,35 @@ import UserProfile from "../components/user/UserProfile";
 import UserChangePassword from "../components/user/UserChangePassword";
 import { User, MapPin, Lock, List, LogOut } from "lucide-react";
 import { ShopContext } from "../context/ShopContext";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const { token } = useContext(ShopContext);
+
+  const handleLogout = async () => {
+    const confirm = await Swal.fire({
+      text: "Bạn có muốn đăng xuất?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Đăng xuất",
+      cancelButtonText: "Hủy",
+      width: "300px",
+      customClass: {
+        title: "text-sm",
+        popup: "p-2",
+      },
+    });
+
+    if (!confirm.isConfirmed) return; // User cancelled
+
+    localStorage.removeItem("token");
+    globalThis.location.href = "/";
+    return null;
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -21,9 +46,7 @@ const UserDashboard = () => {
       case "orders":
         return <UserOrders />;
       case "logout":
-        localStorage.removeItem("token");
-        globalThis.location.href = "/";
-        return null;
+        handleLogout();
 
       default:
         return null;

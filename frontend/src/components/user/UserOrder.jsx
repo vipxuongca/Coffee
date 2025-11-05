@@ -49,7 +49,9 @@ const UserOrders = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
-      <h2 className="text-2xl font-semibold mb-6 text-[#3e2723]">Đơn hàng của bạn</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-[#3e2723]">
+        Đơn hàng của bạn
+      </h2>
 
       <div className="overflow-x-auto rounded-xl">
         <table className="min-w-full text-sm border-collapse">
@@ -104,7 +106,9 @@ const UserOrders = () => {
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button
-                    onClick={() => navigate(`/orders/${order.orderId}`)}
+                    onClick={() =>
+                      navigate(`/orders/${order.orderId}`, { state: { order } })
+                    }
                     className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md transition"
                   >
                     Xem chi tiết

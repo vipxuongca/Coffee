@@ -228,4 +228,38 @@ const orderGetUser = async (req, res) => {
   }
 };
 
-export { orderGetOne, orderCreate, orderGetUser };
+// Cancel an order by ID
+const orderCancel = async (req, res) => {
+  try {
+    const { orderid } = req.params;
+    console.log("orderid", orderid)
+
+    // Find the user's order
+    const order = await Order.findById(orderid);
+    console.log(order)
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Không tìm thấy đơn hàng.' });
+    }
+
+    // Validate status
+    if (order.status !== "PENDING_PAYMENT") {
+      return res.status(400).json({ success: false, message: "Không thể hủy đơn hàng đã thanh toán hoặc đã xử lý." });
+    }
+
+    // Update status
+    order.status = "CANCELLED";
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Đơn hàng đã được hủy thành công.",
+      order
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: "Lỗi khi hủy đơn hàng.", error: err.message });
+  }
+};
+
+
+export { orderGetOne, orderCreate, orderGetUser, orderCancel };
