@@ -145,10 +145,6 @@ const OrderDetail = () => {
             <strong>Phương thức thanh toán:</strong>{" "}
             {order.paymentMethod || "—"}
           </p>
-          <p>
-            <strong>Thanh toán:</strong>{" "}
-            {order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
-          </p>
         </div>
       </Section>
 

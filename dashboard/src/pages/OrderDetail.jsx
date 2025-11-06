@@ -142,7 +142,7 @@ const OrderDetail = () => {
     order.isPaid
   );
 
-    const paymentConfirmable = !(
+  const paymentConfirmable = !(
     order.status === "PAID" ||
     order.status === "FAILED" ||
     order.status === "CANCELLED" ||
@@ -184,10 +184,6 @@ const OrderDetail = () => {
           <p>
             <strong>Phương thức thanh toán:</strong>{" "}
             {order.paymentMethod || "—"}
-          </p>
-          <p>
-            <strong>Thanh toán:</strong>{" "}
-            {order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
           </p>
         </div>
       </Section>
@@ -305,7 +301,7 @@ const OrderDetail = () => {
           Quay lại danh sách
         </button>
 
-      {paymentConfirmable && (
+        {paymentConfirmable && (
           <button
             onClick={handleConfirmPayment}
             disabled={processing}
