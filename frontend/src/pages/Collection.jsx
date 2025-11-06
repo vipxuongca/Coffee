@@ -10,6 +10,8 @@ const Collection = () => {
   const [category, setcategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
   const [sortType, setSortType] = useState("relevant");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   const toggleCategory = (e) => {
     if (category.includes(e.target.value)) {
@@ -41,9 +43,22 @@ const Collection = () => {
         category.includes(item.category)
       );
     }
+
     if (subCategory.length > 0) {
       productsCopy = productsCopy.filter((item) =>
         subCategory.includes(item.subCategory)
+      );
+    }
+
+    // Price filter
+    if (minPrice !== "") {
+      productsCopy = productsCopy.filter(
+        (item) => item.price >= Number(minPrice)
+      );
+    }
+    if (maxPrice !== "") {
+      productsCopy = productsCopy.filter(
+        (item) => item.price <= Number(maxPrice)
       );
     }
 
@@ -66,30 +81,28 @@ const Collection = () => {
     }
   };
 
+  const handleMin = (e) => {
+    const v = e.target.value.replace(/\D/g, ""); // remove non-digits
+    setMinPrice(v ? parseInt(v, 10) * 1000 : "");
+  };
+
+  const handleMax = (e) => {
+    const v = e.target.value.replace(/\D/g, "");
+    setMaxPrice(v ? parseInt(v, 10) * 1000 : "");
+  };
+
   useEffect(() => {
     sortProducts();
   }, [sortType]);
 
   useEffect(() => {
     applyFilters();
-  }, [category, subCategory, search, products]);
+  }, [category, subCategory, search, products, minPrice, maxPrice]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
       {/* Filtering */}
       <div className="min-w-60">
-        <p
-          className="my-2 text-x1 flex items-center cursor-pointer gap-2"
-          onClick={() => setShowFilter(!showFilter)}
-        >
-          FILTER
-          <img
-            className={`h-3 sm:hidden ${showFilter ? "rotate-90" : ""}`}
-            src={assets.dropdown_icon}
-            alt=""
-          />
-        </p>
-
         <div
           className={`border-gray-300 border pl-5 py-3 mt-6 ${
             showFilter ? "" : "hidden"
@@ -141,6 +154,29 @@ const Collection = () => {
               Ground
             </p>
           </div> */}
+        </div>
+
+        <div
+          className={`border-gray-300 border pl-5 py-3 mt-6 ${
+            showFilter ? "" : "hidden"
+          } sm:block`}
+        >
+          <p className="mb-3 text-sm font-medium">KHOẢNG GIÁ (nghìn đồng)</p>
+          <input
+            type="text"
+            placeholder="từ"
+            value={minPrice ? minPrice / 1000 : ""}
+            onChange={handleMin}
+            className="no-arrow w-20 border border-gray-300 rounded px-2 py-1"
+          />
+          <span>-</span>
+          <input
+            type="text"
+            placeholder="đến"
+            value={maxPrice ? maxPrice / 1000 : ""}
+            onChange={handleMax}
+            className="no-arrow w-20 border border-gray-300 rounded px-2 py-1"
+          />
         </div>
       </div>
 
