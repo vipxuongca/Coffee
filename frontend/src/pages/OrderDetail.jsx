@@ -117,7 +117,7 @@ const OrderDetail = () => {
         <span
           className={`px-3 py-1 text-sm font-semibold rounded-md ${
             order.status === "PENDING_PAYMENT"
-              ? "bg-[#fff8f0] text-[#8d6e63] border border-[#d7ccc8]"
+              ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
               : order.status === "PAID"
               ? "bg-green-100 text-green-700"
               : order.status === "CANCELLED"
@@ -139,6 +139,7 @@ const OrderDetail = () => {
             <strong>Ngày tạo:</strong>{" "}
             {new Date(order.createdAt).toLocaleString("vi-VN")}
           </p>
+          <br />
           <p>
             <strong>Phương thức thanh toán:</strong>{" "}
             {order.paymentMethod || "—"}

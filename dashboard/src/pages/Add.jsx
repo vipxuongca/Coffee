@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendUrl } from "../App";
@@ -6,6 +7,7 @@ import { toast } from "react-toastify";
 import { AdminContext } from "../../context/AdminContext";
 
 const Add = () => {
+  const navigate = useNavigate();
   const { token, setLoading } = useContext(AdminContext); //for the loading screen
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
@@ -84,6 +86,7 @@ const Add = () => {
         setImage3(false);
         setImage4(false);
         setPrice("");
+        navigate("/list");
       } else {
         toast.error(response.data.message);
       }
@@ -98,7 +101,7 @@ const Add = () => {
   return (
     <div className="w-full max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6 mt-6">
       <h1 className="text-2xl font-semibold mb-6 text-[#3e2723]">
-        Thêm Sản Phẩm
+        Thêm sản phẩm
       </h1>
 
       <form
@@ -108,7 +111,8 @@ const Add = () => {
         {/* Upload Image */}
         <div className="w-full">
           <p className="mb-2 font-medium">
-            Tải Lên Hình Ảnh <span className="text-red-500 ml-1">*</span>
+            <strong>Tải lên hình ảnh </strong>{" "}
+            <span className="text-red-500 ml-1">*</span>
           </p>
           <div className="flex gap-3 flex-wrap">
             {[image1, image2, image3, image4].map((img, i) => (
@@ -138,7 +142,8 @@ const Add = () => {
         {/* Basic Info */}
         <div className="w-full">
           <p className="mb-1 font-medium">
-            Tên Sản Phẩm <span className="text-red-500 ml-1">*</span>
+            <strong>Tên sản phẩm </strong>
+            <span className="text-red-500 ml-1">*</span>
           </p>
           <input
             onChange={(e) => setName(e.target.value)}
@@ -151,7 +156,8 @@ const Add = () => {
 
         <div className="w-full">
           <p className="mb-1 font-medium">
-            Thương Hiệu <span className="text-red-500 ml-1">*</span>
+            <strong>Thương hiệu</strong>{" "}
+            <span className="text-red-500 ml-1">*</span>
           </p>
           <input
             onChange={(e) => setBrand(e.target.value)}
@@ -164,21 +170,23 @@ const Add = () => {
 
         <div className="w-full">
           <p className="mb-1 font-medium">
-            Mô Tả <span className="text-red-500 ml-1">*</span>
+            <strong>Mô tả</strong> <span className="text-red-500 ml-1">*</span>
           </p>
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
-            className="w-full border rounded-md px-3 py-2 h-24"
+            className="w-full border rounded-md px-3 py-2 h-40"
             placeholder="Mô tả ngắn sản phẩm"
           />
         </div>
         <div className="w-full">
-          <p className="mb-1 font-medium">Mô Tả Chi Tiết</p>
+          <p className="mb-1 font-medium">
+            <strong>Mô tả chi tiết</strong>
+          </p>
           <textarea
             onChange={(e) => setLongDescription(e.target.value)}
             value={longDescription}
-            className="w-full border rounded-md px-3 py-2 h-24"
+            className="w-full border rounded-md px-3 py-2 h-40"
             placeholder="Mô tả chi tiết sản phẩm"
           />
         </div>
@@ -187,7 +195,8 @@ const Add = () => {
         <div className="flex flex-col sm:flex-row gap-5 w-full">
           <div className="flex-1">
             <p className="mb-1 font-medium">
-              Phân Loại<span className="text-red-500 ml-1">*</span>
+              <strong>Phân loại</strong>
+              <span className="text-red-500 ml-1">*</span>
             </p>
             <select
               className="w-full border rounded-md px-3 py-2"
@@ -222,7 +231,7 @@ const Add = () => {
         <div className="flex flex-col sm:flex-row gap-5 w-full">
           <div className="flex-1">
             <p className="mb-1 font-medium">
-              Giá <span className="text-red-500 ml-1">*</span>
+              <strong>Giá</strong> <span className="text-red-500 ml-1">*</span>
             </p>
             <input
               onChange={(e) => setPrice(e.target.value)}
@@ -234,7 +243,9 @@ const Add = () => {
           </div>
 
           <div className="flex-1">
-            <p className="mb-1 font-medium">Giảm Giá</p>
+            <p className="mb-1 font-medium">
+              <strong>Giảm giá</strong>
+            </p>
             <input
               onChange={(e) => setDiscount(e.target.value)}
               value={discount}
@@ -246,7 +257,8 @@ const Add = () => {
 
           <div className="flex-1">
             <p className="mb-1 font-medium">
-              Tồn Kho <span className="text-red-500 ml-1">*</span>
+              <strong>Tồn kho</strong>{" "}
+              <span className="text-red-500 ml-1">*</span>
             </p>
             <input
               onChange={(e) => setStock(e.target.value)}
