@@ -16,6 +16,7 @@ const Product = () => {
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [tab, setTab] = useState("detail");
 
   // Add to cart API
 
@@ -96,22 +97,27 @@ const Product = () => {
           <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">
             {productData.name}
           </h1>
-
-          <div className="flex items-center gap-1 mt-3">
-            {/* {[...Array(5)].map((_, i) => (
+          {/* <div className="flex items-center gap-1 mt-3"> */}
+          {/* {[...Array(5)].map((_, i) => (
               <img
-                key={i}
-                src={assets.star_icon}
-                alt="star"
-                className="w-4 h-4"
+              key={i}
+              src={assets.star_icon}
+              alt="star"
+              className="w-4 h-4"
               />
-            ))}
-            <p className="pl-2 text-gray-600 text-sm">(120 đánh giá)</p> */}
-          </div>
+              ))}
+              <p className="pl-2 text-gray-600 text-sm">(120 đánh giá)</p> */}
+          {/* </div> */}
 
-          <p className="mt-5 text-3xl font-semibold text-gray-900">
+          <p className="mt-5 text-4xl font-extrabold text-green-600 tracking-tight">
             {productData.price.toLocaleString()} {currency}
           </p>
+
+          <div className="flex items-center gap-1 mt-3">
+            <h3 className="text-xl sm:text-l font-semibold text-gray-600">
+              {productData.packageType}
+            </h3>
+          </div>
 
           <p className="mt-5 text-gray-600 leading-relaxed">
             {productData.description}
@@ -172,14 +178,40 @@ const Product = () => {
       {/* Description & Reviews */}
       <div className="mt-20">
         <div className="flex border-b">
-          <b className="border px-5 py-3 text-sm bg-gray-100">Mô tả chi tiết</b>
-          {/* <p className="border px-5 py-3 text-sm text-gray-500">
-            Đánh giá (122)
-          </p> */}
+          <button
+            onClick={() => setTab("detail")}
+            className={`border px-5 py-3 text-sm ${
+              tab === "detail"
+                ? "bg-gray-100 font-semibold text-gray-900"
+                : "text-gray-500"
+            }`}
+          >
+            Mô tả chi tiết
+          </button>
+
+          <button
+            onClick={() => setTab("packageDetail")}
+            className={`border px-5 py-3 text-sm ${
+              tab === "packageDetail"
+                ? "bg-gray-100 font-semibold text-gray-900"
+                : "text-gray-500"
+            }`}
+          >
+            Hình thức đóng gói
+          </button>
         </div>
-        <div className="border-x border-b px-6 py-6 text-sm text-gray-600 space-y-3 leading-relaxed whitespace-pre-line">
-          <p>{productData.longDescription || "Không có mô tả chi tiết."}</p>
-        </div>
+
+        {tab === "detail" && (
+          <div className="border-x border-b px-6 py-6 text-sm text-gray-600 space-y-3 leading-relaxed whitespace-pre-line">
+            <p>{productData.longDescription || "Không có mô tả chi tiết."}</p>
+          </div>
+        )}
+
+        {tab === "packageDetail" && (
+          <div className="border-x border-b px-6 py-6 text-sm text-gray-600">
+            Không có mô tả.
+          </div>
+        )}
       </div>
 
       {/* Related Products */}

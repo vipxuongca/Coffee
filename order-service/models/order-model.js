@@ -15,6 +15,9 @@ const orderItemSchema = new mongoose.Schema({
   discount: { type: Number, default: 0 },
   stock: { type: Number }, // useful for historical data integrity
   quantity: { type: Number, required: true },
+  packageType: { type: String },
+  packageDetail: { type: String },
+  warranty: { type: String }
 });
 
 // --- Shipping / User Detail ---

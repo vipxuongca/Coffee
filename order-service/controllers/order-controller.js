@@ -85,6 +85,9 @@ Expected payload:
         discount: p.discount,
         quantity: p.quantity,
         price: p.price,
+        warranty: p.warranty,
+        packageType: p.packageType,
+        packageDetail: p.packageDetail
       })),
       total,
       paymentMethod: paymentMethod || "COD",

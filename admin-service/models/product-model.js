@@ -12,7 +12,10 @@ const productSchema = new mongoose.Schema({
   bestseller: { type: Boolean },
   stock: { type: Number, required: true },
   brand: { type: String, required: true },
-  discount: { type: Number, default: 0 }
+  discount: { type: Number, default: 0 },
+  packageType: { type: String, required: true },
+  packageDetail: { type: String },
+  warranty: { type: String }
 }, { timestamps: true })
 
 const productModel = mongoose.models.product || mongoose.model('Products', productSchema);

@@ -59,7 +59,8 @@ const AddCategory = () => {
         <div>
           <p className="mb-2 font-medium">
             <strong>
-              Tải lên hình ảnh <span className="text-red-500 ml-1">*</span>
+              Tải lên hình ảnh{" "}
+              <span className="text-red-600 ml-1 font-bold text-lg">*</span>
             </strong>
           </p>
           <label
@@ -90,7 +91,8 @@ const AddCategory = () => {
         <div>
           <p className="mb-2 font-medium">
             <strong>
-              Tên phân loại <span className="text-red-500 ml-1">*</span>
+              Tên phân loại{" "}
+              <span className="text-red-600 ml-1 font-bold text-lg">*</span>
             </strong>
           </p>
           <input
@@ -107,7 +109,8 @@ const AddCategory = () => {
         <div>
           <p className="mb-2 font-medium">
             <strong>
-              Mô tả phân loại <span className="text-red-500 ml-1">*</span>
+              Mô tả phân loại
+              <span className="text-red-600 ml-1 font-bold text-lg">*</span>
             </strong>
           </p>
           <textarea

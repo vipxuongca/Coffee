@@ -27,6 +27,9 @@ const Edit = () => {
   const [bestseller, setBestseller] = useState(false);
   const [variants, setVariants] = useState([]);
   const [brand, setBrand] = useState("");
+  const [packageType, setPackageType] = useState("");
+  const [packageDetail, setPackageDetail] = useState("");
+  const [warranty, setWarranty] = useState("");
 
   const fetchProduct = async () => {
     try {
@@ -46,6 +49,9 @@ const Edit = () => {
         setSubCategory(product.subCategory || "");
         setBestseller(product.bestseller || false);
         setBrand(product.brand || "");
+        setPackageType(product.packageType || "");
+        setPackageDetail(product.packageDetail || "");
+        setWarranty(product.warranty || "");
         setVariants(product.variant || []);
 
         if (Array.isArray(product.image)) {
@@ -100,6 +106,9 @@ const Edit = () => {
       formData.append("variants", JSON.stringify(variants));
       formData.append("bestseller", bestseller);
       formData.append("brand", brand);
+      formData.append("packageType", packageType);
+      formData.append("packageDetail", packageDetail);
+      formData.append("warranty", warranty);
 
       image1 && formData.append("image1", image1);
       image2 && formData.append("image2", image2);
@@ -116,11 +125,23 @@ const Edit = () => {
         toast.success(response.data.message);
         setName("");
         setDescription("");
+        setLongDescription("");
+        setPrice("100000");
+        setDiscount("0");
+        setStock("1");
+        setCategory("");
+        setSubCategory("");
+        setBestseller(false);
+        setVariants([]);
+        setBrand("");
+        setPackageType("");
+        setPackageDetail("");
+        setWarranty("");
+
         setImage1(false);
         setImage2(false);
         setImage3(false);
         setImage4(false);
-        setPrice("");
         navigate("/list");
       } else {
         toast.error(response.data.message);
@@ -183,8 +204,8 @@ const Edit = () => {
         {/* Product Info */}
         <div className="w-full">
           <p className="mb-1 font-medium">
-            <strong>Tên sản phẩm</strong>{" "}
-            <span className="text-red-500 ml-1">*</span>
+            <strong>Tên sản phẩm </strong>
+            <span className="text-red-600 ml-1 font-bold text-lg">*</span>
           </p>
           <input
             onChange={(e) => setName(e.target.value)}
@@ -192,13 +213,14 @@ const Edit = () => {
             className="w-full border rounded-md px-3 py-2"
             type="text"
             placeholder="Tên sản phẩm"
+            required
           />
         </div>
 
         <div className="w-full">
           <p className="mb-1 font-medium">
             <strong>Thương hiệu</strong>{" "}
-            <span className="text-red-500 ml-1">*</span>
+            <span className="text-red-600 ml-1 font-bold text-lg">*</span>
           </p>
           <input
             onChange={(e) => setBrand(e.target.value)}
@@ -206,18 +228,48 @@ const Edit = () => {
             className="w-full border rounded-md px-3 py-2"
             type="text"
             placeholder="Thương hiệu"
+            required
           />
         </div>
 
         <div className="w-full">
           <p className="mb-1 font-medium">
-            <strong>Mô tả</strong> <span className="text-red-500 ml-1">*</span>
+            <strong>Hình thức đóng gói</strong>{" "}
+            <span className="text-red-600 ml-1 font-bold text-lg">*</span>
+          </p>
+          <input
+            onChange={(e) => setPackageType(e.target.value)}
+            value={packageType}
+            className="w-full border rounded-md px-3 py-2"
+            type="text"
+            placeholder="Hình thức đóng gói"
+            required
+          />
+        </div>
+
+        <div className="w-full">
+          <p className="mb-1 font-medium">
+            <strong>Hình thức đóng gói chi tiết</strong>
+          </p>
+          <textarea
+            onChange={(e) => setPackageDetail(e.target.value)}
+            value={packageDetail}
+            className="w-full border rounded-md px-3 py-2 h-24"
+            placeholder="Mô tả chi tiết hình thức đóng gói"
+          />
+        </div>
+
+        <div className="w-full">
+          <p className="mb-1 font-medium">
+            <strong>Mô tả</strong>{" "}
+            <span className="text-red-600 ml-1 font-bold text-lg">*</span>
           </p>
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
             className="w-full border rounded-md px-3 py-2 h-40"
             placeholder="Mô tả ngắn sản phẩm"
+            required
           />
         </div>
         <div className="w-full">
@@ -236,13 +288,14 @@ const Edit = () => {
         <div className="flex flex-col sm:flex-row gap-5 w-full">
           <div className="flex-1">
             <p className="mb-1 font-medium">
-              <strong>Phân loại</strong>{" "}
-              <span className="text-red-500 ml-1">*</span>
+              <strong>Phân loại</strong>
+              <span className="text-red-600 ml-1 font-bold text-lg">*</span>
             </p>
             <select
               className="w-full border rounded-md px-3 py-2"
               onChange={(e) => setCategory(e.target.value)}
               value={category}
+              required
             >
               {categoryList.map((cat) => (
                 <option key={cat._id} value={cat.name}>
@@ -268,11 +321,12 @@ const Edit = () => {
           </div> */}
         </div>
 
-        {/* Price, Discount, Stock */}
+        {/* Numeric Fields */}
         <div className="flex flex-col sm:flex-row gap-5 w-full">
           <div className="flex-1">
             <p className="mb-1 font-medium">
-              <strong>Giá</strong> <span className="text-red-500 ml-1">*</span>
+              <strong>Giá</strong>{" "}
+              <span className="text-red-600 ml-1 font-bold text-lg">*</span>
             </p>
             <input
               onChange={(e) => setPrice(e.target.value)}
@@ -280,9 +334,27 @@ const Edit = () => {
               className="w-full border rounded-md px-3 py-2"
               type="number"
               placeholder="0"
+              required
             />
           </div>
 
+          <div className="flex-1">
+            <p className="mb-1 font-medium">
+              <strong>Tồn kho</strong>{" "}
+              <span className="text-red-600 ml-1 font-bold text-lg">*</span>
+            </p>
+            <input
+              onChange={(e) => setStock(e.target.value)}
+              value={stock}
+              className="w-full border rounded-md px-3 py-2"
+              type="number"
+              placeholder="0"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-5 w-full">
           <div className="flex-1">
             <p className="mb-1 font-medium">
               <strong>Giảm giá</strong>
@@ -298,15 +370,14 @@ const Edit = () => {
 
           <div className="flex-1">
             <p className="mb-1 font-medium">
-              <strong>Tồn kho</strong>{" "}
-              <span className="text-red-500 ml-1">*</span>
+              <strong>Bảo hành</strong>{" "}
             </p>
             <input
-              onChange={(e) => setStock(e.target.value)}
-              value={stock}
+              onChange={(e) => setWarranty(e.target.value)}
+              value={warranty}
               className="w-full border rounded-md px-3 py-2"
-              type="number"
-              placeholder="0"
+              type="text"
+              placeholder="Nhập bảo hành. VD: 18 tháng"
             />
           </div>
         </div>

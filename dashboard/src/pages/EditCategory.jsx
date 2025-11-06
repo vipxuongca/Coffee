@@ -89,7 +89,8 @@ const EditCategory = () => {
         <div className="w-full">
           <p className="mb-2 font-medium">
             <strong>
-              Tải lên hình ảnh <span className="text-red-500 ml-1">*</span>
+              Tải lên hình ảnh{" "}
+              <span className="text-red-600 ml-1 font-bold text-lg">*</span>
             </strong>
           </p>
           <div className="flex gap-3 flex-wrap">
@@ -126,7 +127,8 @@ const EditCategory = () => {
         <div>
           <p className="mb-2 font-medium">
             <strong>
-              Tên phân loại <span className="text-red-500 ml-1">*</span>
+              Tên phân loại{" "}
+              <span className="text-red-600 ml-1 font-bold text-lg">*</span>
             </strong>
           </p>
           <input
@@ -143,7 +145,8 @@ const EditCategory = () => {
         <div>
           <p className="mb-2 font-medium">
             <strong>
-              Mô tả phân loại <span className="text-red-500 ml-1">*</span>
+              Mô tả phân loại{" "}
+              <span className="text-red-600 ml-1 font-bold text-lg">*</span>
             </strong>
           </p>
           <textarea
