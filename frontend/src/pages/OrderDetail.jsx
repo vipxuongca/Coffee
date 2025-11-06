@@ -254,7 +254,7 @@ const OrderDetail = () => {
       {/* Action buttons */}
       <div className="flex justify-between items-center mt-8">
         <button
-          onClick={() => navigate("/orders")}
+          onClick={() => navigate("/user/orders")}
           className="bg-[#6d4c41] text-white px-5 py-2 rounded-md hover:bg-[#5d4037]"
         >
           Quay lại danh sách
