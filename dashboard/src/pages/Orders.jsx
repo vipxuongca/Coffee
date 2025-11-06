@@ -51,7 +51,7 @@ const Orders = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Order Management</h2>
+      <h2 className="text-2xl font-semibold mb-4">Danh sách đơn hàng</h2>
 
       <div className="overflow-x-auto shadow rounded-lg">
         <table className="min-w-full text-sm text-left border-collapse">
@@ -67,7 +67,7 @@ const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order, index) => (
+            {[...orders].reverse().map((order, index) => (
               <tr
                 key={order.orderId}
                 className="border-b hover:bg-gray-50 transition-colors"

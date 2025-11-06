@@ -30,7 +30,7 @@ const App = () => {
     <div className="relative min-h-screen">
       <ToastContainer position="top-left" autoClose={1500} />
       <Navbar />
-      <AdBanner />
+      {/* <AdBanner /> */}
       <TopScroll />
 
       {location.pathname === "/shop" && <SearchBar />}
