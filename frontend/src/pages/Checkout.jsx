@@ -13,6 +13,7 @@ import {
   Pencil,
 } from "lucide-react";
 import UserDefaultAddress from "../components/user/UserDefaultAddress";
+import PaymentMethod from "../components/PaymentMethod";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -125,23 +126,10 @@ const Checkout = () => {
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
-        <div className="mb-6">
-          <label className="block text-[#4e342e] font-semibold mb-2">
-            Phương thức thanh toán
-          </label>
-          <select
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-            className="w-full border border-[#a1887f] rounded-lg p-2 bg-white text-[#3e2723]"
-          >
-            <option value="COD">Thanh toán khi nhận hàng (COD)</option>
-            <option value="CARD">Thẻ tín dụng / ghi nợ</option>
-            <option value="TRANSFER">Chuyển khoản ngân hàng</option>
-            <option value="PAYMENT_GATEWAY">Cổng Thanh Toán</option>
-          </select>
-        </div>
-      </div>
+      <PaymentMethod
+        paymentMethod={paymentMethod}
+        setPaymentMethod={setPaymentMethod}
+      />
 
       <div className="mt-10 flex justify-end gap-3">
         <button

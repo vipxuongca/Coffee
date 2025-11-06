@@ -219,7 +219,7 @@ const OrderDetail = () => {
                 <th className="px-4 py-3 text-right">Giá</th>
                 <th className="px-4 py-3 text-right">Số lượng</th>
                 <th className="px-4 py-3 text-right">Tổng</th>
-                <th className="px-4 py-3 text-right">Thao tác</th>
+                {/* <th className="px-4 py-3 text-right">Thao tác</th> */}
               </tr>
             </thead>
 
@@ -254,14 +254,14 @@ const OrderDetail = () => {
                   <td className="px-4 py-3 text-right font-semibold text-[#3e2723]">
                     {formatCurrency(item.price * item.quantity)}
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  {/* <td className="px-4 py-3 text-right">
                     <Link
                       to={`/product/${item.productId}`}
                       className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md transition"
                     >
                       Xem sản phẩm
                     </Link>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
