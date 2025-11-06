@@ -16,6 +16,7 @@ const Edit = () => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [longDescription, setLongDescription] = useState("");
   const [price, setPrice] = useState("100000");
   const [discount, setDiscount] = useState("0");
   const [stock, setStock] = useState("");
@@ -28,12 +29,15 @@ const Edit = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/product/fetch/${id}`);
+      const response = await axios.get(
+        `http://localhost:4000/api/product/fetch/${id}`
+      );
       if (response.data.success) {
         const product = response.data.product;
 
         setName(product.name || "");
         setDescription(product.description || "");
+        setLongDescription(product.longDescription || "");
         setPrice(product.price || "");
         setDiscount(product.discount || "");
         setStock(product.stock || "");
@@ -65,7 +69,9 @@ const Edit = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/category/get`);
+        const response = await axios.get(
+          `http://localhost:4000/api/category/get`
+        );
         if (response.data.success) {
           const categories = response.data.category || [];
           setCategoryList(categories);
@@ -84,6 +90,7 @@ const Edit = () => {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
+      formData.append("longDescription", longDescription);
       formData.append("price", Number(price));
       formData.append("discount", Number(discount));
       formData.append("stock", Number(stock));
@@ -136,7 +143,7 @@ const Edit = () => {
       >
         {/* Upload Image */}
         <div className="w-full">
-          <p className="mb-2 font-medium">Tải Lên Hình Ảnh</p>
+          <p className="mb-2 font-medium">Tải Lên Hình Ảnh <span className="text-red-500 ml-1">*</span></p>
           <div className="flex gap-3 flex-wrap">
             {[image1, image2, image3, image4].map((img, i) => (
               <label key={i} htmlFor={`image${i + 1}`}>
@@ -170,41 +177,58 @@ const Edit = () => {
 
         {/* Product Info */}
         <div className="w-full">
-          <p className="mb-1 font-medium">Tên Sản Phẩm</p>
+          <p className="mb-1 font-medium">
+            Tên Sản Phẩm <span className="text-red-500 ml-1">*</span>
+          </p>
           <input
             onChange={(e) => setName(e.target.value)}
             value={name}
             className="w-full border rounded-md px-3 py-2"
             type="text"
-            placeholder="Product Name"
+            placeholder="Tên sản phẩm"
           />
         </div>
 
         <div className="w-full">
-          <p className="mb-1 font-medium">Thương Hiệu</p>
+          <p className="mb-1 font-medium">
+            Thương Hiệu <span className="text-red-500 ml-1">*</span>
+          </p>
           <input
             onChange={(e) => setBrand(e.target.value)}
             value={brand}
             className="w-full border rounded-md px-3 py-2"
             type="text"
-            placeholder="Brand"
+            placeholder="Thương hiệu"
           />
         </div>
 
         <div className="w-full">
-          <p className="mb-1 font-medium">Mô Tả</p>
+          <p className="mb-1 font-medium">
+            Mô Tả <span className="text-red-500 ml-1">*</span>
+          </p>
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
             className="w-full border rounded-md px-3 py-2 h-24"
-            placeholder="Product Description"
+            placeholder="Mô tả ngắn sản phẩm"
+          />
+        </div>
+        <div className="w-full">
+          <p className="mb-1 font-medium">Mô Tả Chi Tiết</p>
+          <textarea
+            onChange={(e) => setLongDescription(e.target.value)}
+            value={longDescription}
+            className="w-full border rounded-md px-3 py-2 h-24"
+            placeholder="Mô tả chi tiết sản phẩm"
           />
         </div>
 
         {/* Category & Subcategory */}
         <div className="flex flex-col sm:flex-row gap-5 w-full">
           <div className="flex-1">
-            <p className="mb-1 font-medium">Phân Loại</p>
+            <p className="mb-1 font-medium">
+              Phân Loại <span className="text-red-500 ml-1">*</span>
+            </p>
             <select
               className="w-full border rounded-md px-3 py-2"
               onChange={(e) => setCategory(e.target.value)}
@@ -237,7 +261,9 @@ const Edit = () => {
         {/* Price, Discount, Stock */}
         <div className="flex flex-col sm:flex-row gap-5 w-full">
           <div className="flex-1">
-            <p className="mb-1 font-medium">Giá</p>
+            <p className="mb-1 font-medium">
+              Giá <span className="text-red-500 ml-1">*</span>
+            </p>
             <input
               onChange={(e) => setPrice(e.target.value)}
               value={price}
@@ -259,7 +285,9 @@ const Edit = () => {
           </div>
 
           <div className="flex-1">
-            <p className="mb-1 font-medium">Tồn Kho</p>
+            <p className="mb-1 font-medium">
+              Tồn Kho <span className="text-red-500 ml-1">*</span>
+            </p>
             <input
               onChange={(e) => setStock(e.target.value)}
               value={stock}

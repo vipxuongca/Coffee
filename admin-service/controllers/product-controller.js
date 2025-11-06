@@ -3,7 +3,7 @@ import productModel from '../models/product-model.js';
 
 const addProduct = async (req, res) => {
   try {
-    const { name, description, price, category, subCategory, variants, bestseller, stock, brand, discount } = req.body;
+    const { name, description, longDescription, price, category, subCategory, variants, bestseller, stock, brand, discount } = req.body;
 
     const image1 = req.files.image1 && req.files.image1[0];
     const image2 = req.files.image2 && req.files.image2[0];
@@ -28,6 +28,7 @@ const addProduct = async (req, res) => {
     const productData = {
       name,
       description,
+      longDescription,
       price: Number(price),
       discount: Number(discount),
       stock: Number(stock),
@@ -46,9 +47,9 @@ const addProduct = async (req, res) => {
     const product = new productModel(productData);
     await product.save();
 
-    res.json({ success: true, message: 'Product added successfully' });
+    res.json({ success: true, message: 'Thêm sản phẩm thành công' });
   } catch (error) {
-    console.error('Error adding product:', error);
+    console.error('Thêm sản phẩm thất bại:', error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -85,11 +86,11 @@ const removeProduct = async (req, res) => {
   try {
     const deleted = await productModel.findByIdAndDelete(req.body.id);
     if (!deleted) {
-      return res.status(404).json({ message: 'Delete failed' });
+      return res.status(404).json({ message: 'Xóa sản phẩm thất bại' });
     }
-    res.json({ success: true, message: 'Product removed successfully' });
+    res.json({ success: true, message: 'Xóa sản phẩm thành công' });
   } catch (error) {
-    console.error('Error removing product:', error);
+    console.error('Xảy ra lỗi xóa sản phẩm:', error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -116,7 +117,7 @@ const updateProduct = async (req, res) => {
     const existingProduct = await productModel.findById(id);
     if (!existingProduct) return res.status(404).json({ success: false, message: "Product not found" });
 
-    const { name, description, price, category, subCategory, variants, bestseller, stock, brand, discount } = req.body;
+    const { name, description, longDescription, price, category, subCategory, variants, bestseller, stock, brand, discount } = req.body;
 
     const imageFiles = [req.files?.image1?.[0], req.files?.image2?.[0], req.files?.image3?.[0], req.files?.image4?.[0]];
     const newImages = [];
@@ -140,6 +141,7 @@ const updateProduct = async (req, res) => {
     const updatedData = {
       name,
       description,
+      longDescription,
       price: Number(price),
       discount: Number(discount) || 0,
       stock: Number(stock),
@@ -153,7 +155,7 @@ const updateProduct = async (req, res) => {
 
     await productModel.findByIdAndUpdate(id, updatedData, { new: true });
 
-    res.json({ success: true, message: "Product updated successfully" });
+    res.json({ success: true, message: "Chỉnh sửa sản phẩm thành công" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: error.message });
