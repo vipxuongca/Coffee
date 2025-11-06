@@ -125,7 +125,7 @@ const OrderDetail = () => {
       );
 
       // Backend returns success; update state locally
-      setOrder((prev) => ({ ...prev, status: "CANCELLED" }));
+      setOrder((prev) => ({ ...prev, status: "PAID" }));
       toast.info("Đơn hàng đã được xác nhận thanh toán thành công.");
     } catch (err) {
       toast.error("Lỗi khi xác nhận thanh toán");
