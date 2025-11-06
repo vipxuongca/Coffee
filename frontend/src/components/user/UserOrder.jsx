@@ -106,9 +106,7 @@ const UserOrders = () => {
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button
-                    onClick={() =>
-                      navigate(`/orders/${order.orderId}`, { state: { order } })
-                    }
+                    onClick={() => navigate(`/orders/${order.orderId}`)}
                     className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md transition"
                   >
                     Xem chi tiết

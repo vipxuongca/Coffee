@@ -1,5 +1,5 @@
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useLocation, useNavigate, Link, useParams } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -10,7 +10,34 @@ const OrderDetail = () => {
   const navigate = useNavigate();
   const [order, setOrder] = useState(location.state?.order);
   const [processing, setProcessing] = useState(false);
+
+  const [refresh, setRefresh] = useState("0");
   const { token, setLoading } = useContext(ShopContext);
+
+  const { orderId } = useParams();
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:4004/api/order/get-one/${orderId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (res.data) {
+          setOrder(res.data);
+        }
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      }
+    };
+
+    if (token) fetchOrders();
+  }, [token]);
 
   if (!order) {
     return (
@@ -50,33 +77,24 @@ const OrderDetail = () => {
       confirmButtonText: "Hủy đơn hàng",
       cancelButtonText: "Trở lại",
       width: "300px",
-      customClass: {
-        title: "text-sm",
-        popup: "p-2",
-      },
     });
 
-    if (!confirm.isConfirmed) return; // User cancelled
+    if (!confirm.isConfirmed) return;
 
     setProcessing(true);
     setLoading(true);
+
     try {
       const res = await axios.put(
         `http://localhost:4004/api/order/cancel/${order.orderId}`,
         {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      const data = res.data;
-      if (!res.ok) throw new Error(data.message || "Không thể hủy đơn hàng.");
-
-      // Update local state without refetching
+      // Backend returns success; update state locally
       setOrder((prev) => ({ ...prev, status: "CANCELLED" }));
       toast.info("Đơn hàng đã được hủy thành công.");
     } catch (err) {
-      console.log(err.message);
       toast.error("Lỗi khi hủy đơn hàng");
     } finally {
       setProcessing(false);
@@ -136,21 +154,18 @@ const OrderDetail = () => {
 
       <Section title="Thông tin giao hàng">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-y-2 text-[#3e2723] text-sm">
-
           <p>
-            <strong>Người nhận:</strong> {order.userId || "—"}
+            <strong>Người nhận:</strong> {order.userDetail?.receiverName || "—"}
           </p>
           <p>
-            <strong>Ngày tạo:</strong>{" "}
-            {new Date(order.createdAt).toLocaleString("vi-VN")}
+            <strong>Số điện thoại:</strong> {order.userDetail?.phone || "—"}
           </p>
+          <br />
           <p>
-            <strong>Phương thức thanh toán:</strong>{" "}
-            {order.paymentMethod || "—"}
-          </p>
-          <p>
-            <strong>Thanh toán:</strong>{" "}
-            {order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
+            <strong>Địa chỉ:</strong>{" "}
+            {order.userDetail
+              ? `${order.userDetail.addressLine1}, ${order.userDetail.ward}, ${order.userDetail.city}`
+              : "—"}
           </p>
         </div>
       </Section>

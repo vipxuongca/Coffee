@@ -164,7 +164,8 @@ const orderGetOne = async (req, res) => {
       total: order.total,
       status: order.status,
       paymentMethod: order.paymentMethod,
-      createdAt: order.createdAt
+      createdAt: order.createdAt,
+      userDetail: order.userDetail
     });
 
   } catch (err) {
