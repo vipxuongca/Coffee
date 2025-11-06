@@ -76,6 +76,7 @@ Expected payload:
         productId: p._id,
         name: p.name,
         description: p.description,
+        longDescription: p.longDescription,
         image: p.image,
         category: p.category,
         subCategory: p.subCategory,

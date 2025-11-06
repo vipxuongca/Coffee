@@ -172,13 +172,13 @@ const Product = () => {
       {/* Description & Reviews */}
       <div className="mt-20">
         <div className="flex border-b">
-          <b className="border px-5 py-3 text-sm bg-gray-100">Mô tả</b>
+          <b className="border px-5 py-3 text-sm bg-gray-100">Mô tả chi tiết</b>
           {/* <p className="border px-5 py-3 text-sm text-gray-500">
             Đánh giá (122)
           </p> */}
         </div>
-        <div className="border-x border-b px-6 py-6 text-sm text-gray-600 space-y-3 leading-relaxed">
-          <p>{productData.description || "Không có mô tả chi tiết."}</p>
+        <div className="border-x border-b px-6 py-6 text-sm text-gray-600 space-y-3 leading-relaxed whitespace-pre-line">
+          <p>{productData.longDescription || "Không có mô tả chi tiết."}</p>
         </div>
       </div>
 
