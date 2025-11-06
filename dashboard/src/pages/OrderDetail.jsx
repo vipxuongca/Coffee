@@ -3,24 +3,22 @@ import { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { ShopContext } from "../context/ShopContext";
+import { AdminContext } from "../../context/AdminContext";
 
 const OrderDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [order, setOrder] = useState(location.state?.order);
   const [processing, setProcessing] = useState(false);
+  const { token, setLoading } = useContext(AdminContext);
 
-  const [refresh, setRefresh] = useState("0");
-  const { token, setLoading } = useContext(ShopContext);
-
-  const { orderId } = useParams();
+  const { orderid } = useParams();
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:4004/api/order/get-one/${orderId}`,
+          `http://localhost:4004/api/order/admin/get-one/${orderid}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -86,7 +84,7 @@ const OrderDetail = () => {
 
     try {
       const res = await axios.put(
-        `http://localhost:4004/api/order/cancel/${order.orderId}`,
+        `http://localhost:4004/api/order/admin/cancel/${order.orderId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -102,7 +100,49 @@ const OrderDetail = () => {
     }
   };
 
+  const handleConfirmPayment = async () => {
+    const confirm = await Swal.fire({
+      text: "Xác nhận thanh toán đơn hàng này?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "rgba(0, 208, 14, 1)",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Trở lại",
+      width: "300px",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    setProcessing(true);
+    setLoading(true);
+
+    try {
+      const res = await axios.put(
+        `http://localhost:4004/api/order/admin/confirm-payment/${order.orderId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Backend returns success; update state locally
+      setOrder((prev) => ({ ...prev, status: "PAID" }));
+      toast.info("Đơn hàng đã được xác nhận thanh toán thành công.");
+    } catch (err) {
+      toast.error("Lỗi khi xác nhận thanh toán");
+    } finally {
+      setProcessing(false);
+      setLoading(false);
+    }
+  };
+
   const cancellable = !(
+    order.status === "PAID" ||
+    order.status === "FAILED" ||
+    order.status === "CANCELLED" ||
+    order.isPaid
+  );
+
+  const paymentConfirmable = !(
     order.status === "PAID" ||
     order.status === "FAILED" ||
     order.status === "CANCELLED" ||
@@ -260,6 +300,21 @@ const OrderDetail = () => {
         >
           Quay lại danh sách
         </button>
+
+        {paymentConfirmable && (
+          <button
+            onClick={handleConfirmPayment}
+            disabled={processing}
+            className={`px-5 py-2 rounded-md border transition-all font-medium shadow-sm 
+      ${
+        processing
+          ? "bg-gray-200 text-gray-500 cursor-not-allowed border-gray-300"
+          : "bg-green-100 hover:bg-green-200 text-black-800 border-green-200 hover:shadow-md"
+      }`}
+          >
+            {processing ? "Đang xác nhận..." : "Xác nhận thanh toán"}
+          </button>
+        )}
 
         {cancellable && (
           <button

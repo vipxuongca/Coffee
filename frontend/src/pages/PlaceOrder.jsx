@@ -26,10 +26,10 @@ const PlaceOrder = () => {
       }
     };
     fetchOrder();
-  }, [orderId]);
+  }, [orderId, token]);
 
   if (loading)
-    return <div className="p-8 text-center">Đang tải đơn hàng...</div>;
+    return <div className="p-8 text-center text-[#5d4037]">Đang tải đơn hàng...</div>;
   if (!order)
     return (
       <div className="p-8 text-center text-red-600">
@@ -39,34 +39,31 @@ const PlaceOrder = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-2xl font-semibold mb-4 text-center text-green-600">
+      <h1 className="text-2xl font-semibold mb-4 text-center text-[#4e342e]">
         ✅ Đặt hàng thành công!
       </h1>
 
-      <div className="bg-white shadow rounded-lg p-6 space-y-6">
-        {/* --- Order Info --- */}
+      <div className="bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-inner p-6 space-y-6 text-[#3e2723]">
         <section>
-          <h2 className="text-lg font-medium border-b pb-2 mb-2">
+          <h2 className="text-lg font-medium border-b border-[#d7ccc8] pb-2 mb-2 text-[#4e342e]">
             Mã đơn hàng: {order.orderId}
           </h2>
-          <p className="text-gray-600">
+          <p className="text-sm text-[#6d4c41]">
             Ngày tạo: {new Date(order.createdAt).toLocaleString()}
           </p>
-          <p className="text-gray-700 font-medium">
-            Trạng thái: <span className="text-yellow-600">{order.status}</span>
+          <p className="text-sm font-medium">
+            Trạng thái: <span className="text-[#6d4c41]">{order.status}</span>
           </p>
-          <p className="text-gray-700 font-medium">
-            Phương thức Thanh toán:{" "}
-            <span className="text-yellow-600">{order.paymentMethod}</span>
+          <p className="text-sm font-medium">
+            Phương thức thanh toán: <span className="text-[#6d4c41]">{order.paymentMethod}</span>
           </p>
         </section>
 
-        {/* --- Order Items --- */}
         <section>
-          <h2 className="text-lg font-medium border-b pb-2 mb-2">
+          <h2 className="text-lg font-medium border-b border-[#d7ccc8] pb-2 mb-2 text-[#4e342e]">
             Sản phẩm đã đặt
           </h2>
-          <div className="divide-y">
+          <div className="divide-y divide-[#d7ccc8]">
             {order.items.map((item) => (
               <div
                 key={item._id}
@@ -76,29 +73,26 @@ const PlaceOrder = () => {
                   <img
                     src={item.image?.[0]}
                     alt={item.name}
-                    className="w-16 h-16 object-cover rounded"
+                    className="w-16 h-16 object-cover rounded border border-[#d7ccc8]"
                   />
                   <div>
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-semibold text-[#4e342e]">{item.name}</p>
+                    <p className="text-xs text-[#6d4c41]">
                       {item.brand} • {item.category}
                     </p>
-                    <p className="text-sm">Số lượng: {item.quantity}</p>
+                    <p className="text-xs">Số lượng: {item.quantity}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {(item.price * item.quantity).toLocaleString()} ₫
-                  </p>
+                <div className="text-right font-semibold text-[#4e342e]">
+                  {(item.price * item.quantity).toLocaleString()} ₫
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* --- Summary --- */}
-        <section className="border-t pt-4">
-          <div className="flex justify-between text-lg font-semibold mt-2">
+        <section className="border-t border-[#d7ccc8] pt-4">
+          <div className="flex justify-between text-lg font-semibold text-[#4e342e] mt-2">
             <span>Thành tiền:</span>
             <span>{order.total.toLocaleString()} ₫</span>
           </div>
@@ -107,7 +101,7 @@ const PlaceOrder = () => {
         <div className="text-center mt-6">
           <Link
             to="/"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            className="bg-[#6d4c41] hover:bg-[#5d4037] text-white py-2 px-4 rounded shadow"
           >
             Quay lại trang chủ
           </Link>

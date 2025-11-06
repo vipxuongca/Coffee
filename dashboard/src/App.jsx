@@ -12,6 +12,7 @@ import Add from "./pages/Add.jsx";
 import Edit from "./pages/Edit.jsx";
 import AddCategory from "./pages/AddCategory.jsx";
 import EditCategory from "./pages/EditCategory.jsx";
+import OrderDetail from "./pages/OrderDetail.jsx";
 import { AdminContext } from "../context/AdminContext.jsx";
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -36,6 +37,7 @@ const App = () => {
                 <Route path="/edit/:id" element={<Edit />} />
                 <Route path="/list" element={<List />} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/orders/:orderid" element={<OrderDetail />} />
                 <Route path="/add-category" element={<AddCategory />} />
                 <Route path="/list-category" element={<ListCategory />} />
                 <Route
