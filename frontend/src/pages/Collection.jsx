@@ -181,7 +181,7 @@ const Collection = () => {
                   <p className="text-gray-600 text-xs sm:text-sm mt-1 line-clamp-2">
                     {item.description || " "}
                   </p>
-                  <p className="text-lg font-bold text-gray-900 mt-2">
+                  <p className="text-amber-700 font-semibold mt-2 text-sm md:text-base">
                     {item.price.toLocaleString()}₫
                   </p>
                 </div>
