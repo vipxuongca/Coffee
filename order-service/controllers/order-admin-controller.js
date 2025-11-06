@@ -140,5 +140,37 @@ const orderCancel = async (req, res) => {
   }
 };
 
+const orderConfirmPayment = async (req, res) => {
+  try {
+    const { orderid } = req.params;
+    console.log("orderid", orderid)
 
-export { orderGet, orderGetOne, orderCancel };
+    // Find the user's order
+    const order = await OrderModel.findById(orderid);
+    console.log(order)
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Không tìm thấy đơn hàng.' });
+    }
+
+    // Validate status
+    if (order.status !== "PENDING_PAYMENT") {
+      return res.status(400).json({ success: false, message: "Không thể xác nhận đơn hàng đã thanh toán hoặc đã xử lý." });
+    }
+
+    // Update status
+    order.status = "PAID";
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Đơn hàng đã được xác nhận thanh toán thành công.",
+      order
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: "Lỗi khi xác nhận đơn hàng.", error: err.message });
+  }
+};
+
+
+export { orderGet, orderGetOne, orderCancel, orderConfirmPayment };
