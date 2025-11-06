@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../../context/AdminContext";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
   const { token } = useContext(AdminContext);
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -57,11 +59,11 @@ const Orders = () => {
             <tr>
               <th className="px-4 py-3">#</th>
               <th className="px-4 py-3">Order ID</th>
-              <th className="px-4 py-3">Products</th>
-              <th className="px-4 py-3">Total</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Created</th>
-              <th className="px-4 py-3 text-right">Action</th>
+              <th className="px-4 py-3">Sản phẩm</th>
+              <th className="px-4 py-3">Đơn giá</th>
+              <th className="px-4 py-3">Trạng thái</th>
+              <th className="px-4 py-3">Ngày tạo</th>
+              <th className="px-4 py-3 text-right">Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -105,10 +107,10 @@ const Orders = () => {
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button
-                    className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
-                    onClick={() => alert(`See details for ${order.orderId}`)}
+                    onClick={() => navigate(`/orders/${order.orderId}`)}
+                    className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md transition"
                   >
-                    See Detail
+                    Xem chi tiết
                   </button>
                 </td>
               </tr>
@@ -119,7 +121,7 @@ const Orders = () => {
                   colSpan="7"
                   className="text-center py-6 text-gray-500 italic"
                 >
-                  No orders found.
+                  Không tìm thấy đơn hàng nào.
                 </td>
               </tr>
             )}
