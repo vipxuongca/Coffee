@@ -12,13 +12,13 @@ const Sidebar = () => {
     <div className="w-[18%] min-h-screen border-r border-[#a1887f] bg-[#f8f3ef] shadow-inner flex flex-col">
       {/* Header */}
       <div className="p-6 pb-4 border-b border-[#d7ccc8]">
-        <h2 className="text-xl font-semibold tracking-wide text-[#4e342e] font-serif">
+        <h2 className="text-xl font-semibold tracking-wide text-[#4e342e]">
           Dashboard
         </h2>
       </div>
 
       {/* Nav Section */}
-      <div className="flex flex-col gap-3 px-4 pt-6 text-sm font-serif">
+      <div className="flex flex-col gap-3 px-4 pt-6 text-sm">
         <NavLink
           to="/list"
           className={({ isActive }) =>
@@ -26,7 +26,7 @@ const Sidebar = () => {
           }
         >
           <img className="w-5 h-5 opacity-80" src={assets.order_icon} alt="" />
-          <span className="hidden md:block">Danh Mục SP</span>
+          <span className="hidden md:block">Sản phẩm</span>
         </NavLink>
 
         <NavLink
@@ -46,7 +46,9 @@ const Sidebar = () => {
           }
         >
           <img className="w-5 h-5 opacity-80" src={assets.order_icon} alt="" />
-          <span className="hidden md:block">Danh Mục Phân Loại</span>
+          <span className="hidden md:block">
+            Phân loại
+          </span>
         </NavLink>
 
         <NavLink
@@ -56,7 +58,7 @@ const Sidebar = () => {
           }
         >
           <img className="w-5 h-5 opacity-80" src={assets.add_icon} alt="" />
-          <span className="hidden md:block">Thêm Phân Loại</span>
+          <span className="hidden md:block">Thêm phân loại</span>
         </NavLink>
 
         <NavLink
@@ -66,7 +68,7 @@ const Sidebar = () => {
           }
         >
           <img className="w-5 h-5 opacity-80" src={assets.order_icon} alt="" />
-          <span className="hidden md:block">Danh Sách Đơn Hàng</span>
+          <span className="hidden md:block">Đơn hàng</span>
         </NavLink>
       </div>
     </div>

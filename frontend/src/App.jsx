@@ -24,31 +24,34 @@ import TopScroll from "./components/TopScroll.jsx";
 
 const App = () => {
   const location = useLocation();
-
+  const isUserRoute = location.pathname.startsWith("/user");
   return (
-    <div className="px-4 lg:px-[9vw] relative">
+    <div className="relative min-h-screen">
       <ToastContainer position="top-left" autoClose={1500} />
       <Navbar />
       <TopScroll />
 
       {location.pathname === "/shop" && <SearchBar />}
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/shop" element={<Collection />} />
-        <Route path="/product/:productId" element={<Product />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/place-order/:orderId" element={<PlaceOrder />} />
-        <Route path="/orders/:orderId" element={<OrderDetail />} />
-        <Route path="/policy" element={<Policy />} />
-        <Route path="/user/*" element={<UserDashboard />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      {/* Apply padding only if not in /user */}
+      <div className={isUserRoute ? "" : "px-4 lg:px-[4vw]"}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/shop" element={<Collection />} />
+          <Route path="/product/:productId" element={<Product />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/place-order/:orderId" element={<PlaceOrder />} />
+          <Route path="/orders/:orderId" element={<OrderDetail />} />
+          <Route path="/policy" element={<Policy />} />
+          <Route path="/user/*" element={<UserDashboard />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
 
       <Footer />
     </div>

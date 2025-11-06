@@ -48,14 +48,14 @@ const UserOrders = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
+    <div className="max-w-3xl mx-auto p-8  rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
       <h2 className="text-2xl font-semibold mb-6 text-[#3e2723]">
         Đơn hàng của bạn
       </h2>
 
       <div className="overflow-x-auto rounded-xl">
         <table className="min-w-full text-sm border-collapse">
-          <thead className="bg-[#fff8f0] text-[#4e342e] uppercase text-xs border-b border-[#d7ccc8]">
+          <thead className="bg-gray-100 text-[#4e342e] uppercase text-xs border-b border-[#d7ccc8]">
             <tr>
               <th className="px-4 py-3 text-left">#</th>
               <th className="px-4 py-3 text-left">Mã đơn</th>
