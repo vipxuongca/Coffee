@@ -162,11 +162,49 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const deduceStockForOrder = async (req, res) => {
+  try {
+    const { items } = req.body;
+    if (!Array.isArray(items) || items.length === 0)
+      return res.status(400).json({ success: false, message: "Invalid items" });
+
+    // Fetch all products in one query
+    const ids = items.map(x => x.productId);
+    const products = await productModel.find({ _id: { $in: ids } });
+
+    // Ensure all exist and have enough stock
+    for (const { productId, quantity } of items) {
+      const p = products.find(x => x._id.toString() === productId);
+      if (!p) return res.status(404).json({ success: false, message: `Product not found: ${productId}` });
+      if (p.stock < quantity)
+        return res.status(400).json({ success: false, message: `Insufficient stock for ${p.name}` });
+    }
+
+    // Apply deductions
+    for (const { productId, quantity } of items) {
+      const p = products.find(x => x._id.toString() === productId);
+      p.stock -= quantity;
+    }
+
+    // Save all
+    await Promise.all(products.map(p => p.save()));
+
+    return res.json({ success: true, message: "Stock deducted successfully" });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+
 export {
   addProduct,
   getProducts,
   removeProduct,
   getOneProduct,
   updateProduct,
-  getOneStockProduct
+  getOneStockProduct,
+  deduceStockForOrder
 };

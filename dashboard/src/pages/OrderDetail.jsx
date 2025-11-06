@@ -160,7 +160,7 @@ const OrderDetail = () => {
           className={`px-3 py-1 text-sm font-semibold rounded-md ${
             order.status === "PENDING_PAYMENT"
               ? "bg-[#fff8f0] text-[#8d6e63] border border-[#d7ccc8]"
-              : order.status === "COMPLETED"
+              : order.status === "PAID"
               ? "bg-green-100 text-green-700"
               : order.status === "CANCELLED"
               ? "bg-red-100 text-red-700"
