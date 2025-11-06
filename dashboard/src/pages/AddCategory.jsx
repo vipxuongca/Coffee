@@ -4,8 +4,10 @@ import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
 import { AdminContext } from "../../context/AdminContext";
+import { useNavigate } from "react-router-dom";
 
 const AddCategory = () => {
+  const navigate = useNavigate();
   const { token, setLoading } = useContext(AdminContext);
   const [image1, setImage1] = useState(false);
   const [name, setName] = useState("");
@@ -31,6 +33,7 @@ const AddCategory = () => {
         setName("");
         setDescription("");
         setImage1(false);
+        navigate("/list-category");
       } else {
         toast.error(response.data.message);
       }
@@ -54,7 +57,11 @@ const AddCategory = () => {
       >
         {/* Image Upload */}
         <div>
-          <p className="mb-2 font-medium">Tải Lên Hình Ảnh</p>
+          <p className="mb-2 font-medium">
+            <strong>
+              Tải lên hình ảnh <span className="text-red-500 ml-1">*</span>
+            </strong>
+          </p>
           <label
             htmlFor="image1"
             className="inline-block cursor-pointer border rounded-lg overflow-hidden hover:opacity-80 transition"
@@ -81,26 +88,34 @@ const AddCategory = () => {
 
         {/* Category Name */}
         <div>
-          <p className="mb-2 font-medium">Tên Phân Loại</p>
+          <p className="mb-2 font-medium">
+            <strong>
+              Tên phân loại <span className="text-red-500 ml-1">*</span>
+            </strong>
+          </p>
           <input
             onChange={(e) => setName(e.target.value)}
             value={name}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
             type="text"
-            placeholder="Enter category name"
+            placeholder="Nhập tên phân loại"
             required
           />
         </div>
 
         {/* Category Description */}
         <div>
-          <p className="mb-2 font-medium">Mô Tả Phân Loại</p>
+          <p className="mb-2 font-medium">
+            <strong>
+              Mô tả phân loại <span className="text-red-500 ml-1">*</span>
+            </strong>
+          </p>
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
             rows="3"
-            placeholder="Enter category description"
+            placeholder="Nhập mô tả phân loại"
             required
           />
         </div>

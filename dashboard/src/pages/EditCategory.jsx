@@ -5,9 +5,11 @@ import { backendUrl } from "../App";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { AdminContext } from "../../context/AdminContext";
+import { useNavigate } from "react-router-dom";
 
 const EditCategory = () => {
   const { categoryId } = useParams();
+  const navigate = useNavigate();
   const { token, setLoading } = useContext(AdminContext);
 
   const [image1, setImage1] = useState(false);
@@ -61,6 +63,7 @@ const EditCategory = () => {
         setName("");
         setDescription("");
         setImage1(false);
+        navigate("/list-category");
       } else {
         toast.error(response.data.message);
       }
@@ -84,7 +87,11 @@ const EditCategory = () => {
       >
         {/* Upload Image */}
         <div className="w-full">
-          <p className="mb-2 font-medium">Tải Lên Hình Ảnh</p>
+          <p className="mb-2 font-medium">
+            <strong>
+              Tải lên hình ảnh <span className="text-red-500 ml-1">*</span>
+            </strong>
+          </p>
           <div className="flex gap-3 flex-wrap">
             {(Array.isArray([image1]) ? [image1] : []).map((img, i) => (
               <label key={i} htmlFor={`image${i + 1}`}>
@@ -117,7 +124,11 @@ const EditCategory = () => {
 
         {/* Category Name */}
         <div>
-          <p className="mb-2 font-medium">Tên Phân Loại</p>
+          <p className="mb-2 font-medium">
+            <strong>
+              Tên phân loại <span className="text-red-500 ml-1">*</span>
+            </strong>
+          </p>
           <input
             onChange={(e) => setName(e.target.value)}
             value={name}
@@ -130,7 +141,11 @@ const EditCategory = () => {
 
         {/* Category Description */}
         <div>
-          <p className="mb-2 font-medium">Mô Tả Phân Loại</p>
+          <p className="mb-2 font-medium">
+            <strong>
+              Mô tả phân loại <span className="text-red-500 ml-1">*</span>
+            </strong>
+          </p>
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
