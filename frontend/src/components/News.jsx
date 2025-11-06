@@ -8,7 +8,7 @@ const News = () => {
   return (
     <div className="bg-amber-50 py-16 px-6 sm:px-10 rounded-2xl shadow-inner text-center my-12">
       <h2 className="text-3xl font-semibold text-amber-900">
-        Đăng Ký Nhận Tin
+        Đăng ký nhận tin
       </h2>
       <p className="text-gray-600 mt-3 max-w-lg mx-auto text-sm sm:text-base">
         Nhận thông tin mới nhất về sản phẩm, ưu đãi và câu chuyện cà phê từ{" "}

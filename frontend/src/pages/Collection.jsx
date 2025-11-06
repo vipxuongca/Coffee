@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
-import { assets } from "../assets/assets";
 import Title from "../components/Title";
+import HighlightBox from "../components/ad/HighlightBox";
 
 const Collection = () => {
   const { categories, products, search } = useContext(ShopContext);
@@ -102,7 +102,7 @@ const Collection = () => {
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
       {/* Filtering */}
-      <div className="min-w-60">
+      <div className="min-w-60 max-w-60">
         <div
           className={`border-gray-300 border pl-5 py-3 mt-6 ${
             showFilter ? "" : "hidden"
@@ -122,38 +122,6 @@ const Collection = () => {
               </p>
             ))}
           </div>
-
-          {/* Subcategory filter */}
-          {/* <p className="mb-3 mt-6 text-sm font-medium">KIỂU LOẠI</p>
-          <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value="Roasted"
-                onChange={toggleSubCategory}
-              />{" "}
-              Roasted
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value="Raw"
-                onChange={toggleSubCategory}
-              />{" "}
-              Raw
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value="Ground"
-                onChange={toggleSubCategory}
-              />{" "}
-              Ground
-            </p>
-          </div> */}
         </div>
 
         <div
@@ -178,6 +146,7 @@ const Collection = () => {
             className="no-arrow w-20 border border-gray-300 rounded px-2 py-1"
           />
         </div>
+          <HighlightBox />
       </div>
 
       {/* Cards */}

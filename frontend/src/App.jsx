@@ -21,6 +21,7 @@ import SearchBar from "./components/SearchBar.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TopScroll from "./components/TopScroll.jsx";
+import AdBanner from "./components/ad/AdBanner.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -29,6 +30,7 @@ const App = () => {
     <div className="relative min-h-screen">
       <ToastContainer position="top-left" autoClose={1500} />
       <Navbar />
+      <AdBanner />
       <TopScroll />
 
       {location.pathname === "/shop" && <SearchBar />}
