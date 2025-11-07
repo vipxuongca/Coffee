@@ -47,7 +47,7 @@ const UserEditModal = ({
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        `http://localhost:4010/api/user-detail/edit/${editDetail.id}`,
+        `http://localhost:4002/api/user-detail/edit/${editDetail.id}`,
         newAddress,
         {
           headers: { Authorization: `Bearer ${token}` },

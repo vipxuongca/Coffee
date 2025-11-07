@@ -6,14 +6,14 @@ import {
   singleUser,
   refreshAccessToken
 } from '../controllers/user-controller.js';
-import userAuth from '../middleware/user-auth.js'
+import verifyToken from '../middleware/verifyToken.js'
 
 const router = express.Router();
 
 router.post('/login', loginUser);
-router.post('/logout', userAuth, logoutUser);
+router.post('/logout', verifyToken, logoutUser);
 router.post('/register', registerUser);
-router.get('/single', userAuth, singleUser);
+router.get('/single', verifyToken, singleUser);
 router.post('/refresh', refreshAccessToken);
 
 export default router;

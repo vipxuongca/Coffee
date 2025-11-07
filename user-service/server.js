@@ -11,6 +11,7 @@ import cors from 'cors';
 import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
 import userRouter from './routes/user-route.js';
+import userDetailRouter from './routes/user-detail-route.js';
 
 
 // configuration
@@ -43,6 +44,7 @@ app.use(cors());
 
 //api endpoint
 app.use('/api/user', userRouter);
+app.use('/api/user-detail', userDetailRouter);
 
 //start the server
 app.listen(PORT, () => {

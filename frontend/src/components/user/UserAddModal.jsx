@@ -24,7 +24,7 @@ const UserAddModal = ({ showAddModal, setShowAddModal, setUserDetail }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        `http://localhost:4010/api/user-detail/add`,
+        `http://localhost:4002/api/user-detail/add`,
         { ...newAddress },
         {
           headers: {

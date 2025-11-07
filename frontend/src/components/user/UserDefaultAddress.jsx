@@ -16,7 +16,7 @@ const UserDetailAddress = () => {
       if (!token) return;
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:4010/api/user-detail", {
+        const res = await axios.get("http://localhost:4002/api/user-detail", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.data.success && res.data.data.length > 0) {

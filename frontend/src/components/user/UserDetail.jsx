@@ -17,7 +17,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   useEffect(() => {
     const fetchUserDetail = async () => {
       try {
-        const res = await axios.get("http://localhost:4010/api/user-detail", {
+        const res = await axios.get("http://localhost:4002/api/user-detail", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserDetail(res.data);
@@ -55,7 +55,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.delete(
-        `http://localhost:4010/api/user-detail/delete/${itemId}`,
+        `http://localhost:4002/api/user-detail/delete/${itemId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -80,7 +80,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.patch(
-        `http://localhost:4010/api/user-detail/default/${itemId}`,
+        `http://localhost:4002/api/user-detail/default/${itemId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
