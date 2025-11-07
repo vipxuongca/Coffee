@@ -1,19 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
 import Swal from "sweetalert2";
-import {
-  PackageCheck,
-  ShoppingCart,
-  CreditCard,
-  MapPin,
-  Pencil,
-} from "lucide-react";
+import { PackageCheck, ShoppingCart, CreditCard } from "lucide-react";
 import UserDefaultAddress from "../components/user/UserDefaultAddress";
 import PaymentMethod from "../components/PaymentMethod";
+import { orderApi } from "../../api/order-api";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -51,11 +45,7 @@ const Checkout = () => {
         defaultAddress,
       };
 
-      const res = await axios.post(
-        "http://localhost:4004/api/order/create",
-        orderPayload,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await orderApi.createOrder(orderPayload);
 
       if (res.data.success) {
         toast.success("Đặt hàng thành công!");

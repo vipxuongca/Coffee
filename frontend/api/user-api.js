@@ -1,0 +1,58 @@
+import apiAuth from "./baseAuth";
+import axios from 'axios';
+
+const BASE = import.meta.env.VITE_API_USER;
+const BASE_DETAIL = import.meta.env.VITE_API_USERDETAIL;
+/*
+VITE_API_USER=http://localhost:4002/api/user
+VITE_API_USERDETAIL=http://localhost:4002/api/user-detail
+*/
+const apiPublic = axios.create({
+  withCredentials: false,
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
+
+export const userApi = {
+  // public APIs, no authentication
+  login(email, password) {
+    return apiPublic.post(`${BASE}/login`, { email, password });
+  },
+
+  register(email, password) {
+    return apiPublic.post(`${BASE}/register`, { email, password });
+  },
+
+  // Authenticated API
+  logout(productId) {
+    return apiAuth.delete(`${BASE}/service/api/product/remove/${productId}`);
+  },
+
+  single() {
+    return apiAuth.get(`${BASE}/single`);
+  }
+};
+
+export const userDetailApi = {
+  getAllAddress() {
+    return apiAuth.get(`${BASE_DETAIL}/`);
+  },
+
+  getDefaultAddress() {
+    return apiAuth.get(`${BASE_DETAIL}/default`);
+  },
+
+  updateAddress(id, data) {
+    return apiAuth.post(`${BASE_DETAIL}/edit/${id}`, data);
+  },
+
+  deleteAddress(id) {
+    return apiAuth.delete(`${BASE_DETAIL}/delete/${id}`);
+  },
+
+  setDefaultAddress(id) {
+    return apiAuth.patch(`${BASE_DETAIL}/default/${id}`);
+  }
+};
+

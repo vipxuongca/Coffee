@@ -1,14 +1,12 @@
-import React, { useState, useContext } from "react";
-import axios from "axios";
-import { ShopContext } from "../context/ShopContext";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { userApi } from "../../api/user-api";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  const { backendUserUrl } = useContext(ShopContext);
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
@@ -19,10 +17,7 @@ const Register = () => {
         return;
       }
 
-      const response = await axios.post(`${backendUserUrl}/api/user/register`, {
-        email,
-        password,
-      });
+      const response = await userApi.register(email, password);
 
       if (response.data.success) {
         toast.success("Đăng ký tài khoản thành công");

@@ -1,14 +1,15 @@
 import { CartContext } from "./CartContext";
 import { useState, useContext, useEffect } from "react";
-import axios from "axios";
 import { ShopContext } from "./ShopContext";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { cartApi } from "../../api/cart-api";
+import { productApi } from "../../api/product-api";
 
 const CartContextProvider = (props) => {
   // import context
-  const { token, backendCartUrl, setLoading } = useContext(ShopContext);
+  const { token, setLoading } = useContext(ShopContext);
   const navigate = useNavigate();
 
   // states
@@ -17,11 +18,7 @@ const CartContextProvider = (props) => {
 
   const verifyStockCount = async (productId, quantity) => {
     try {
-      const res = await axios.post(
-        `http://localhost:4000/api/product/stock/${productId}`,
-        { quantity },
-        {}
-      );
+      const res = await productApi.stockVerify(productId, quantity);
       // console.log("message:", res.data.message);
       return res.data;
     } catch (err) {
@@ -46,9 +43,7 @@ const CartContextProvider = (props) => {
   const updateCartContext = async () => {
     if (!token) return;
     try {
-      const res = await axios.get(`http://localhost:4003/api/cart`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await cartApi.getCart();
 
       const items = res.data.items || [];
       // console.log("item is: ", items);
@@ -100,13 +95,7 @@ const CartContextProvider = (props) => {
           i.cartId === cartId ? { ...i, quantity: i.quantity + 1 } : i
         )
       );
-
-      await axios.put(
-        `http://localhost:4003/api/cart/update/${item.productId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
+      await cartApi.increaseItem(item.productId);
       await updateCartContext();
     } catch (err) {
       console.error("Error increasing quantity:", err);
@@ -124,11 +113,7 @@ const CartContextProvider = (props) => {
         )
       );
 
-      await axios.put(
-        `http://localhost:4003/api/cart/update/decrease/${item.productId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await cartApi.decreaseItem(item.productId);
       await updateCartContext();
     } catch (err) {
       console.error("Error decreasing quantity:", err);
@@ -142,12 +127,7 @@ const CartContextProvider = (props) => {
 
       setCartItems((prev) => prev.filter((i) => i.cartId !== cartId));
 
-      await axios.delete(
-        `http://localhost:4003/api/cart/remove/${item.productId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await cartApi.removeItem(item.productId);
       await updateCartContext();
     } catch (err) {
       console.error("Error removing item from cart:", err);
@@ -156,9 +136,7 @@ const CartContextProvider = (props) => {
 
   const clearCart = async () => {
     try {
-      await axios.delete("http://localhost:4003/api/cart/clear", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await cartApi.clearCart();
       setCartItems([]);
       await updateCartContext();
     } catch (err) {
@@ -206,15 +184,7 @@ const CartContextProvider = (props) => {
     }
     try {
       setLoading(true);
-      const res = await axios.post(
-        `http://localhost:4003/api/cart/add/${productId}`,
-        { quantity },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await cartApi.addCart(productId, quantity);
       // console.log("Cart updated:", res.data);
       await updateCartContext();
       toast.success("Thêm vào giỏ hàng thành công");
@@ -251,11 +221,8 @@ const CartContextProvider = (props) => {
             i.cartId === cartId ? { ...i, quantity: maxStock } : i
           )
         );
-        await axios.put(
-          `http://localhost:4003/api/cart/update/quantity/${item.productId}`,
-          { quantity: maxStock },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+
+        await cartApi.updateQuantity(item.productId, maxStock);
         await updateCartContext();
         return;
       }
@@ -264,11 +231,8 @@ const CartContextProvider = (props) => {
         prev.map((i) => (i.cartId === cartId ? { ...i, quantity } : i))
       );
 
-      await axios.put(
-        `http://localhost:4003/api/cart/update/quantity/${item.productId}`,
-        { quantity },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await cartApi.updateQuantity(item.productId, quantity);
+
       await updateCartContext();
     } catch (err) {
       toast.error("Có lỗi xảy ra khi thay đổi số lượng");
@@ -284,9 +248,7 @@ const CartContextProvider = (props) => {
     const fetchCart = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:4003/api/cart", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await cartApi.getCart();
 
         const data = res.data.items.map((item) => ({
           cartId: item._id,

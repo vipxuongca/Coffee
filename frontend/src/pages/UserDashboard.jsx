@@ -5,6 +5,7 @@ import UserProfile from "../components/user/UserProfile";
 import UserChangePassword from "../components/user/UserChangePassword";
 import Swal from "sweetalert2";
 import { LogOut, MapPin, User, Receipt, Lock } from "lucide-react";
+import { userApi } from "../../api/user-api";
 
 const UserDashboard = () => {
   const baseLinkStyle =
@@ -26,19 +27,8 @@ const UserDashboard = () => {
 
     if (!confirm.isConfirmed) return;
 
-    const token = localStorage.getItem("token");
-  
     try {
-      await axios.post(
-        "http://localhost:4002/api/user/logout",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true, // ensures refresh cookie is sent
-        }
-      );
+      await userApi.logout();
     } catch (_) {
       // Even if backend fails, still clear state
     }

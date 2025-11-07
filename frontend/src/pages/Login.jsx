@@ -3,6 +3,7 @@ import axios from "axios";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { userApi } from "../../api/user-api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,10 +14,7 @@ const Login = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${backendUserUrl}/api/user/login`, {
-        email,
-        password,
-      });
+      const response = await userApi.login(email, password);
 
       if (response.data.success) {
         setToken(response.data.token);

@@ -3,8 +3,8 @@ import UserAddModal from "./UserAddModal";
 import UserEditModal from "./UserEditModal";
 import { toast } from "react-toastify";
 import { ShopContext } from "../../context/ShopContext";
-import axios from "axios";
 import Swal from "sweetalert2";
+import { userDetailApi } from "../../../api/user-api";
 
 const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -17,9 +17,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   useEffect(() => {
     const fetchUserDetail = async () => {
       try {
-        const res = await axios.get("http://localhost:4002/api/user-detail", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await userDetailApi.getAllAddress();
         setUserDetail(res.data);
       } catch (err) {
         console.error("Failed to fetch user:", err);
@@ -44,8 +42,8 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
       cancelButtonText: "Hủy",
       width: "300px",
       customClass: {
-        title: "text-sm", 
-        popup: "p-2", 
+        title: "text-sm",
+        popup: "p-2",
       },
     });
 
@@ -53,13 +51,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.delete(
-        `http://localhost:4002/api/user-detail/delete/${itemId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await userDetailApi.deleteAddress(itemId);
 
       if (!res.data.success) throw new Error("Không thể xóa địa chỉ");
       setUserDetail(res.data);
@@ -78,14 +70,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.patch(
-        `http://localhost:4002/api/user-detail/default/${itemId}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await userDetailApi.setDefaultAddress(itemId);
 
       if (!res.data.success) throw new Error("Không thể đặt địa chỉ mặc định");
       setUserDetail(res.data);

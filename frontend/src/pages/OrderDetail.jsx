@@ -2,8 +2,8 @@ import { useLocation, useNavigate, Link, useParams } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import axios from "axios";
 import { ShopContext } from "../context/ShopContext";
+import { orderApi } from "../../api/order-api";
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -17,14 +17,7 @@ const OrderDetail = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:4004/api/order/get-one/${orderId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await orderApi.getOneOrder(orderId);
 
         if (res.data) {
           setOrder(res.data);
@@ -83,11 +76,7 @@ const OrderDetail = () => {
     setLoading(true);
 
     try {
-      const res = await axios.put(
-        `http://localhost:4004/api/order/cancel/${order.orderId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await orderApi.cancelOrder(orderId);
 
       // Backend returns success; update state locally
       setOrder((prev) => ({ ...prev, status: "CANCELLED" }));
