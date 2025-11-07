@@ -5,6 +5,7 @@ dotenv.config({ path: envFile });
 
 
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import connectDB from './config/mongodb.js';
@@ -14,6 +15,7 @@ import userRouter from './routes/user-route.js';
 
 // configuration
 const app = express();
+app.use(cookieParser());
 const PORT = process.env.PORT || 4002;
 
 const allowedOrigins = process.env.ALLOWED_ORIGIN
@@ -44,5 +46,5 @@ app.use('/api/user', userRouter);
 
 //start the server
 app.listen(PORT, () => {
-    console.log(`USER is running on http://localhost:${PORT}`);
+  console.log(`USER is running on http://localhost:${PORT}`);
 }); 

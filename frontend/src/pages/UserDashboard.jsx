@@ -25,8 +25,26 @@ const UserDashboard = () => {
     });
 
     if (!confirm.isConfirmed) return;
+
+    const token = localStorage.getItem("token");
+  
+    try {
+      await axios.post(
+        "http://localhost:4002/api/user/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true, // ensures refresh cookie is sent
+        }
+      );
+    } catch (_) {
+      // Even if backend fails, still clear state
+    }
+
     localStorage.removeItem("token");
-    globalThis.location.href = "/";
+    window.location.href = "/";
   };
 
   return (
