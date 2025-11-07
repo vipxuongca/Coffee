@@ -5,6 +5,11 @@ const api = axios.create({
   withCredentials: true
 });
 
+const refreshApi = axios.create({
+  withCredentials: true
+});
+
+
 // Request interceptor
 api.interceptors.request.use(config => {
   const token = localStorage.getItem("token");
@@ -40,8 +45,8 @@ api.interceptors.response.use(
 
     isRefreshing = true;
     try {
-      const res = await api.post("http://localhost:4002/api/user/refresh");
-      const newToken = res.data.token;
+      const res = await refreshApi.post("http://localhost:4002/api/user/refresh");
+      const newToken = res.data.accessToken;
 
       localStorage.setItem("token", newToken);
       api.defaults.headers.Authorization = `Bearer ${newToken}`;

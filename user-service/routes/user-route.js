@@ -11,7 +11,7 @@ import verifyToken from '../middleware/verifyToken.js'
 const router = express.Router();
 
 router.post('/login', loginUser);
-router.post('/logout', verifyToken, logoutUser);
+router.post('/logout', logoutUser);
 router.post('/register', registerUser);
 router.get('/single', verifyToken, singleUser);
 router.post('/refresh', refreshAccessToken);
