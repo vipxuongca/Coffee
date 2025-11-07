@@ -5,14 +5,14 @@ import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+const createRefreshToken = () =>
+  crypto.randomBytes(64).toString("hex");
 
 const createAccessToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '15m',
   });
 }
-const createRefreshToken = () =>
-  crypto.randomBytes(64).toString("hex");
 
 const refreshAccessToken = async (req, res) => {
   const token = req.cookies.refreshToken;

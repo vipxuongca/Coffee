@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import axios from "axios";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +7,7 @@ import { userApi } from "../../api/user-api";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { backendUserUrl, setToken } = useContext(ShopContext);
+  const { setToken } = useContext(ShopContext);
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {

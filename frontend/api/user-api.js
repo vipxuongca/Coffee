@@ -8,7 +8,7 @@ VITE_API_USER=http://localhost:4002/api/user
 VITE_API_USERDETAIL=http://localhost:4002/api/user-detail
 */
 const apiPublic = axios.create({
-  withCredentials: false,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json"
   }
@@ -25,8 +25,8 @@ export const userApi = {
   },
 
   // Authenticated API
-  logout(productId) {
-    return apiAuth.delete(`${BASE}/service/api/product/remove/${productId}`);
+  logout() {
+    return apiAuth.post(`${BASE}/logout`, {});
   },
 
   single() {
