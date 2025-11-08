@@ -4,6 +4,7 @@ import { backendUrl } from "../App";
 import { toast } from "react-toastify";
 import { AdminContext } from "../../context/AdminContext";
 import { useContext } from "react";
+import { adminApi } from "../../api/admin-api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,13 +15,7 @@ const Login = () => {
     setLoading(true);
     try {
       e.preventDefault();
-      const response = await axios.post(
-        "http://localhost:4000/api/admin/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await adminApi.login(email, password);
 
       if (response.data.success) {
         setToken(response.data.token);
