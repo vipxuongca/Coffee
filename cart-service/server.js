@@ -13,6 +13,7 @@ import connectDB from './config/mongodb.js'
 
 // routing for cart
 import cartRoutes from './routes/cart-route.js';
+import cartOrderRoutes from './routes/cart-order-route.js';
 
 //initialisation
 const app = express();
@@ -39,6 +40,7 @@ app.use(bodyParser.json());
 // Routes listing
 // CART
 app.use('/api/cart', cartRoutes);
+app.use('/api/cart/order', cartOrderRoutes);
 
 //listen
 app.listen(PORT, () => console.log(`CART running on port: http://localhost:${PORT}`));
