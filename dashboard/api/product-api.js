@@ -1,4 +1,5 @@
 import axios from 'axios';
+import apiAuth from "./baseAuth"
 
 const apiPublic = axios.create({
   withCredentials: false,
@@ -21,5 +22,21 @@ export const productApi = {
 
   stockVerify(productId, quantity) {
     return apiPublic.post(`${BASE}/stock/${productId}`, { quantity });
-  }
+  },
+
+  addProduct(formData) {
+    return apiAuth.post(`${BASE}/add`, formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+  },
+
+  updateProduct(productId, formData) {
+    return apiAuth.post(`${BASE}/edit/${productId}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+  },
+
+  // deleteProduct(productId) {
+  //   return apiAuth.delete(`${BASE}/stock/${productId}`);
+  // }
 };
