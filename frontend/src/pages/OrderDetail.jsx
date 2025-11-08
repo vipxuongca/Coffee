@@ -93,6 +93,10 @@ const OrderDetail = () => {
     order.status === "PAID" ||
     order.status === "FAILED" ||
     order.status === "CANCELLED" ||
+    order.status === "PROCESSING" ||
+    order.status === "ABANDONED" ||
+    order.status === "REFUNDED" ||
+    order.status === "COMPLETED" ||
     order.isPaid
   );
 
@@ -111,6 +115,8 @@ const OrderDetail = () => {
               ? "bg-green-100 text-green-700"
               : order.status === "CANCELLED"
               ? "bg-red-100 text-red-700"
+              : order.status === "PROCESSING"
+              ? "bg-blue-100 text-blue-700"
               : "bg-gray-100 text-gray-700"
           }`}
         >

@@ -21,6 +21,15 @@ const ShopContextProvider = (props) => {
   const [reloadAddress, setReloadAddress] = useState(0);
   const [defaultAddress, setDefaultAddress] = useState(null);
 
+  const [statusFilter, setStatusFilter] = useState({
+    PAID: true,
+    PENDING_PAYMENT: true,
+    CANCELLED: true,
+    PROCESSING: true,
+    FAILED: true,
+    REFUNDED: true,
+  });
+
   useEffect(() => {
     let timer;
     if (loading) {
@@ -90,6 +99,8 @@ const ShopContextProvider = (props) => {
     setReloadAddress,
     defaultAddress,
     setDefaultAddress,
+    statusFilter,
+    setStatusFilter,
   };
 
   return (
