@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../../context/AdminContext";
 import { useNavigate } from "react-router-dom";
+import { orderApi } from "../../api/order-api";
 
 const Orders = () => {
   const { token } = useContext(AdminContext);
@@ -10,13 +11,10 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:4004/api/order/admin/get", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
-        if (res.ok && data.orders) setOrders(data.orders);
+        const res = await orderApi.getAllOrder();
+         if (res.data && res.data.orders) {
+          setOrders(res.data.orders);
+        }
       } catch (err) {
         console.error("Error fetching orders:", err);
       }

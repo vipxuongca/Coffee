@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AdminContext } from "../../context/AdminContext";
+import { orderApi } from "../../api/order-api";
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -17,14 +18,7 @@ const OrderDetail = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:4004/api/order/admin/get-one/${orderid}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await orderApi.getOneOrder(orderid);
 
         if (res.data) {
           setOrder(res.data);
@@ -83,11 +77,7 @@ const OrderDetail = () => {
     setLoading(true);
 
     try {
-      const res = await axios.put(
-        `http://localhost:4004/api/order/admin/cancel/${order.orderId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await orderApi.cancelOrder(order.orderId);
 
       // Backend returns success; update state locally
       setOrder((prev) => ({ ...prev, status: "CANCELLED" }));
@@ -118,11 +108,7 @@ const OrderDetail = () => {
     setLoading(true);
 
     try {
-      const res = await axios.put(
-        `http://localhost:4004/api/order/admin/confirm-payment/${order.orderId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await orderApi.confirmPayment(order.orderId)
 
       // Backend returns success; update state locally
       setOrder((prev) => ({ ...prev, status: "PAID" }));
