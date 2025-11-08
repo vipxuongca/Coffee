@@ -1,15 +1,17 @@
+import CartModel from '../models/cart-model.js';
+
 const cartClearFromOrder = async (req, res) => {
   /*
-  DELETE
-  http://localhost:4003/api/cart/:productId
+  PUT
+  http://localhost:4003/api/cart/order/clear
   User Token needed
   Expected Payload:
   {
-    "quantity": 2
+    "userId": "useridnumber"
   }
   */
   try {
-    const userId = req.user.id;
+    const { userId } = req.body;
 
     // Find user's cart
     const cart = await CartModel.findOne({ userId });

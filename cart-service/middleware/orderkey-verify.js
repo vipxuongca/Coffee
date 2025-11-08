@@ -1,21 +1,15 @@
-import jwt from 'jsonwebtoken';
-
 const verifyOrderKey = (req, res, next) => {
   const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'No token provided' });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(403).json({ error: "Forbidden" });
   }
 
-  const token = authHeader.split(' ')[1];
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(401).json({ error: 'CART-Invalid or expired token' });
+  const token = authHeader.split(" ")[1];
+  if (token !== process.env.ORDER_SECRET_KEY) {
+    return res.status(403).json({ error: "Forbidden" });
   }
+
+  next();
 };
 
 export { verifyOrderKey };

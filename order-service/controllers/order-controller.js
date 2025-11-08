@@ -1,7 +1,10 @@
 import axios from 'axios';
+import jwt from 'jsonwebtoken'
 import { buildOrderData } from "../controllers/order-build.js";
 import Order from '../models/order-model.js';
 import { paymentApi } from '../api/payment-api.js';
+import { cartApi } from '../api/cart-api.js';
+
 
 const orderCreateCOD = async (req, res) => {
   /*
@@ -71,14 +74,12 @@ Expected payload:
     });
 
     await newOrder.save();
-
+    const userId = jwt.verify(token, process.env.JWT_SECRET).id;
+    // console.log("user id is", userId)
     // --- Clear user's cart after successful order creation ---
     try {
-      await axios.delete("http://localhost:4003/api/cart/clear", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await cartApi.clearCartFromOrder(userId);
+      console.log("success placed COD")
     } catch (cartErr) {
       console.error("Failed to clear cart after order:", cartErr.message);
       // Do not fail the whole request if cart removal fails
@@ -168,14 +169,12 @@ Expected payload:
     });
 
     await newOrder.save();
-
+    const userId = jwt.verify(token, process.env.JWT_SECRET).id;
+    // console.log("user id is", userId)
     // --- Clear user's cart after successful order creation ---
     try {
-      await axios.delete("http://localhost:4003/api/cart/clear", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await cartApi.clearCartFromOrder(userId);
+      console.log('delete cart success');
     } catch (cartErr) {
       console.error("Failed to clear cart after order:", cartErr.message);
       // Do not fail the whole request if cart removal fails
@@ -265,10 +264,11 @@ Expected payload:
     });
 
     await newOrder.save();
-
+    const userId = jwt.verify(token, process.env.JWT_SECRET).id;
+    // console.log("user id is", userId)
     // --- Clear user's cart after successful order creation ---
     try {
-      await paymentApi.stripe();
+      await cartApi.clearCartFromOrder(userId);
     } catch (cartErr) {
       console.error("Failed to clear cart after order:", cartErr.message);
       // Do not fail the whole request if cart removal fails

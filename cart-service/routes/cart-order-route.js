@@ -10,6 +10,6 @@ const router = express.Router();
 
 // Routes
 
-router.delete('/clear', verifyOrderKey, cartClearFromOrder);
+router.put('/clear', verifyOrderKey, cartClearFromOrder);
 
 export default router;
