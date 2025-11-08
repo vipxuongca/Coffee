@@ -44,10 +44,12 @@ const loginUser = async (req, res) => {
     expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
   });
 
+  const isProd = process.env.NODE_ENV === "production";
+
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: true, // true in production HTTPS
-    sameSite: "strict",
+    secure: isProd,
+    sameSite: isProd ? "strict" : "lax",
     maxAge: 14 * 24 * 60 * 60 * 1000
   });
 
