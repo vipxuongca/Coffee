@@ -2,8 +2,7 @@
 import express from "express";
 import paypalClient from "../config/paypal.js";
 import CartModel from "../models/cart-model.js";
-import { verifyToken } from "../controllers/auth/jwt-verify.js";
-import checkoutNodeJssdk from "@paypal/checkout-server-sdk";
+import { verifyToken } from "../middleware/jwt-verify.js";
 
 const router = express.Router();
 
