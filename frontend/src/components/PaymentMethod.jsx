@@ -5,7 +5,7 @@ const methods = [
   { value: "COD", label: "Thanh toán khi nhận hàng (COD)" },
   { value: "CARD", label: "Thẻ tín dụng / ghi nợ" },
   { value: "TRANSFER", label: "Chuyển khoản ngân hàng" },
-  { value: "PAYMENT_GATEWAY", label: "Cổng Thanh Toán" },
+  { value: "STRIPE", label: "Stripe" },
 ];
 
 const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
@@ -95,8 +95,8 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
           </div>
         )}
 
-        {paymentMethod === "PAYMENT_GATEWAY" && (
-          <p>Tích hợp VNPay / MoMo / ZaloPay tại đây.</p>
+        {paymentMethod === "STRIPE" && (
+          <p>STRIPE</p>
         )}
       </div>
     </div>
