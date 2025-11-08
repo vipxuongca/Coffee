@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 
 const createRefreshToken = () =>
   crypto.randomBytes(64).toString("hex");
-const createToken = (id) => {
+const createAccessToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30m',
   });
@@ -49,7 +49,7 @@ const loginAdmin = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     } else {
-      const token = createToken(admin._id);
+      const token = createAccessToken(admin._id);
       const refreshToken = createRefreshToken();
 
       await RefreshToken.create({
