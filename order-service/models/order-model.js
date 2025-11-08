@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { PAYMENT_METHOD } from "../config/paymentMethod.js";
 
 // --- Order Item ---
 const orderItemSchema = new mongoose.Schema({
@@ -43,7 +44,7 @@ const orderSchema = new mongoose.Schema(
     shippingFee: { type: Number, default: 0 },
     paymentMethod: {
       type: String,
-      enum: ["COD", "CARD", "TRANSFER", "PAYMENT_GATEWAY"],
+      enum: Object.values(PAYMENT_METHOD),
       default: "COD",
     },
     notes: { type: String },
@@ -53,6 +54,7 @@ const orderSchema = new mongoose.Schema(
       enum: ["PENDING_PAYMENT", "PAID", "FAILED", "CANCELLED"],
       default: "PENDING_PAYMENT",
     },
+    failureReason: { type: String }
   },
   { timestamps: true }
 );
