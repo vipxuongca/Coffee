@@ -4,18 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { orderApi } from "../../api/order-api";
 
 const Orders = () => {
-  const { token } = useContext(AdminContext);
+  const { token, statusFilter, setStatusFilter } = useContext(AdminContext);
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
-  const [statusFilter, setStatusFilter] = useState({
-    PAID: true,
-    PENDING_PAYMENT: true,
-    CANCELLED: true,
-    PROCESSING: true,
-    FAILED: true,
-    REFUNDED: true,
-  });
   const toggleStatus = (status) => {
     setStatusFilter((prev) => ({ ...prev, [status]: !prev[status] }));
   };
