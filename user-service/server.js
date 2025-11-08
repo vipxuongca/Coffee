@@ -9,7 +9,6 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import connectDB from './config/mongodb.js';
-import connectCloudinary from './config/cloudinary.js';
 import userRouter from './routes/user-route.js';
 import userDetailRouter from './routes/user-detail-route.js';
 
@@ -35,7 +34,6 @@ app.use(cors({
 }));
 
 connectDB();
-connectCloudinary();
 
 //middlewares
 app.use(express.json());
