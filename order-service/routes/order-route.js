@@ -7,7 +7,7 @@ import {
   orderCreateStripe,
   orderCreateTransfer
 } from '../controllers/order-controller.js'
-import { verifyToken } from '../controllers/jwt-verify.js';
+import { verifyToken } from '../middleware/jwt-verify.js';
 
 const router = express.Router();
 
