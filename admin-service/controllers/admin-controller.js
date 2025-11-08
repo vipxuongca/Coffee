@@ -1,14 +1,29 @@
 import adminModel from '../models/admin-model.js';
+import RefreshToken from '../models/refreshtoken-model.js';
+import crypto from "crypto"
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-
+const createRefreshToken = () =>
+  crypto.randomBytes(64).toString("hex");
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '1d',
+    expiresIn: '30m',
   });
 }
+
+const refreshAccessToken = async (req, res) => {
+  const token = req.cookies.refreshToken;
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+  const hashed = crypto.createHash("sha256").update(token).digest("hex");
+  const stored = await RefreshToken.findOne({ token: hashed });
+  if (!stored) return res.status(401).json({ message: "Invalid refresh" });
+
+  const newAccessToken = createAccessToken(stored.adminId);
+  return res.json({ accessToken: newAccessToken });
+};
 
 const loginAdmin = async (req, res) => {
 
@@ -35,6 +50,21 @@ const loginAdmin = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     } else {
       const token = createToken(admin._id);
+      const refreshToken = createRefreshToken();
+
+      await RefreshToken.create({
+        adminId: admin._id,
+        token: crypto.createHash("sha256").update(refreshToken).digest("hex"),
+        expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
+      });
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 14 * 24 * 60 * 60 * 1000
+      });
+
       return res.status(200).json({ success: true, token });
     }
   }
@@ -48,7 +78,7 @@ const registerAdmin = async (req, res) => {
   try {
     const { email, password } = req.body;
     // Validation
-    if ( !email || !password) {
+    if (!email || !password) {
       return res.status(400).json({ message: 'Please fill all the fields' });
     }
 
@@ -84,4 +114,21 @@ const registerAdmin = async (req, res) => {
   }
 }
 
-export { loginAdmin, registerAdmin };
+const logoutAdmin = async (req, res) => {
+  const tokenFromCookie = req.cookies.refreshToken;
+  if (tokenFromCookie) {
+    const hashed = crypto.createHash("sha256").update(tokenFromCookie).digest("hex");
+    await RefreshToken.findOneAndDelete({ token: hashed });
+  }
+  console.log("Cookie received:", req.cookies.refreshToken);
+
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict"
+  });
+
+  return res.json({ success: true });
+};
+
+export { loginAdmin, registerAdmin, logoutAdmin, refreshAccessToken };
