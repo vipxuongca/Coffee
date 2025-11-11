@@ -14,6 +14,7 @@ import {
   NotFound,
   Policy,
   Checkout,
+  Stripe,
 } from "./pages";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -30,7 +31,7 @@ const App = () => {
     <div className="relative min-h-screen">
       <ToastContainer position="top-left" autoClose={1500} />
       <Navbar />
-      {/* <AdBanner /> */}
+      <AdBanner />
       <TopScroll />
 
       {location.pathname === "/shop" && <SearchBar />}
@@ -51,6 +52,7 @@ const App = () => {
           <Route path="/policy" element={<Policy />} />
           <Route path="/user/*" element={<UserDashboard />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/stripe" element={<Stripe />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

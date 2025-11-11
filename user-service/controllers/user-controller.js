@@ -1,48 +1,79 @@
 import userModel from '../models/user-model.js';
+import RefreshToken from '../models/refreshtoken-model.js';
+import crypto from "crypto"
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+const createRefreshToken = () =>
+  crypto.randomBytes(64).toString("hex");
 
-const createToken = (id) => {
+const createAccessToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30m',
   });
 }
 
+const refreshAccessToken = async (req, res) => {
+  const token = req.cookies.refreshToken;
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+  const hashed = crypto.createHash("sha256").update(token).digest("hex");
+  const stored = await RefreshToken.findOne({ token: hashed });
+  if (!stored) return res.status(401).json({ message: "Invalid refresh" });
+
+  const newAccessToken = createAccessToken(stored.userId);
+  return res.json({ accessToken: newAccessToken });
+};
+
 const loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
-  /* expected payload:
-    {
-      "email": "sample@gmail.com",
-      "password": "Sample@1234"
-    }  
-  */
-  try {
-    const { email, password } = req.body;
+  const user = await userModel.findOne({ email });
+  if (!user) return res.status(400).json({ message: "Tài khoản không tồn tại" });
 
-    // validation
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Xin nhập tất cả các trường' });
-    }
-    const user = await userModel.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Tài khoản không tồn tại' });
-    }
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) return res.status(400).json({ message: "Thông tin đăng nhập không đúng" });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Thông tin đăng nhập không đúng' });
-    } else {
-      const token = createToken(user._id);
-      return res.status(200).json({ success: true, token });
-    }
+  const token = createAccessToken(user._id);
+  const refreshToken = createRefreshToken();
+
+  await RefreshToken.create({
+    userId: user._id,
+    token: crypto.createHash("sha256").update(refreshToken).digest("hex"),
+    expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
+  });
+
+  const isProd = process.env.NODE_ENV === "production";
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "strict" : "none",
+    maxAge: 14 * 24 * 60 * 60 * 1000
+  });
+
+  return res.json({ success: true, token });
+};
+
+const logoutUser = async (req, res) => {
+  const tokenFromCookie = req.cookies.refreshToken;
+  if (tokenFromCookie) {
+    const hashed = crypto.createHash("sha256").update(tokenFromCookie).digest("hex");
+    await RefreshToken.findOneAndDelete({ token: hashed });
   }
-  catch (error) {
-    console.error('Error logging in user:', error);
-    res.status(500).json({ message: error.message });
-  }
-}
+  console.log("Cookie received:", req.cookies.refreshToken);
+
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict"
+  });
+
+  return res.json({ success: true });
+};
+
+
 
 const registerUser = async (req, res) => {
   try {
@@ -111,4 +142,4 @@ const singleUser = async (req, res) => {
   }
 };
 
-export { loginUser, registerUser, singleUser };
+export { loginUser, registerUser, singleUser, logoutUser, refreshAccessToken };

@@ -5,6 +5,7 @@ import UserProfile from "../components/user/UserProfile";
 import UserChangePassword from "../components/user/UserChangePassword";
 import Swal from "sweetalert2";
 import { LogOut, MapPin, User, Receipt, Lock } from "lucide-react";
+import { userApi } from "../../api/user-api";
 
 const UserDashboard = () => {
   const baseLinkStyle =
@@ -25,8 +26,15 @@ const UserDashboard = () => {
     });
 
     if (!confirm.isConfirmed) return;
+
+    try {
+      await userApi.logout();
+    } catch (_) {
+      // Even if backend fails, still clear state
+    }
+
     localStorage.removeItem("token");
-    globalThis.location.href = "/";
+    window.location.href = "/";
   };
 
   return (

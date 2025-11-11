@@ -1,15 +1,14 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { NavLink, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
-import axios from "axios";
+import { FiShoppingCart, FiUser } from "react-icons/fi";
 
-const Navbar = ({ backendCartUrl }) => {
+const Navbar = () => {
   const baseClass = "flex flex-col items-center gap-1 group";
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, cartCount, setCartCount, token } =
-    useContext(ShopContext);
+  const { token } = useContext(ShopContext);
   const { cartCountTotal } = useContext(CartContext);
 
   return (
@@ -18,7 +17,6 @@ const Navbar = ({ backendCartUrl }) => {
         <img src={assets.logo} alt="Logo" className="w-28 h-auto" />
       </Link>
 
-      {/* Company title and nav */}
       <div className="flex flex-col items-center">
         <img
           src={assets.company}
@@ -48,52 +46,38 @@ const Navbar = ({ backendCartUrl }) => {
         </ul>
       </div>
 
-      {/* Icons */}
+      {/* LOG IN */}
       <div className="flex items-center gap-6">
-        {/* Search */}
-        {/* <button
-          onClick={() => setShowSearch(true)}
-          className="w-5 cursor-pointer invert brightness-0 saturate-0"
-        >
-          <img src={assets.search_icon} alt="search" />
-        </button> */}
-
-        {/* Profile */}
-        <Link to={!token ? "/login" : "/user"} className="relative">
-          <button className="w-5 invert brightness-0 saturate-0">
-            <img src={assets.profile_icon} alt="profile" />
+        {/* Profile top-right */}
+        <Link to={!token ? "/login" : "/user"}>
+          <button className="flex items-center gap-2 px-4 py-2 rounded-full border">
+            <span>{!token ? "Đăng nhập/Đăng ký" : "Xin chào"}</span>
+            <FiUser className="w-5 h-5" />
           </button>
         </Link>
 
-        {/* Cart */}
-        <Link
-          to={!token ? "/login" : "/cart"}
-          className="relative inline-flex items-center justify-center"
-        >
-          <button className="relative w-5 min-w-5 flex items-center justify-center">
-            <img
-              src={assets.cart_icon}
-              alt="cart"
-              className="invert brightness-0 saturate-0"
-            />
+        {/* CART */}
+        <Link to={!token ? "/login" : "/cart"} className="relative">
+          <button className="relative flex items-center justify-center p-2 rounded-full border">
+            <FiShoppingCart className="w-6 h-6" />
             {token && cartCountTotal > 0 && (
-              <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-amber-600 text-white aspect-square rounded-full text-[8px] z-10">
+              <span className="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center bg-amber-600 text-white text-[10px] rounded-full font-semibold">
                 {cartCountTotal}
-              </p>
+              </span>
             )}
           </button>
         </Link>
 
-        {/* Menu for small screens */}
+        {/* Mobile Menu */}
         <button
           onClick={() => setVisible(true)}
-          className="w-5 cursor-pointer sm:hidden invert brightness-0 saturate-0"
+          className="w-6 cursor-pointer sm:hidden invert brightness-0 saturate-0"
         >
           <img src={assets.menu_icon} alt="menu" />
         </button>
       </div>
 
-      {/* Sidebar (mobile) */}
+      {/* Sidebar mobile */}
       <div
         className={`fixed sm:hidden top-0 right-0 bottom-0 overflow-hidden bg-[#4e342e] text-white transition-all z-50 ${
           visible ? "w-full" : "w-0"
@@ -107,10 +91,11 @@ const Navbar = ({ backendCartUrl }) => {
             <img
               src={assets.dropdown_icon}
               className="h-4 rotate-180 invert brightness-0 saturate-0"
-              alt=""
+              alt="back"
             />
             <p>Back</p>
           </div>
+
           {[
             { name: "TRANG CHỦ", path: "/" },
             { name: "CỬA HÀNG", path: "/shop" },

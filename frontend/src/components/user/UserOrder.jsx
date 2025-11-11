@@ -1,20 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../../context/ShopContext";
 import { useNavigate } from "react-router-dom";
+import { orderApi } from "../../../api/order-api";
 
 const UserOrders = () => {
-  const { token } = useContext(ShopContext);
+  const { token, statusFilter, setStatusFilter } = useContext(ShopContext);
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
+
+  const toggleStatus = (status) => {
+    setStatusFilter((prev) => ({ ...prev, [status]: !prev[status] }));
+  };
+  const filteredOrders = orders.filter((o) => statusFilter[o.status]);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:4004/api/order/get-user/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        if (res.ok && data.orders) setOrders(data.orders);
+        const res = await orderApi.getUserOrders();
+        if (res.data && res.data.orders) {
+          setOrders(res.data.orders);
+        }
       } catch (err) {
         console.error("Error fetching orders:", err);
       }
@@ -42,6 +47,12 @@ const UserOrders = () => {
         return "bg-yellow-100 text-yellow-800";
       case "CANCELLED":
         return "bg-red-100 text-red-800";
+      case "PROCESSING":
+        return "bg-blue-100 text-blue-800";
+      case "FAILED":
+        return "bg-black-100 text-white-800";
+      case "REFUNDED":
+        return "bg-purple-100 text-white-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -52,6 +63,27 @@ const UserOrders = () => {
       <h2 className="text-2xl font-semibold mb-6 text-[#3e2723]">
         Đơn hàng của bạn
       </h2>
+
+      <div className="flex flex-wrap gap-2 mb-4">
+        {Object.keys(statusFilter).map((status) => {
+          const active = statusFilter[status];
+
+          return (
+            <button
+              key={status}
+              onClick={() => toggleStatus(status)}
+              className={`px-3 py-1 text-xs rounded-md border transition
+          ${
+            active
+              ? "bg-[#3e2723] text-white border-[#3e2723]"
+              : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+          }`}
+            >
+              {status.replace("_", " ")}
+            </button>
+          );
+        })}
+      </div>
 
       <div className="overflow-x-auto rounded-xl">
         <table className="min-w-full text-sm border-collapse">
@@ -68,7 +100,7 @@ const UserOrders = () => {
           </thead>
 
           <tbody>
-            {orders.map((order, index) => (
+            {[...filteredOrders].map((order, index) => (
               <tr
                 key={order.orderId}
                 className="border-b border-[#e0d6d1] hover:bg-[#fff8f0] transition"

@@ -8,7 +8,7 @@ import {
   cartUpdateItemDecrease,
   cartUpdateQuantity,
 } from '../controllers/cart-controller.js'
-import { verifyToken } from '../controllers/jwt-verify.js';
+import { verifyToken } from '../middleware/jwt-verify.js';
 
 const router = express.Router();
 

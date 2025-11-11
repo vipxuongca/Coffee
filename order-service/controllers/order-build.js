@@ -9,7 +9,7 @@ import axios from "axios";
 
 const SERVICE_URLS = {
   user: "http://localhost:4002",
-  userDetail: "http://localhost:4010",
+  userDetail: "http://localhost:4002",
   product: "http://localhost:4000",
 };
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { ShopContext } from "../../context/ShopContext";
+import { userDetailApi } from "../../../api/user-api";
 
 const UserAddModal = ({ showAddModal, setShowAddModal, setUserDetail }) => {
   const [newAddress, setNewAddress] = useState({
@@ -22,16 +23,7 @@ const UserAddModal = ({ showAddModal, setShowAddModal, setUserDetail }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.post(
-        `http://localhost:4010/api/user-detail/add`,
-        { ...newAddress },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await userDetailApi.createAddress(newAddress);
 
       if (!res.data.success) throw new Error("Failed to add address");
       setUserDetail(res.data);

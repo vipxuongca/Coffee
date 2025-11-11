@@ -1,14 +1,17 @@
 import { useState, useEffect, useContext } from "react";
 import { MapPin, Pencil } from "lucide-react";
 import { ShopContext } from "../../context/ShopContext";
-import axios from "axios";
-import { toast } from "react-toastify";
 import UserDetail from "./UserDetail";
+import { userDetailApi } from "../../../api/user-api";
 
 const UserDetailAddress = () => {
-  const { token, setLoading, reloadAddress, setDefaultAddress, defaultAddress } =
-    useContext(ShopContext);
-  // const [defaultAddress, setDefaultAddress] = useState(null);
+  const {
+    token,
+    setLoading,
+    reloadAddress,
+    setDefaultAddress,
+    defaultAddress,
+  } = useContext(ShopContext);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
   useEffect(() => {
@@ -16,9 +19,7 @@ const UserDetailAddress = () => {
       if (!token) return;
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:4010/api/user-detail", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await userDetailApi.getAllAddress();
         if (res.data.success && res.data.data.length > 0) {
           const def = res.data.data.find((a) => a.isDefault);
           setDefaultAddress(def || null);

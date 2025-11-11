@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ShopContext } from "../../context/ShopContext";
+import { userDetailApi } from "../../../api/user-api";
 
 const UserEditModal = ({
   showEditModal,
@@ -45,14 +46,7 @@ const UserEditModal = ({
     e.preventDefault();
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.post(
-        `http://localhost:4010/api/user-detail/edit/${editDetail.id}`,
-        newAddress,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await userDetailApi.updateAddress(editDetail.id, newAddress);
 
       if (!res.data.success) throw new Error("Chỉnh sửa không thành công");
       toast.success("Đã chỉnh sửa địa chỉ");

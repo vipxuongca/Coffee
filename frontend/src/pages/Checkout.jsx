@@ -1,19 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
 import Swal from "sweetalert2";
-import {
-  PackageCheck,
-  ShoppingCart,
-  CreditCard,
-  MapPin,
-  Pencil,
-} from "lucide-react";
+import { PackageCheck, ShoppingCart, CreditCard } from "lucide-react";
 import UserDefaultAddress from "../components/user/UserDefaultAddress";
 import PaymentMethod from "../components/PaymentMethod";
+import { orderApi } from "../../api/order-api";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -32,13 +26,9 @@ const Checkout = () => {
           icon: "warning",
           title: "Bạn chưa thêm địa chỉ mặc định",
           confirmButtonColor: "#3e2723",
-          width: "300px", // default is ~500px
-          customClass: {
-            title: "text-sm", // smaller font
-            popup: "p-2", // reduce padding
-          },
+          width: "300px",
+          customClass: { title: "text-sm", popup: "p-2" },
         });
-
         return;
       }
 
@@ -47,28 +37,53 @@ const Checkout = () => {
           productId: item.productId,
           quantity: item.quantity,
         })),
-        paymentMethod,
         defaultAddress,
       };
 
-      const res = await axios.post(
-        "http://localhost:4004/api/order/create",
-        orderPayload,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      let res;
 
-      if (res.data.success) {
+      switch (paymentMethod) {
+        case "COD":
+          // Backend: standard createOrder
+          res = await orderApi.createOrderCOD(orderPayload);
+          break;
+        case "TRANSFER":
+          res = await orderApi.createOrderTransfer(orderPayload);
+          break;
+        case "STRIPE":
+          // Backend: stripe order endpoint, returns checkout URL
+          res = await orderApi.createOrderStripe(orderPayload);
+          break;
+
+        default:
+          return toast.error("Phương thức thanh toán không hợp lệ.");
+      }
+
+      if (!res.data.success) {
+        return toast.error(res.data.message || "Đặt hàng thất bại.");
+      }
+
+      // NAVIGATION TO ORDER SUCCESS
+      if (paymentMethod === "COD") {
         toast.success("Đặt hàng thành công!");
         clearCart();
-        navigate(`/place-order/${res.data.orderId}`);
-      } else {
-        toast.error(
-          "Đặt hàng thất bại: " + (res.data.message || "Lỗi không xác định.")
-        );
+        return navigate(`/place-order/${res.data.orderId}`);
+      }
+
+      if (paymentMethod === "TRANSFER") {
+        toast.success("Đặt hàng thành công!");
+        clearCart();
+        return navigate(`/place-order/${res.data.orderId}`);
+      }
+
+      // STRIPE flow: redirect to external payment page
+      if (paymentMethod === "STRIPE") {
+        toast.info("Tạo đơn hàng thanh toán với STRIPE");
+        return navigate(`/stripe`);
       }
     } catch (err) {
-      console.error("Error placing order:", err);
-      toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
+      console.error(err);
+      toast.error("Có lỗi xảy ra.");
     } finally {
       setLoading(false);
     }

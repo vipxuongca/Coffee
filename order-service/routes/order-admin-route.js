@@ -1,6 +1,6 @@
 import express from 'express';
 import { orderGet, orderCancel, orderGetOne, orderConfirmPayment } from '../controllers/order-admin-controller.js';
-import { verifyAdminToken } from '../controllers/jwt-admin-verify.js';
+import { verifyAdminToken } from '../middleware/jwt-admin-verify.js';
 
 const router = express.Router();
 

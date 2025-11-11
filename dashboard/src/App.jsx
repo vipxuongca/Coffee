@@ -12,6 +12,7 @@ import Add from "./pages/Add.jsx";
 import Edit from "./pages/Edit.jsx";
 import AddCategory from "./pages/AddCategory.jsx";
 import EditCategory from "./pages/EditCategory.jsx";
+import Home from "./pages/Home.jsx";
 import OrderDetail from "./pages/OrderDetail.jsx";
 import { AdminContext } from "../context/AdminContext.jsx";
 
@@ -33,6 +34,7 @@ const App = () => {
             <Sidebar />
             <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">
               <Routes>
+                <Route path="/" element={<Home />} />
                 <Route path="/add" element={<Add />} />
                 <Route path="/edit/:id" element={<Edit />} />
                 <Route path="/list" element={<List />} />
