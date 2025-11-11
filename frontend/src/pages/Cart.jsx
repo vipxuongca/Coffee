@@ -104,18 +104,19 @@ const Cart = () => {
                 >
                   <Minus size={14} />
                 </button>
-<input
-  type="number"
-  min="1"
-  value={draftQty[item.cartId] ?? item.quantity}
-  onChange={(e) => handleDraftChange(item.cartId, e.target.value)}
-  onBlur={() => handleBlur(item.cartId)}
-  className="w-12 text-center border border-[#bcaaa4] rounded-md
+                <input
+                  type="number"
+                  min="1"
+                  value={draftQty[item.cartId] ?? item.quantity}
+                  onChange={(e) =>
+                    handleDraftChange(item.cartId, e.target.value)
+                  }
+                  onBlur={() => handleBlur(item.cartId)}
+                  className="w-12 text-center border border-[#bcaaa4] rounded-md
     [appearance:textfield] 
     [&::-webkit-inner-spin-button]:appearance-none 
     [&::-webkit-outer-spin-button]:appearance-none"
-/>
-
+                />
 
                 <button
                   onClick={() => increaseQty(item.cartId)}
