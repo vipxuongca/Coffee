@@ -12,3 +12,4 @@ export { default as UserDashboard } from "./UserDashboard.jsx";
 export { default as NotFound } from "./NotFound.jsx";
 export { default as Policy } from "./Policy.jsx";
 export { default as Checkout } from "./Checkout.jsx";
+export { default as Stripe } from "./Stripe.jsx";

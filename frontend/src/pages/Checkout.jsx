@@ -78,7 +78,8 @@ const Checkout = () => {
 
       // STRIPE flow: redirect to external payment page
       if (paymentMethod === "STRIPE") {
-        return (window.location.href = res.data.checkoutUrl);
+        toast.info("Tạo đơn hàng thanh toán với STRIPE");
+        return navigate(`/stripe`);
       }
     } catch (err) {
       console.error(err);

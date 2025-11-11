@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { PAYMENT_METHOD } from "../config/paymentMethod.js";
+import { ORDER_STATUS } from "../config/orderStatus.js";
 
 // --- Order Item ---
 const orderItemSchema = new mongoose.Schema({
@@ -47,11 +48,12 @@ const orderSchema = new mongoose.Schema(
       enum: Object.values(PAYMENT_METHOD),
       default: "COD",
     },
+    paymentIntentId: { type: String },
     notes: { type: String },
 
     status: {
       type: String,
-      enum: ["PENDING_PAYMENT", "PAID", "FAILED", "CANCELLED"],
+      enum: Object.values(ORDER_STATUS),
       default: "PENDING_PAYMENT",
     },
     failureReason: { type: String }
