@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
@@ -18,8 +18,25 @@ const Cart = () => {
     handleQtyChange,
   } = useContext(CartContext);
 
-  const handleLocalChange = (cartId, value) => {
-    setTempQty((prev) => ({ ...prev, [cartId]: value }));
+  const [draftQty, setDraftQty] = useState({});
+
+  useEffect(() => {
+    // keep local values aligned when context updates
+    setDraftQty(
+      cartItems.reduce((acc, item) => {
+        acc[item.cartId] = item.quantity;
+        return acc;
+      }, {})
+    );
+  }, [cartItems]);
+
+  const handleDraftChange = (cartId, val) => {
+    setDraftQty((prev) => ({ ...prev, [cartId]: val }));
+  };
+
+  const handleBlur = (cartId) => {
+    const value = draftQty[cartId];
+    handleQtyChange(cartId, value); // your existing stock check logic
   };
 
   const handleClearCart = () => {
@@ -87,15 +104,18 @@ const Cart = () => {
                 >
                   <Minus size={14} />
                 </button>
-                <input
-                  type="number"
-                  min="1"
-                  value={item.quantity} // ← always reflect context state
-                  onChange={(e) => handleQtyChange(item.cartId, e.target.value)}
-                  className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723]
-  [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none
-  [&::-webkit-outer-spin-button]:appearance-none"
-                />
+<input
+  type="number"
+  min="1"
+  value={draftQty[item.cartId] ?? item.quantity}
+  onChange={(e) => handleDraftChange(item.cartId, e.target.value)}
+  onBlur={() => handleBlur(item.cartId)}
+  className="w-12 text-center border border-[#bcaaa4] rounded-md
+    [appearance:textfield] 
+    [&::-webkit-inner-spin-button]:appearance-none 
+    [&::-webkit-outer-spin-button]:appearance-none"
+/>
+
 
                 <button
                   onClick={() => increaseQty(item.cartId)}
