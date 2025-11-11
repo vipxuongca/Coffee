@@ -18,8 +18,6 @@ const Cart = () => {
     handleQtyChange,
   } = useContext(CartContext);
 
-  const [tempQty, setTempQty] = useState({});
-
   const handleLocalChange = (cartId, value) => {
     setTempQty((prev) => ({ ...prev, [cartId]: value }));
   };
@@ -92,15 +90,13 @@ const Cart = () => {
                 <input
                   type="number"
                   min="1"
-                  value={tempQty[item.cartId] ?? item.quantity}
-                  onChange={(e) =>
-                    handleLocalChange(item.cartId, e.target.value)
-                  }
-                  onBlur={(e) => handleQtyChange(item.cartId, e.target.value)}
+                  value={item.quantity} // ← always reflect context state
+                  onChange={(e) => handleQtyChange(item.cartId, e.target.value)}
                   className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723]
-     [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none
-     [&::-webkit-outer-spin-button]:appearance-none"
+  [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none
+  [&::-webkit-outer-spin-button]:appearance-none"
                 />
+
                 <button
                   onClick={() => increaseQty(item.cartId)}
                   className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
