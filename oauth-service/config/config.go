@@ -39,11 +39,11 @@ func LoadConfig() {
 		log.Fatal("Missing required Google OAuth environment variables")
 	}
 
-	for _, k := range []string{"GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REDIRECT_URI"} {
-		log.Printf("%s='%s'", k, os.Getenv(k))
-	}
+	// for _, k := range []string{"GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REDIRECT_URI"} {
+	// 	log.Printf("%s='%s'", k, os.Getenv(k))
+	// }
 
-	log.Println("redirect: ", RedirectURI)
-	log.Println("clientid: ", GoogleClientID)
-	log.Println("secret: ", GoogleClientSecret)
+	// log.Println("redirect: ", RedirectURI)
+	// log.Println("clientid: ", GoogleClientID)
+	// log.Println("secret: ", GoogleClientSecret)
 }
