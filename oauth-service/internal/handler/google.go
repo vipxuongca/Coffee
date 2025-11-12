@@ -101,17 +101,34 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 				"googleId":      googleUser.Sub,
 				"oauthProvider": "google",
 			}}
-			usersColl.UpdateByID(context.Background(), existingUser.ID, update)
+			_, err = usersColl.UpdateByID(context.Background(), existingUser.ID, update)
+			if err != nil {
+				http.Error(w, "Failed to update user", http.StatusInternalServerError)
+				return
+			}
+			// Ensure we still have the latest user data
+			err = usersColl.FindOne(context.Background(), bson.M{"_id": existingUser.ID}).Decode(&existingUser)
+			if err != nil {
+				http.Error(w, "Failed to reload user", http.StatusInternalServerError)
+				return
+			}
 		}
+
 	} else if err != nil {
 		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
+	}
+
+	// check userId
+	if existingUser.ID.IsZero() {
+		http.Error(w, "User ID missing after Google login", http.StatusInternalServerError)
 		return
 	}
 
 	// Generate JWT
 	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": existingUser.ID.Hex(),
+		"id": existingUser.ID.Hex(),
 		"email":   googleUser.Email,
 		"exp":     time.Now().Add(60 * time.Minute).Unix(),
 	})
