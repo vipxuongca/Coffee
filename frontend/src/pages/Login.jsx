@@ -111,8 +111,13 @@ const Login = () => {
           <button
             type="button"
             onClick={onGoogleLogin}
-            className="w-full py-2 rounded-md bg-[#4285F4] hover:bg-[#357ae8] text-white font-medium transition-all mt-4"
+            className="w-full flex items-center justify-center gap-2 py-2 rounded-md bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium shadow-sm transition-all mt-4"
           >
+            <img
+              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+              alt="Google Logo"
+              className="w-5 h-5"
+            />
             Đăng nhập với Google
           </button>
         </form>
