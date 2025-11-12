@@ -28,6 +28,34 @@ const Login = () => {
     }
   };
 
+  const onGoogleLogin = () => {
+    const width = 500;
+    const height = 600;
+    const left = window.screen.width / 2 - width / 2;
+    const top = window.screen.height / 2 - height / 2;
+
+    const authWindow = window.open(
+      "http://localhost:4001/auth/google/login",
+      "GoogleLogin",
+      `width=${width},height=${height},top=${top},left=${left}`
+    );
+
+    const messageListener = (event) => {
+      if (event.origin !== "http://localhost:4001") return;
+
+      const { token, email } = event.data;
+      if (token) {
+        setToken(token);
+        toast.success(`Logged in as ${email}`);
+        navigate("/");
+        window.removeEventListener("message", messageListener);
+        authWindow.close();
+      }
+    };
+
+    window.addEventListener("message", messageListener);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f8f3ef] px-4">
       <div className="bg-[#fff8f0] border border-[#d7ccc8] rounded-xl shadow-inner w-full max-w-md p-8">
@@ -77,6 +105,14 @@ const Login = () => {
             className="w-full py-2 rounded-md bg-[#d7ccc8] hover:bg-[#bcaaa4] text-[#3e2723] font-medium transition-all"
           >
             Đăng ký tài khoản
+          </button>
+
+          <button
+            type="button"
+            onClick={onGoogleLogin}
+            className="w-full py-2 rounded-md bg-[#4285F4] hover:bg-[#357ae8] text-white font-medium transition-all mt-4"
+          >
+            Đăng nhập với Google
           </button>
         </form>
       </div>

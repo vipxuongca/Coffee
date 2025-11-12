@@ -73,7 +73,9 @@ const logoutUser = async (req, res) => {
   return res.json({ success: true });
 };
 
-
+const loginUserGoogle = async(req, res) => {
+  
+}
 
 const registerUser = async (req, res) => {
   try {

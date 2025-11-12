@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	// "log"
 
 	"oauth-service/config"
 	"oauth-service/internal/utils"
@@ -19,19 +20,29 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-var googleOAuthConfig = &oauth2.Config{
-	RedirectURL:  config.RedirectURL,
-	ClientID:     config.GoogleClientID,
-	ClientSecret: config.GoogleClientSecret,
-	Scopes:       []string{"openid", "profile", "email"},
-	Endpoint:     google.Endpoint,
+var googleOAuthConfig *oauth2.Config
+
+func InitGoogleOAuth() {
+	googleOAuthConfig = &oauth2.Config{
+		RedirectURL:  config.RedirectURI,
+		ClientID:     config.GoogleClientID,
+		ClientSecret: config.GoogleClientSecret,
+		Scopes:       []string{"openid", "profile", "email"},
+		Endpoint:     google.Endpoint,
+	}
 }
+
 
 // Redirects user to Google OAuth login page
 func GoogleLogin(w http.ResponseWriter, r *http.Request) {
 	url := googleOAuthConfig.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
+
+	// log.Println("url is: ",url)
+	// log.Println("Redirect is: ",googleOAuthConfig)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
+
+
 
 // Handles Google OAuth callback
 func GoogleCallback(w http.ResponseWriter, r *http.Request) {

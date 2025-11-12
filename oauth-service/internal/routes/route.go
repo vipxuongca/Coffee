@@ -6,5 +6,5 @@ import (
 )
 
 func Register(r *chi.Mux) {
-	r.Post("/auth/google", handlers.GoogleLogin)
+	r.Post("/auth/google/login", handlers.GoogleLogin)
 }

@@ -9,6 +9,7 @@ import (
 
 func main() {
 	config.LoadConfig()
+	handlers.InitGoogleOAuth()
 
 	http.HandleFunc("/auth/google/login", handlers.GoogleLogin)
 	http.HandleFunc("/auth/google/callback", handlers.GoogleCallback)
