@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 	// "log"
+	"fmt"
 
 	"oauth-service/config"
 	"oauth-service/internal/utils"
@@ -75,7 +76,8 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db := utils.GetDB()
-	usersColl := db.Collection("user")
+	fmt.Println("Connected to DB:", db.Name())
+	usersColl := db.Collection("users")
 
 	var existingUser models.User
 	err = usersColl.FindOne(context.Background(), bson.M{"googleId": googleUser.Sub}).Decode(&existingUser)
