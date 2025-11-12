@@ -11,12 +11,26 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: function () {
+        return !this.googleId; // password required only if not Google OAuth
+      },
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // allows multiple users without googleId
+    },
+    oauthProvider: {
+      type: String,
+      enum: ['google'],
+    },
+    name: {
+      type: String,
     },
   },
   {
     minimize: false,
-    timestamps: true, // adds createdAt and updatedAt automatically
+    timestamps: true,
   }
 );
 

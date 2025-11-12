@@ -16,12 +16,12 @@ import {
   Checkout,
   Stripe,
 } from "./pages";
-import Navbar from "./components/Navbar.jsx";
-import Footer from "./components/Footer.jsx";
-import SearchBar from "./components/SearchBar.jsx";
+import Navbar from "./components/layout/Navbar.jsx";
+import Footer from "./components/layout/Footer.jsx";
+import SearchBar from "./components/layout/SearchBar.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TopScroll from "./components/TopScroll.jsx";
+import TopScroll from "./components/layout/TopScroll.jsx";
 import AdBanner from "./components/ad/AdBanner.jsx";
 
 const App = () => {

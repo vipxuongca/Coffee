@@ -1,9 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { CartContext } from "../context/CartContext";
-import EmptyCart from "../components/EmptyCart";
+import EmptyCart from "../components/layout/EmptyCart";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 
 const Cart = () => {
@@ -18,10 +18,25 @@ const Cart = () => {
     handleQtyChange,
   } = useContext(CartContext);
 
-  const [tempQty, setTempQty] = useState({});
+  const [draftQty, setDraftQty] = useState({});
 
-  const handleLocalChange = (cartId, value) => {
-    setTempQty((prev) => ({ ...prev, [cartId]: value }));
+  useEffect(() => {
+    // keep local values aligned when context updates
+    setDraftQty(
+      cartItems.reduce((acc, item) => {
+        acc[item.cartId] = item.quantity;
+        return acc;
+      }, {})
+    );
+  }, [cartItems]);
+
+  const handleDraftChange = (cartId, val) => {
+    setDraftQty((prev) => ({ ...prev, [cartId]: val }));
+  };
+
+  const handleBlur = (cartId) => {
+    const value = draftQty[cartId];
+    handleQtyChange(cartId, value); // your existing stock check logic
   };
 
   const handleClearCart = () => {
@@ -92,15 +107,17 @@ const Cart = () => {
                 <input
                   type="number"
                   min="1"
-                  value={tempQty[item.cartId] ?? item.quantity}
+                  value={draftQty[item.cartId] ?? item.quantity}
                   onChange={(e) =>
-                    handleLocalChange(item.cartId, e.target.value)
+                    handleDraftChange(item.cartId, e.target.value)
                   }
-                  onBlur={(e) => handleQtyChange(item.cartId, e.target.value)}
-                  className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723]
-     [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none
-     [&::-webkit-outer-spin-button]:appearance-none"
+                  onBlur={() => handleBlur(item.cartId)}
+                  className="w-12 text-center border border-[#bcaaa4] rounded-md
+    [appearance:textfield] 
+    [&::-webkit-inner-spin-button]:appearance-none 
+    [&::-webkit-outer-spin-button]:appearance-none"
                 />
+
                 <button
                   onClick={() => increaseQty(item.cartId)}
                   className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +27,35 @@ const Login = () => {
       toast.error("Lỗi khi đăng nhập. Vui lòng thử lại.");
     }
   };
+
+  const onGoogleLogin = () => {
+    const width = 500;
+    const height = 600;
+    const left = window.screen.width / 2 - width / 2;
+    const top = window.screen.height / 2 - height / 2;
+
+    window.open(
+      "http://localhost:4001/auth/google/login",
+      "GoogleLogin",
+      `width=${width},height=${height},top=${top},left=${left}`
+    );
+  };
+
+  useEffect(() => {
+    const messageListener = (event) => {
+      if (event.origin !== "http://localhost:4001") return;
+      const { token, email } = event.data;
+      if (token) {
+        setToken(token);
+        toast.success(`Logged in as ${email}`);
+        navigate("/");
+        window.removeEventListener("message", messageListener);
+      }
+    };
+
+    window.addEventListener("message", messageListener);
+    return () => window.removeEventListener("message", messageListener);
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f8f3ef] px-4">
@@ -77,6 +106,19 @@ const Login = () => {
             className="w-full py-2 rounded-md bg-[#d7ccc8] hover:bg-[#bcaaa4] text-[#3e2723] font-medium transition-all"
           >
             Đăng ký tài khoản
+          </button>
+
+          <button
+            type="button"
+            onClick={onGoogleLogin}
+            className="w-full flex items-center justify-center gap-2 py-2 rounded-md bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium shadow-sm transition-all mt-4"
+          >
+            <img
+              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+              alt="Google Logo"
+              className="w-5 h-5"
+            />
+            Đăng nhập với Google
           </button>
         </form>
       </div>

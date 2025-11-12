@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { ShopContext } from "../context/ShopContext";
-import { assets } from "../assets/assets";
+import { ShopContext } from "../../context/ShopContext";
+import { assets } from "../../assets/assets";
 
 const SearchBar = () => {
   const { search, setSearch } = useContext(ShopContext);

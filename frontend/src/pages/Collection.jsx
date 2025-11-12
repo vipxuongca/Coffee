@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
-import Title from "../components/Title";
+import Title from "../components/layout/Title";
 import HighlightBox from "../components/ad/HighlightBox";
+import ProductCard from "../components/ProductCard";
 
 const Collection = () => {
   const { categories, products, search } = useContext(ShopContext);
@@ -146,7 +147,7 @@ const Collection = () => {
             className="no-arrow w-20 border border-gray-300 rounded px-2 py-1"
           />
         </div>
-          <HighlightBox />
+        <HighlightBox />
       </div>
 
       {/* Cards */}
@@ -172,24 +173,9 @@ const Collection = () => {
               <a
                 key={index}
                 href={`/product/${item._id}`}
-                className="group block border border-gray-200 rounded-2xl shadow-md bg-white overflow-hidden transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+                className="group block border border-gray-200 rounded-none shadow-md bg-white overflow-hidden transition-transform duration-200 hover:scale-105 hover:shadow-lg"
               >
-                <img
-                  src={item.image[0]}
-                  alt={item.name}
-                  className="w-full h-48 object-cover transition-transform duration-200 group-hover:scale-110"
-                />
-                <div className="p-4">
-                  <h3 className="text-sm sm:text-base font-semibold text-gray-800 truncate">
-                    {item.name}
-                  </h3>
-                  <p className="text-gray-600 text-xs sm:text-sm mt-1 line-clamp-2">
-                    {item.description || " "}
-                  </p>
-                  <p className="text-amber-700 font-semibold mt-2 text-sm md:text-base">
-                    {item.price.toLocaleString()}₫
-                  </p>
-                </div>
+                <ProductCard product={item} />
               </a>
             ))}
           </div>

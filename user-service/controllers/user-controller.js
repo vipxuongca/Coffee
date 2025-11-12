@@ -10,7 +10,7 @@ const createRefreshToken = () =>
 
 const createAccessToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30m',
+    expiresIn: '1h',
   });
 }
 
@@ -72,8 +72,6 @@ const logoutUser = async (req, res) => {
 
   return res.json({ success: true });
 };
-
-
 
 const registerUser = async (req, res) => {
   try {

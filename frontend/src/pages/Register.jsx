@@ -27,7 +27,15 @@ const Register = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Đã xảy ra lỗi");
+      }
     }
   };
 
