@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
-import { assets } from "../assets/assets";
+import { assets } from "../../assets/assets";
 import { NavLink, Link } from "react-router-dom";
-import { ShopContext } from "../context/ShopContext";
-import { CartContext } from "../context/CartContext";
+import { ShopContext } from "../../context/ShopContext";
+import { CartContext } from "../../context/CartContext";
 import { FiShoppingCart, FiUser } from "react-icons/fi";
 
 const Navbar = () => {

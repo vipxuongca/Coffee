@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { CartContext } from "../context/CartContext";
-import EmptyCart from "../components/EmptyCart";
+import EmptyCart from "../components/layout/EmptyCart";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 
 const Cart = () => {
