@@ -6,5 +6,8 @@ import (
 )
 
 func Register(r *chi.Mux) {
-	r.Post("/auth/google/login", handlers.GoogleLogin)
+	r.Get("/auth/google/login", handlers.GoogleLogin)
+	r.Get("/auth/google/callback", handlers.GoogleCallback)
+	r.Get("/user/profile", handlers.GetUserProfile)
+
 }

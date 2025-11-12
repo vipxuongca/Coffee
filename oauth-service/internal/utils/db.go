@@ -24,6 +24,7 @@ func GetDB() *mongo.Database {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
+
 		clientOptions := options.Client().ApplyURI(config.MongoURI)
 		clientInstance, clientInstanceErr = mongo.Connect(ctx, clientOptions)
 		if clientInstanceErr != nil {

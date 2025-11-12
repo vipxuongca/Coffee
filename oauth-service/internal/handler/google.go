@@ -32,7 +32,6 @@ func InitGoogleOAuth() {
 	}
 }
 
-
 // Redirects user to Google OAuth login page
 func GoogleLogin(w http.ResponseWriter, r *http.Request) {
 	url := googleOAuthConfig.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
@@ -42,8 +41,6 @@ func GoogleLogin(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
-
-
 // Handles Google OAuth callback
 func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code")
@@ -52,7 +49,7 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Exchange code for token
+	// Exchange authorization code for token
 	token, err := googleOAuthConfig.Exchange(context.Background(), code)
 	if err != nil {
 		http.Error(w, "Failed to exchange token", http.StatusInternalServerError)
@@ -77,18 +74,16 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Get DB collection
 	db := utils.GetDB()
 	usersColl := db.Collection("user")
 
-	// Merge logic
 	var existingUser models.User
 	err = usersColl.FindOne(context.Background(), bson.M{"googleId": googleUser.Sub}).Decode(&existingUser)
 	if err == mongo.ErrNoDocuments {
-		// check if email exists
+		// If Google ID not found, check if email exists
 		err = usersColl.FindOne(context.Background(), bson.M{"email": googleUser.Email}).Decode(&existingUser)
 		if err == mongo.ErrNoDocuments {
-			// create new user
+			// Create new user
 			newUser := models.User{
 				Email:         googleUser.Email,
 				GoogleID:      googleUser.Sub,
@@ -99,29 +94,71 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 			existingUser.ID = res.InsertedID.(primitive.ObjectID)
 			existingUser.Email = newUser.Email
 		} else {
-			// attach Google to existing account
-			update := bson.M{"$set": bson.M{"googleId": googleUser.Sub, "oauthProvider": "google"}}
+			// Attach Google account to existing email
+			update := bson.M{"$set": bson.M{
+				"googleId":      googleUser.Sub,
+				"oauthProvider": "google",
+			}}
 			usersColl.UpdateByID(context.Background(), existingUser.ID, update)
 		}
+	} else if err != nil {
+		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
 	}
 
-	// --- Generate JWT ---
+	// Generate JWT
 	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": existingUser.ID.Hex(),
 		"email":   googleUser.Email,
-		"exp":     time.Now().Add(24 * time.Hour).Unix(),
+		"exp":     time.Now().Add(60 * time.Minute).Unix(),
 	})
+
 	tokenString, err := jwtToken.SignedString(jwtSecret)
 	if err != nil {
-		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
+		http.Error(w, "Failed to generate JWT", http.StatusInternalServerError)
 		return
 	}
 
-	// Return JWT as JSON
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{
-		"token": tokenString,
-		"email": googleUser.Email,
+	// Return token to the frontend popup via postMessage
+	html := `
+		<script>
+			window.opener.postMessage({
+				token: "` + tokenString + `",
+				email: "` + googleUser.Email + `"
+			}, "http://localhost:4020");
+			window.close();
+		</script>`
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write([]byte(html))
+}
+
+func GetUserProfile(w http.ResponseWriter, r *http.Request) {
+	tokenString := r.Header.Get("Authorization")
+	if tokenString == "" {
+		http.Error(w, "Missing token", http.StatusUnauthorized)
+		return
+	}
+
+	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_SECRET")), nil
 	})
+	if err != nil || !token.Valid {
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+	email := claims["email"].(string)
+
+	db := utils.GetDB()
+	usersColl := db.Collection("user")
+
+	var user models.User
+	if err := usersColl.FindOne(context.Background(), bson.M{"email": email}).Decode(&user); err != nil {
+		http.Error(w, "User not found", http.StatusNotFound)
+		return
+	}
+
+	json.NewEncoder(w).Encode(user)
 }

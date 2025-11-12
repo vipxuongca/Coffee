@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -34,27 +34,28 @@ const Login = () => {
     const left = window.screen.width / 2 - width / 2;
     const top = window.screen.height / 2 - height / 2;
 
-    const authWindow = window.open(
+    window.open(
       "http://localhost:4001/auth/google/login",
       "GoogleLogin",
       `width=${width},height=${height},top=${top},left=${left}`
     );
+  };
 
+  useEffect(() => {
     const messageListener = (event) => {
       if (event.origin !== "http://localhost:4001") return;
-
       const { token, email } = event.data;
       if (token) {
         setToken(token);
         toast.success(`Logged in as ${email}`);
         navigate("/");
         window.removeEventListener("message", messageListener);
-        authWindow.close();
       }
     };
 
     window.addEventListener("message", messageListener);
-  };
+    return () => window.removeEventListener("message", messageListener);
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f8f3ef] px-4">
