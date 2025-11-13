@@ -2,7 +2,7 @@ import React from "react";
 
 const Policy = () => {
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-md text-[#3e2723]">
+    <div className="max-w-4xl mx-auto p-8 bg-[#f8f3ef]   shadow-md text-[#3e2723]">
       <h1 className="text-3xl font-bold mb-6 border-b border-[#a1887f] pb-3">
         Chính Sách Mua Hàng & Giao Nhận
       </h1>

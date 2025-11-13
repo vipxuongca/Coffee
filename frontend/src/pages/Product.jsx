@@ -75,7 +75,7 @@ const Product = () => {
                 src={item}
                 onClick={() => setImage(item)}
                 alt="Product thumbnail"
-                className={`cursor-pointer rounded-lg border-2 transition-all duration-200 ${
+                className={`cursor-pointer  border-2 transition-all duration-200 ${
                   image === item ? "border-amber-700" : "border-transparent"
                 } hover:opacity-80`}
               />
@@ -87,7 +87,7 @@ const Product = () => {
             <img
               src={image}
               alt={productData.name}
-              className="w-full max-h-[600px] object-contain rounded-2xl shadow-md transition-transform duration-300 hover:scale-105"
+              className="w-full max-h-[600px] object-contain  shadow-md transition-transform duration-300 hover:scale-105"
             />
           </div>
         </div>
@@ -132,7 +132,7 @@ const Product = () => {
             <strong className="text-sm text-gray-700 font-medium">
               SỐ LƯỢNG:
             </strong>
-            <div className="flex items-center border rounded-lg">
+            <div className="flex items-center border ">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 className="px-3 py-1 text-gray-700 hover:bg-gray-100"
@@ -144,7 +144,7 @@ const Product = () => {
                 min="1"
                 value={quantity}
                 onChange={(e) => handleQuantityChange(e)}
-                className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723] 
+                className="w-12 text-center border border-[#bcaaa4]   text-[#3e2723] 
              [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none 
              [&::-webkit-outer-spin-button]:appearance-none"
               />
@@ -163,7 +163,7 @@ const Product = () => {
           {/* Add to Cart */}
           <button
             onClick={handleAddToCart}
-            className="mt-8 w-fit bg-[#3e2723] text-white px-10 py-3 text-sm rounded-lg shadow hover:bg-gray-800 active:scale-95 transition-transform duration-100"
+            className="mt-8 w-fit bg-[#3e2723] text-white px-10 py-3 text-sm  shadow hover:bg-gray-800 active:scale-95 transition-transform duration-100"
           >
             THÊM VÀO GIỎ
           </button>

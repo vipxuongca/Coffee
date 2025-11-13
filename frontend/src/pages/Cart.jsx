@@ -65,7 +65,7 @@ const Cart = () => {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8]">
+    <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef]   shadow-inner border border-[#d7ccc8]">
       <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2 flex items-center gap-2">
         <ShoppingBag className="w-6 h-6 text-[#4e342e]" />
         Giỏ hàng
@@ -79,7 +79,7 @@ const Cart = () => {
             <div
               key={item.cartId}
               className="flex flex-col sm:flex-row sm:items-center sm:justify-between 
-  bg-[#fff8f0] border border-[#d7ccc8] shadow-sm rounded-xl p-4 
+  bg-[#fff8f0] border border-[#d7ccc8] shadow-sm py-2 p-4 
   hover:shadow-md transition space-y-3 sm:space-y-0"
             >
               {/* Image */}
@@ -90,7 +90,7 @@ const Cart = () => {
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-24 h-24 object-cover rounded-lg border border-[#bcaaa4]"
+                  className="w-24 h-24 object-cover  border border-[#bcaaa4]"
                 />
               </Link>
 
@@ -105,34 +105,35 @@ const Cart = () => {
                   </p>
                 </Link>
               </div>
-
-              {/* Quantity */}
-              <div className="flex items-center justify-center sm:justify-start space-x-3">
-                <button
-                  onClick={() => decreaseQty(item.cartId)}
-                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
-                >
-                  <Minus size={14} />
-                </button>
-                <input
-                  type="number"
-                  min="1"
-                  value={draftQty[item.cartId] ?? item.quantity}
-                  onChange={(e) =>
-                    handleDraftChange(item.cartId, e.target.value)
-                  }
-                  onBlur={() => handleBlur(item.cartId)}
-                  className="w-12 text-center border border-[#bcaaa4] rounded-md
+              <div>
+                {/* Quantity */}
+                <div className="flex items-center justify-center sm:justify-start space-x-3">
+                  <button
+                    onClick={() => decreaseQty(item.cartId)}
+                    className="bg-[#efebe9] border border-[#bcaaa4]  w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <input
+                    type="number"
+                    min="1"
+                    value={draftQty[item.cartId] ?? item.quantity}
+                    onChange={(e) =>
+                      handleDraftChange(item.cartId, e.target.value)
+                    }
+                    onBlur={() => handleBlur(item.cartId)}
+                    className="w-12 text-center border border-[#bcaaa4]  
       [appearance:textfield] 
       [&::-webkit-inner-spin-button]:appearance-none 
       [&::-webkit-outer-spin-button]:appearance-none"
-                />
-                <button
-                  onClick={() => increaseQty(item.cartId)}
-                  className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
-                >
-                  <Plus size={14} />
-                </button>
+                  />
+                  <button
+                    onClick={() => increaseQty(item.cartId)}
+                    className="bg-[#efebe9] border border-[#bcaaa4] w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
               </div>
 
               {/* Total + Delete */}
@@ -158,13 +159,13 @@ const Cart = () => {
             <div className="mt-4 space-x-3">
               <button
                 onClick={handleClearCart}
-                className="bg-[#6d4c41] text-white px-4 py-2 rounded-md hover:bg-[#5d4037]"
+                className="bg-[#6d4c41] text-white px-4 py-2   hover:bg-[#5d4037]"
               >
                 Xóa toàn bộ
               </button>
 
               <button
-                className="bg-[#3e2723] text-white px-4 py-2 rounded-md hover:bg-[#4e342e]"
+                className="bg-[#3e2723] text-white px-4 py-2   hover:bg-[#4e342e]"
                 onClick={() => navigate("/checkout")}
               >
                 Thanh toán

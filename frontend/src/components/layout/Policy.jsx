@@ -26,12 +26,12 @@ const Policy = () => {
   ];
 
   return (
-    <div className="bg-amber-50 py-16 px-6 sm:px-10 rounded-2xl shadow-inner my-10">
+    <div className="bg-amber-50 py-16 px-6 sm:px-10  shadow-inner my-10">
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-10 text-center text-gray-700">
         {policies.map((policy, index) => (
           <div
             key={index}
-            className="flex flex-col items-center bg-white rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-6"
+            className="flex flex-col items-center bg-white   shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-6"
           >
             <img
               src={policy.icon}

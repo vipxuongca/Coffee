@@ -69,7 +69,7 @@ const UserEditModal = ({
       onClick={() => setShowEditModal(false)}
     >
       <div
-        className="bg-[#f8f3ef] p-6 rounded-xl shadow-inner border border-[#d7ccc8] w-full max-w-md relative"
+        className="bg-[#f8f3ef] p-6   shadow-inner border border-[#d7ccc8] w-full max-w-md relative"
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-xl font-bold text-[#3e2723] mb-4 border-b border-[#a1887f] pb-2">
@@ -86,7 +86,7 @@ const UserEditModal = ({
               name="receiverName"
               value={newAddress.receiverName}
               onChange={handleChange}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
@@ -99,7 +99,7 @@ const UserEditModal = ({
               name="phone"
               value={newAddress.phone}
               onChange={handleChange}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
@@ -112,7 +112,7 @@ const UserEditModal = ({
               name="addressLine1"
               value={newAddress.addressLine1}
               onChange={handleChange}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
@@ -125,7 +125,7 @@ const UserEditModal = ({
               name="ward"
               value={newAddress.ward}
               onChange={handleChange}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
@@ -138,7 +138,7 @@ const UserEditModal = ({
               name="city"
               value={newAddress.city}
               onChange={handleChange}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
             />
           </div>
 
@@ -160,14 +160,14 @@ const UserEditModal = ({
           <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"
-              className="px-5 py-2 rounded-md bg-[#d7ccc8] hover:bg-[#bcaaa4] text-[#3e2723]"
+              className="px-5 py-2   bg-[#d7ccc8] hover:bg-[#bcaaa4] text-[#3e2723]"
               onClick={() => setShowEditModal(false)}
             >
               Hủy
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-md bg-[#3e2723] hover:bg-[#4e342e] text-white font-medium"
+              className="px-5 py-2   bg-[#3e2723] hover:bg-[#4e342e] text-white font-medium"
             >
               Lưu
             </button>

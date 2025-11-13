@@ -31,7 +31,7 @@ const Login = () => {
 
   return (
      <div className="min-h-screen flex items-center justify-center bg-[#f8f3ef] px-4">
-      <div className="bg-[#fff8f0] border border-[#d7ccc8] rounded-xl shadow-inner w-full max-w-md p-8">
+      <div className="bg-[#fff8f0] border border-[#d7ccc8]   shadow-inner w-full max-w-md p-8">
         <h1 className="text-2xl font-bold text-center text-[#3e2723] mb-6 border-b border-[#a1887f] pb-2">
           ĐĂNG NHẬP ADMIN
         </h1>
@@ -44,7 +44,7 @@ const Login = () => {
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
               type="email"
               placeholder="your@email.com"
               required
@@ -58,7 +58,7 @@ const Login = () => {
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
               type="password"
               placeholder="Nhập mật khẩu"
               required
@@ -66,7 +66,7 @@ const Login = () => {
           </div>
 
           <button
-            className="w-full py-2 rounded-md bg-[#3e2723] hover:bg-[#4e342e] text-white font-medium transition-all"
+            className="w-full py-2   bg-[#3e2723] hover:bg-[#4e342e] text-white font-medium transition-all"
             type="submit"
           >
             Đăng nhập

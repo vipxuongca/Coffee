@@ -65,7 +65,7 @@ const List = () => {
     <div className="p-4">
       <p className="mb-4 text-lg font-semibold">Danh Mục Sản Phẩm</p>
 
-      <div className="overflow-x-auto border rounded-lg shadow-sm">
+      <div className="overflow-x-auto border  shadow-sm">
         {/* Header */}
         <div className="grid grid-cols-[100px_2fr_1fr_1fr_1fr_150px] bg-gray-100 text-gray-800 font-semibold py-2 px-4 border-b">
           <span>Hình Ảnh</span>

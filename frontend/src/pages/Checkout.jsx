@@ -112,13 +112,13 @@ const Checkout = () => {
           <div className="flex gap-3 mt-4 lg:mt-0">
             <button
               onClick={() => navigate("/cart")}
-              className="bg-[#6d4c41] text-white px-5 py-2 rounded-md hover:bg-[#5d4037] transition"
+              className="bg-[#6d4c41] text-white px-5 py-2   hover:bg-[#5d4037] transition"
             >
               Quay lại giỏ hàng
             </button>
             <button
               onClick={handleOrderPlacement}
-              className="bg-[#3e2723] text-white px-5 py-2 rounded-md hover:bg-[#4e342e] flex items-center gap-2 transition"
+              className="bg-[#3e2723] text-white px-5 py-2   hover:bg-[#4e342e] flex items-center gap-2 transition"
             >
               <CreditCard size={16} />
               XÁC NHẬN ĐẶT HÀNG
@@ -150,7 +150,7 @@ const Checkout = () => {
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-16 h-16 object-cover rounded-md border border-[#d7ccc8]"
+                        className="w-16 h-16 object-cover   border border-[#d7ccc8]"
                       />
                       <div>
                         <h3 className="font-medium text-[#3e2723]">

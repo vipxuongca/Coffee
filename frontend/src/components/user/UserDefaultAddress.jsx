@@ -38,9 +38,9 @@ const UserDetailAddress = () => {
   }, [token, reloadAddress]);
 
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
+    <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef]   shadow-inner border border-[#d7ccc8] mt-10">
       {defaultAddress ? (
-        <div className="mb-6 bg-[#fff8f0] p-4 rounded-xl border border-[#d7ccc8] relative">
+        <div className="mb-6 bg-[#fff8f0] p-4   border border-[#d7ccc8] relative">
           <div className="flex items-center gap-2 text-[#4e342e] mb-2">
             <MapPin size={18} />
             <span className="font-semibold">Địa chỉ giao hàng</span>
@@ -60,11 +60,11 @@ const UserDetailAddress = () => {
           </button>
         </div>
       ) : (
-        <div className="text-center text-[#5d4037] py-6 bg-[#fff8f0] rounded-xl border border-[#d7ccc8]">
+        <div className="text-center text-[#5d4037] py-6 bg-[#fff8f0]   border border-[#d7ccc8]">
           <p>Bạn chưa có địa chỉ mặc định.</p>
           <button
             onClick={() => setShowDetailModal(true)}
-            className="mt-3 px-4 py-2 bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md text-sm"
+            className="mt-3 px-4 py-2 bg-[#3e2723] hover:bg-[#4e342e] text-white   text-sm"
           >
             Thêm địa chỉ
           </button>

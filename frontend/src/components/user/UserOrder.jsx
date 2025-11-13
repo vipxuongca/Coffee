@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../../context/ShopContext";
 import { useNavigate } from "react-router-dom";
 import { orderApi } from "../../../api/order-api";
+import { Eye } from "lucide-react";
 
 const UserOrders = () => {
   const { token, statusFilter, setStatusFilter } = useContext(ShopContext);
@@ -59,7 +60,7 @@ const UserOrders = () => {
   };
 
   return (
-    <div className="w-[100%] mx-auto p-8 rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
+    <div className="w-[100%] mx-auto p-8   shadow-inner border border-[#d7ccc8] mt-10">
       <h2 className="text-2xl font-semibold mb-6 text-[#3e2723]">
         Đơn hàng của bạn
       </h2>
@@ -72,7 +73,7 @@ const UserOrders = () => {
             <button
               key={status}
               onClick={() => toggleStatus(status)}
-              className={`px-3 py-1 text-xs rounded-md border transition
+              className={`px-3 py-1 text-xs   border transition
           ${
             active
               ? "bg-[#3e2723] text-white border-[#3e2723]"
@@ -85,7 +86,7 @@ const UserOrders = () => {
         })}
       </div>
 
-      <div className="overflow-x-auto rounded-xl">
+      <div className="overflow-x-auto  ">
         <table className="min-w-full text-sm border-collapse">
           <thead className="bg-gray-100 text-[#4e342e] uppercase text-xs border-b border-[#d7ccc8]">
             <tr>
@@ -126,11 +127,19 @@ const UserOrders = () => {
                 </td>
                 <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
+                    className={`px-2 py-1 text-xs font-semibold ${getStatusColor(
                       order.status
                     )}`}
                   >
-                    {order.status.replace("_", " ")}
+                    {order.status === "PENDING_PAYMENT"
+                      ? "CHỜ THANH TOÁN"
+                      : order.status === "PAID"
+                      ? "ĐÃ THANH TOÁN"
+                      : order.status === "CANCELLED"
+                      ? "ĐÃ HỦY"
+                      : order.status === "PROCESSING"
+                      ? "ĐANG XỬ LÝ"
+                      : order.status}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-[#5d4037]">
@@ -139,9 +148,9 @@ const UserOrders = () => {
                 <td className="px-4 py-3 text-right">
                   <button
                     onClick={() => navigate(`/orders/${order.orderId}`)}
-                    className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md transition"
+                    className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white transition"
                   >
-                    Xem chi tiết
+                    <Eye size={16} />
                   </button>
                 </td>
               </tr>

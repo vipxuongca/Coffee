@@ -41,7 +41,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f8f3ef] px-4">
-      <div className="bg-[#fff8f0] border border-[#d7ccc8] rounded-xl shadow-inner w-full max-w-md p-8">
+      <div className="bg-[#fff8f0] border border-[#d7ccc8]   shadow-inner w-full max-w-md p-8">
         <h1 className="text-3xl font-semibold mb-6 text-center text-[#4e342e] tracking-wide">
           ĐĂNG KÝ TÀI KHOẢN
         </h1>
@@ -54,7 +54,7 @@ const Register = () => {
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
               type="email"
               placeholder="your@email.com"
               required
@@ -68,7 +68,7 @@ const Register = () => {
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
               type="password"
               placeholder="Nhập mật khẩu"
               required
@@ -83,7 +83,7 @@ const Register = () => {
             <input
               onChange={(e) => setPassword2(e.target.value)}
               value={password2}
-              className="w-full border border-[#a1887f] rounded-lg p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
+              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
               type="password"
               placeholder="Nhập lại mật khẩu"
               required
@@ -91,7 +91,7 @@ const Register = () => {
           </div>
 
           <button
-            className="w-full py-2 rounded-md text-white bg-[#6d4c41] hover:bg-[#5d4037] transition-all shadow-md"
+            className="w-full py-2   text-white bg-[#6d4c41] hover:bg-[#5d4037] transition-all shadow-md"
             type="submit"
           >
             Đăng ký
@@ -100,7 +100,7 @@ const Register = () => {
           <button
             type="button"
             onClick={() => navigate("/login")}
-            className="w-full py-2 rounded-md border border-[#d7ccc8] text-[#4e342e] hover:bg-[#efebe9] transition-all"
+            className="w-full py-2   border border-[#d7ccc8] text-[#4e342e] hover:bg-[#efebe9] transition-all"
           >
             Quay lại Đăng nhập
           </button>

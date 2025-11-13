@@ -38,7 +38,7 @@ const OrderDetail = () => {
         </p>
         <button
           onClick={() => navigate("/orders")}
-          className="mt-4 px-4 py-2 bg-[#6d4c41] text-white rounded-md hover:bg-[#5d4037]"
+          className="mt-4 px-4 py-2 bg-[#6d4c41] text-white   hover:bg-[#5d4037]"
         >
           Quay lại
         </button>
@@ -50,7 +50,7 @@ const OrderDetail = () => {
     v.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 
   const Section = ({ title, children }) => (
-    <div className="mb-6 bg-[#fff8f0] border border-[#d7ccc8] rounded-xl p-4 shadow-sm">
+    <div className="mb-6 bg-[#fff8f0] border border-[#d7ccc8]   p-4 shadow-sm">
       <h3 className="text-lg font-semibold text-[#4e342e] border-b border-[#d7ccc8] pb-2 mb-3">
         {title}
       </h3>
@@ -143,14 +143,14 @@ const OrderDetail = () => {
   );
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-inner p-6">
+    <div className="max-w-5xl mx-auto mt-10 bg-[#f8f3ef] border border-[#d7ccc8]   shadow-inner p-6">
       {/* Header */}
       <div className="flex justify-between items-center border-b border-[#d7ccc8] pb-3 mb-6">
         <h2 className="text-2xl font-bold text-[#3e2723]">
           Chi tiết đơn hàng #{order.orderId}
         </h2>
         <span
-          className={`px-3 py-1 text-sm font-semibold rounded-md ${
+          className={`px-3 py-1 text-sm font-semibold   ${
             order.status === "PENDING_PAYMENT"
               ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
               : order.status === "PAID"
@@ -203,7 +203,7 @@ const OrderDetail = () => {
       </Section>
 
       <Section title="Sản phẩm trong đơn hàng">
-        <div className="overflow-x-auto rounded-xl">
+        <div className="overflow-x-auto  ">
           <table className="min-w-full text-sm border-collapse">
             <thead className="bg-[#fff8f0] text-[#4e342e] uppercase text-xs border-b border-[#d7ccc8]">
               <tr>
@@ -233,7 +233,7 @@ const OrderDetail = () => {
                       <img
                         src={item.image[0]}
                         alt={item.name}
-                        className="w-16 h-16 object-cover rounded-md border border-[#d7ccc8] mx-auto"
+                        className="w-16 h-16 object-cover   border border-[#d7ccc8] mx-auto"
                       />
                     )}
                   </td>
@@ -252,7 +252,7 @@ const OrderDetail = () => {
                   {/* <td className="px-4 py-3 text-right">
                     <Link
                       to={`/product/${item.productId}`}
-                      className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md transition"
+                      className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white   transition"
                     >
                       Xem sản phẩm
                     </Link>
@@ -292,7 +292,7 @@ const OrderDetail = () => {
       <div className="flex justify-between items-center mt-8">
         <button
           onClick={() => navigate("/orders")}
-          className="bg-[#6d4c41] text-white px-5 py-2 rounded-md hover:bg-[#5d4037]"
+          className="bg-[#6d4c41] text-white px-5 py-2   hover:bg-[#5d4037]"
         >
           Quay lại danh sách
         </button>
@@ -301,7 +301,7 @@ const OrderDetail = () => {
           <button
             onClick={handleConfirmPayment}
             disabled={processing}
-            className={`px-5 py-2 rounded-md border transition-all font-medium shadow-sm 
+            className={`px-5 py-2   border transition-all font-medium shadow-sm 
       ${
         processing
           ? "bg-gray-200 text-gray-500 cursor-not-allowed border-gray-300"
@@ -316,7 +316,7 @@ const OrderDetail = () => {
           <button
             onClick={handleCancelOrder}
             disabled={processing}
-            className={`px-5 py-2 rounded-md border transition-all font-medium shadow-sm 
+            className={`px-5 py-2   border transition-all font-medium shadow-sm 
       ${
         processing
           ? "bg-gray-200 text-gray-500 cursor-not-allowed border-gray-300"

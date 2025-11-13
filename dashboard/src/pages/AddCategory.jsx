@@ -46,7 +46,7 @@ const AddCategory = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-2xl mx-auto">
+    <div className="bg-white p-6   shadow-md w-full max-w-2xl mx-auto">
       <h1 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">
         Thêm Phân Loại
       </h1>
@@ -65,7 +65,7 @@ const AddCategory = () => {
           </p>
           <label
             htmlFor="image1"
-            className="inline-block cursor-pointer border rounded-lg overflow-hidden hover:opacity-80 transition"
+            className="inline-block cursor-pointer border  overflow-hidden hover:opacity-80 transition"
           >
             <img
               className="w-24 h-24 object-cover"
@@ -98,7 +98,7 @@ const AddCategory = () => {
           <input
             onChange={(e) => setName(e.target.value)}
             value={name}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
+            className="w-full border border-gray-300  px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
             type="text"
             placeholder="Nhập tên phân loại"
             required
@@ -116,7 +116,7 @@ const AddCategory = () => {
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
+            className="w-full border border-gray-300  px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
             rows="3"
             placeholder="Nhập mô tả phân loại"
             required
@@ -126,7 +126,7 @@ const AddCategory = () => {
         {/* Submit */}
         <button
           type="submit"
-          className="w-40 py-2.5 bg-[#3e2723] text-white rounded-lg hover:bg-[#4e342e] transition-colors"
+          className="w-40 py-2.5 bg-[#3e2723] text-white  hover:bg-[#4e342e] transition-colors"
         >
           Thêm Phân Loại
         </button>

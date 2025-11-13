@@ -9,7 +9,7 @@ import { userApi } from "../../api/user-api";
 
 const UserDashboard = () => {
   const baseLinkStyle =
-    "flex items-center gap-3 px-4 py-2 rounded-lg border border-[#d7ccc8] bg-[#fffaf7] text-[#3e2723] font-medium transition-all duration-300 hover:bg-[#f3e5ab] hover:shadow-md";
+    "flex items-center gap-3 px-4 py-2  border border-[#d7ccc8] bg-[#fffaf7] text-[#3e2723] font-medium transition-all duration-300 hover:bg-[#f3e5ab] hover:shadow-md";
   const activeLinkStyle =
     "bg-[#d7ccc8] text-[#3e2723] shadow-inner border-[#a1887f]";
 

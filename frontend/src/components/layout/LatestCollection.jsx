@@ -37,14 +37,14 @@ const LatestCollection = () => {
       {/* Scroll Buttons */}
       <button
         onClick={() => scroll("left")}
-        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2 rounded-full z-10 hover:bg-gray-100"
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2  z-10 hover:bg-gray-100"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
 
       <button
         onClick={() => scroll("right")}
-        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2 rounded-full z-10 hover:bg-gray-100"
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2  z-10 hover:bg-gray-100"
       >
         <ChevronRight className="w-5 h-5" />
       </button>

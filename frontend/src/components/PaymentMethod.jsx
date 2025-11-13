@@ -10,7 +10,7 @@ const methods = [
 
 const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl border mt-10">
+    <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef]   border mt-10">
       <label className="block text-[#4e342e] font-semibold mb-4">
         Phương thức thanh toán
       </label>
@@ -20,7 +20,7 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
           <button
             key={m.value}
             onClick={() => setPaymentMethod(m.value)}
-            className={`px-4 py-2 text-sm rounded-lg border transition ${
+            className={`px-4 py-2 text-sm  border transition ${
               paymentMethod === m.value
                 ? "bg-[#4e342e] text-white border-[#4e342e]"
                 : "bg-white text-[#4e342e] border-[#a1887f]"
@@ -32,7 +32,7 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
       </div>
 
       {/* Tab Content */}
-      <div className="p-4 border rounded-lg bg-white text-[#4e342e]">
+      <div className="p-4 border  bg-white text-[#4e342e]">
         {paymentMethod === "COD" && <p>Thanh toán khi nhận hàng. </p>}
 
         {paymentMethod === "CARD" && (
