@@ -3,12 +3,14 @@ import { assets } from "../../assets/assets";
 import { NavLink, Link } from "react-router-dom";
 import { ShopContext } from "../../context/ShopContext";
 import { CartContext } from "../../context/CartContext";
+import { UserContext } from "../../context/UserContext";
 import { FiShoppingCart, FiUser } from "react-icons/fi";
 
 const Navbar = () => {
   const baseClass = "flex flex-col items-center gap-1 group";
   const [visible, setVisible] = useState(false);
   const { token } = useContext(ShopContext);
+  const { user } = useContext(UserContext);
   const { cartCountTotal } = useContext(CartContext);
 
   return (
@@ -48,18 +50,26 @@ const Navbar = () => {
       </div>
 
       {/* LOG IN */}
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col items-end gap-2 w-40">
+        {" "}
+        {/* fixed width for container */}
         {/* Profile top-right */}
         <Link to={!token ? "/login" : "/user"}>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-full border">
-            <span>{!token ? "Đăng nhập" : "Xin chào"}</span>
-            <FiUser className="w-5 h-5" />
+          <button className="flex items-center gap-2 px-4 py-2 rounded-full border w-full overflow-hidden">
+            <span className="truncate">
+              {!token
+                ? "Đăng nhập"
+                : `Xin chào, ${
+                    user?.name || user?.email?.split("@")[0] || "user"
+                  }`}
+            </span>
+            <FiUser className="w-6 h-6 flex-shrink-0" />
           </button>
         </Link>
-
         {/* CART */}
-        <Link to={!token ? "/login" : "/cart"} className="relative">
-          <button className="relative flex items-center justify-center p-2 rounded-full border">
+        <Link to={!token ? "/login" : "/cart"}>
+          <button className="relative flex items-center justify-center gap-2 p-2 px-4 rounded-full border w-full">
+            <span>Giỏ hàng</span>
             <FiShoppingCart className="w-6 h-6" />
             {token && cartCountTotal > 0 && (
               <span className="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center bg-amber-600 text-white text-[10px] rounded-full font-semibold">
@@ -68,7 +78,6 @@ const Navbar = () => {
             )}
           </button>
         </Link>
-
         {/* Mobile Menu */}
         <button
           onClick={() => setVisible(true)}

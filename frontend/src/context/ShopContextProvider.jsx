@@ -1,17 +1,13 @@
 import { ShopContext } from "./ShopContext";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { ClipLoader } from "react-spinners";
+import { categoryApi, productApi } from "../../api/product-api";
 
 const ShopContextProvider = (props) => {
   const currency = "₫";
   const delivery_fee = 30000;
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const backendCartUrl = import.meta.env.VITE_BACKEND_CART_URL;
-  const backendOrderUrl = import.meta.env.VITE_BACKEND_ORDER_URL;
-  const backendUserUrl = import.meta.env.VITE_BACKEND_USER_URL;
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -47,7 +43,7 @@ const ShopContextProvider = (props) => {
 
   const getProductsData = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/product/get`);
+      const response = await productApi.getProduct();
       if (response.data.success) {
         setProducts(response.data.products);
       } else {
@@ -60,9 +56,7 @@ const ShopContextProvider = (props) => {
   };
   const getCategoriesData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:4000/api/category/get`
-      );
+      const response = await categoryApi.getCategory();
       if (response.data.success) {
         setCategories(response.data.category);
       } else {
@@ -88,10 +82,6 @@ const ShopContextProvider = (props) => {
     delivery_fee,
     search,
     setSearch,
-    backendUrl,
-    backendCartUrl,
-    backendOrderUrl,
-    backendUserUrl,
     token,
     setToken,
     setLoading,
