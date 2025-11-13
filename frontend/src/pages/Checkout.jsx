@@ -103,7 +103,7 @@ const Checkout = () => {
       <div className="max-w-7xl mx-auto">
         {/* PAGE TITLE */}
         {/* PAGE TITLE + ACTION BUTTONS */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-10 border-b border-[#d7ccc8] pb-4">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between border-b border-[#d7ccc8] pb-4">
           <h1 className="text-3xl font-semibold text-[#3e2723] flex items-center gap-3">
             <PackageCheck className="w-7 h-7 text-[#4e342e]" />
             Xác nhận đơn hàng
@@ -112,13 +112,13 @@ const Checkout = () => {
           <div className="flex gap-3 mt-4 lg:mt-0">
             <button
               onClick={() => navigate("/cart")}
-              className="bg-[#6d4c41] text-white px-5 py-2   hover:bg-[#5d4037] transition"
+              className="bg-white text-black px-5 py-2 hover:bg-[#d1d1d1] transition border-[1px] border-[#e0d6d2]"
             >
               Quay lại giỏ hàng
             </button>
             <button
               onClick={handleOrderPlacement}
-              className="bg-[#3e2723] text-white px-5 py-2   hover:bg-[#4e342e] flex items-center gap-2 transition"
+              className="bg-[#009e37] text-white px-5 py-2 hover:bg-[#038731] flex items-center gap-2 transition border-[1px] border-[#e0d6d2]"
             >
               <CreditCard size={16} />
               XÁC NHẬN ĐẶT HÀNG
@@ -131,14 +131,14 @@ const Checkout = () => {
           {/* LEFT SIDE: Address + Cart */}
           <div className="lg:col-span-1 space-y-4">
             {/* ADDRESS SECTION */}
-            <div className="bg-white shadow-sm border border-[#e0d6d2] p-6">
+           
               <UserDefaultAddress />
-            </div>
+      
 
             {/* CART SECTION */}
-            <div className="bg-white   shadow-sm border border-[#e0d6d2] p-6">
+            <div className="bg-white shadow-sm border border-[1px] border-[#e0d6d2] p-6">
               <h2 className="text-lg font-semibold text-[#4e342e] mb-4">
-                Sản phẩm trong đơn hàng
+                Sản phẩm
               </h2>
               <div className="space-y-4">
                 {cartItems.map((item) => (
@@ -181,16 +181,12 @@ const Checkout = () => {
 
           {/* RIGHT SIDE: Payment + Action */}
           <div className="lg:col-span-1">
-            <div className="bg-white   shadow-sm border border-[#e0d6d2] p-6 sticky top-10">
-              <h2 className="text-lg font-semibold text-[#4e342e] mb-4">
-                Phương thức thanh toán
-              </h2>
-
+           
               <PaymentMethod
                 paymentMethod={paymentMethod}
                 setPaymentMethod={setPaymentMethod}
               />
-            </div>
+    
           </div>
         </div>
       </div>
