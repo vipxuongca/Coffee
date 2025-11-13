@@ -1,4 +1,3 @@
-import React from "react";
 import Hero from "../components/layout/Hero";
 import LatestCollection from "../components/layout/LatestCollection";
 import BestSeller from "../components/layout/BestSeller";
@@ -10,11 +9,9 @@ const Home = () => {
     <div>
       <Hero />
       <LatestCollection />
-      <BestSeller></BestSeller>
-      <Policy></Policy>
-      <News></News>
-      
-
+      <BestSeller />
+      <Policy />
+      <News />
     </div>
   );
 };
