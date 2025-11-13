@@ -15,6 +15,7 @@ const BestSeller = () => {
 
   return (
     <div className="my-10">
+      {/* Header */}
       <div className="text-center text-3xl py-8">
         <Title text1="BÁN CHẠY " text2="NHẤT" />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
@@ -24,20 +25,19 @@ const BestSeller = () => {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 my-6">
+      <div
+        className="grid gap-3 sm:gap-4 place-items-center justify-center my-6
+                   grid-cols-[repeat(auto-fit,minmax(18rem,max-content))]
+                   rounded-none"
+      >
         {bestSeller.map((item) => (
-          <div
+          <Link
             key={item._id}
-            className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group"
+            to={`/product/${item._id}`}
+            className="flex justify-center rounded-none"
           >
-            <Link
-              key={item._id}
-              to={`/product/${item._id}`}
-              className="flex justify-center"
-            >
-              <ProductCard product={item} />
-            </Link>
-          </div>
+            <ProductCard product={item} />
+          </Link>
         ))}
       </div>
     </div>

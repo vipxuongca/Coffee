@@ -168,12 +168,16 @@ const Collection = () => {
           </div>
 
           {/* Product Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filterProducts.map((item, index) => (
+          <div
+            className="grid justify-center gap-3 sm:gap-4 
+             grid-cols-[repeat(auto-fit,minmax(18rem,max-content))] 
+             place-items-center rounded-none"
+          >
+            {filterProducts.map((item) => (
               <a
-                key={index}
+                key={item._id}
                 href={`/product/${item._id}`}
-                className="group block border border-gray-200 rounded-none shadow-md bg-white overflow-hidden transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+                className="group flex justify-center"
               >
                 <ProductCard product={item} />
               </a>
