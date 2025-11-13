@@ -13,3 +13,4 @@ export { default as NotFound } from "./NotFound.jsx";
 export { default as Policy } from "./Policy.jsx";
 export { default as Checkout } from "./Checkout.jsx";
 export { default as Stripe } from "./Stripe.jsx";
+export { default as Privacy } from "./Privacy.jsx";
