@@ -101,9 +101,9 @@ const OrderDetail = () => {
   );
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-inner p-6">
+    <div className="max-w-5xl mx-auto mt-6 bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-inner p-4 sm:p-6">
       {/* Header */}
-      <div className="flex justify-between items-center border-b border-[#d7ccc8] pb-3 mb-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 border-b border-[#d7ccc8] pb-3 mb-6">
         <h2 className="text-2xl font-bold text-[#3e2723]">
           Chi tiết đơn hàng #{order.orderId}
         </h2>
@@ -126,7 +126,7 @@ const OrderDetail = () => {
 
       {/* Sections */}
       <Section title="Thông tin chung">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-y-2 text-[#3e2723] text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-2 text-[#3e2723] text-sm">
           <p>
             <strong>Mã đơn:</strong> {order.orderId}
           </p>
@@ -143,7 +143,7 @@ const OrderDetail = () => {
       </Section>
 
       <Section title="Thông tin giao hàng">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-y-2 text-[#3e2723] text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-2 text-[#3e2723] text-sm">
           <p>
             <strong>Người nhận:</strong> {order.userDetail?.receiverName || "—"}
           </p>
@@ -162,7 +162,7 @@ const OrderDetail = () => {
 
       <Section title="Sản phẩm trong đơn hàng">
         <div className="overflow-x-auto rounded-xl">
-          <table className="min-w-full text-sm border-collapse">
+          <table className="min-w-[600px] text-sm border-collapse">
             <thead className="bg-[#fff8f0] text-[#4e342e] uppercase text-xs border-b border-[#d7ccc8]">
               <tr>
                 <th className="px-4 py-3 text-left">#</th>
@@ -247,7 +247,7 @@ const OrderDetail = () => {
       </Section>
 
       {/* Action buttons */}
-      <div className="flex justify-between items-center mt-8">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mt-8">
         <button
           onClick={() => navigate("/user/orders")}
           className="bg-[#6d4c41] text-white px-5 py-2 rounded-md hover:bg-[#5d4037]"
