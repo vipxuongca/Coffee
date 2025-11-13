@@ -56,6 +56,15 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
             </p>
 
             <div className="border p-4 rounded bg-gray-50 space-y-1">
+                          <div className="pt-4 flex flex-col items-center">
+              <div className="w-48 h-48 bg-gray-200 flex items-center justify-center">
+                <img
+                  src={assets.qr}
+                  alt="QR"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </div>
               <p>
                 <span className="font-semibold">Ngân hàng:</span> Vietcombank
               </p>
@@ -77,16 +86,7 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
               Thanh toán đơn hàng
             </p>
 
-            <div className="pt-4 flex flex-col items-center">
-              <p className="font-semibold mb-2">Mã QR thanh toán:</p>
-              <div className="w-48 h-48 bg-gray-200 flex items-center justify-center">
-                <img
-                  src={assets.qr}
-                  alt="QR"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            </div>
+
 
             <p className="text-sm text-gray-600">
               Lưu ý: Đơn hàng sẽ được xác nhận sau khi bộ phận kế toán kiểm tra

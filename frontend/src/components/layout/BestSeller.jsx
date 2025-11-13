@@ -30,7 +30,8 @@ const BestSeller = () => {
       <div className="text-center text-3xl py-8">
         <Title text1="BÁN CHẠY " text2="NHẤT" />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
-          Thử để cảm nhận sự khác biệt — những hạt cà phê được yêu thích nhất tại Velvet Roast.
+          Thử để cảm nhận sự khác biệt — những hạt cà phê được yêu thích nhất
+          tại Velvet Roast.
         </p>
       </div>
 
@@ -58,9 +59,9 @@ const BestSeller = () => {
           <Link
             key={item._id}
             to={`/product/${item._id}`}
-            className="snap-start flex-shrink-0 w-[10rem] sm:w-[12rem] md:w-[14rem]"
+            className="snap-start flex-shrink-0"
           >
-            <div className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer">
+            <div className="w-fit bg-white border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer">
               <ProductCard product={item} />
             </div>
           </Link>

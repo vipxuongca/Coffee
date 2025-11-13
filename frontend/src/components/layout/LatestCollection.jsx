@@ -29,7 +29,8 @@ const LatestCollection = () => {
       <div className="text-center py-8 text-3xl">
         <Title text1="SẢN PHẨM " text2="MỚI NHẤT" />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
-          Cà phê ngon nhất thế giới — rang xay thủ công, hương vị đậm đà và tinh tế.
+          Cà phê ngon nhất thế giới — rang xay thủ công, hương vị đậm đà và tinh
+          tế.
         </p>
       </div>
 
@@ -57,9 +58,9 @@ const LatestCollection = () => {
           <Link
             key={item._id}
             to={`/product/${item._id}`}
-            className="snap-start flex-shrink-0 w-[10rem] sm:w-[12rem] md:w-[14rem]"
+            className="snap-start flex-shrink-0"
           >
-            <div className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer">
+            <div className="w-fit bg-white border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer">
               <ProductCard product={item} />
             </div>
           </Link>

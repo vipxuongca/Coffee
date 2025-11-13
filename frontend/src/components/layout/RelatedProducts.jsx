@@ -62,7 +62,7 @@ const RelatedProducts = ({ category }) => {
             to={`/product/${item._id}`}
             className="snap-start flex-shrink-0 w-[10rem] sm:w-[12rem] md:w-[14rem]"
           >
-            <div className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer">
+            <div className="bg-white border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer">
               <ProductCard product={item} />
             </div>
           </Link>

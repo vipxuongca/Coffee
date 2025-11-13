@@ -101,7 +101,7 @@ const Collection = () => {
   }, [category, subCategory, search, products, minPrice, maxPrice]);
 
   return (
-    <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
+    <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 pt-10 border-t">
       {/* Filtering */}
       <div className="min-w-60 max-w-60">
         <div
@@ -152,38 +152,33 @@ const Collection = () => {
 
       {/* Cards */}
       <div className="flex-1">
-        {/* Product Grid */}
-        <div className="flex-1">
-          {/* Header */}
-          <div className="flex justify-between items-center text-base sm:text-2xl mb-6">
-            <Title text1="TẤT CẢ " text2="SẢN PHẨM" />
-            <select
-              className="border border-gray-300 rounded-md text-sm px-3 py-2 bg-white shadow-sm hover:border-gray-400 focus:outline-none"
-              onChange={(e) => setSortType(e.target.value)}
-            >
-              <option value="relevant">Tất cả</option>
-              <option value="low-high">Giá: Thấp - Cao</option>
-              <option value="high-low">Giá: Cao - Thấp</option>
-            </select>
-          </div>
-
-          {/* Product Grid */}
-          <div
-            className="grid justify-center gap-3 sm:gap-4 
-  grid-cols-[repeat(auto-fit,minmax(12rem,max-content))] 
-  sm:grid-cols-[repeat(auto-fit,minmax(18rem,max-content))] 
-  place-items-center rounded-none"
+        {/* Header */}
+        <div className="flex justify-between items-center text-base sm:text-2xl mb-4">
+          <Title text1="TẤT CẢ " text2="SẢN PHẨM" />
+          <select
+            className="border border-gray-300 text-sm px-3 py-2 bg-white shadow-sm hover:border-gray-400 focus:outline-none"
+            onChange={(e) => setSortType(e.target.value)}
           >
-            {filterProducts.map((item) => (
-              <a
-                key={item._id}
-                href={`/product/${item._id}`}
-                className="group flex justify-center scale-90 sm:scale-100"
-              >
-                <ProductCard product={item} />
-              </a>
-            ))}
-          </div>
+            <option value="relevant">Tất cả</option>
+            <option value="low-high">Giá: Thấp - Cao</option>
+            <option value="high-low">Giá: Cao - Thấp</option>
+          </select>
+        </div>
+
+        {/* Product Grid */}
+        <div
+          className="grid gap-2 sm:gap-5 
+  grid-cols-[repeat(auto-fit,minmax(12rem,max-content))] justify-center"
+        >
+          {filterProducts.map((item) => (
+            <a
+              key={item._id}
+              href={`/product/${item._id}`}
+              className="group flex justify-center"
+            >
+              <ProductCard product={item} />
+            </a>
+          ))}
         </div>
       </div>
     </div>

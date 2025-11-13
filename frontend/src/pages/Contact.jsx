@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import emailjs from "emailjs-com";
 
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -10,9 +11,30 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted:", form);
-    alert("Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.");
-    setForm({ name: "", email: "", message: "" });
+
+    emailjs
+      .send(
+        "YOUR_SERVICE_ID",
+        "YOUR_TEMPLATE_ID",
+        {
+          from_name: form.name,
+          from_email: form.email,
+          message: form.message,
+        },
+        "YOUR_PUBLIC_KEY"
+      )
+      .then(
+        () => {
+          alert(
+            "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể."
+          );
+          setForm({ name: "", email: "", message: "" });
+        },
+        (error) => {
+          alert("Gửi thất bại. Vui lòng thử lại sau.");
+          console.error(error);
+        }
+      );
   };
 
   return (
@@ -21,8 +43,8 @@ const Contact = () => {
         Liên hệ với <span className="text-yellow-700">Velvet Roast</span>
       </h1>
       <p className="mb-6 text-center text-gray-600">
-        Chúng tôi luôn sẵn lòng lắng nghe mọi ý kiến, phản hồi và câu hỏi từ bạn.
-        Hãy gửi tin nhắn cho Velvet Roast thông qua biểu mẫu bên dưới.
+        Chúng tôi luôn sẵn lòng lắng nghe mọi ý kiến, phản hồi và câu hỏi từ
+        bạn. Hãy gửi tin nhắn cho Velvet Roast thông qua biểu mẫu bên dưới.
       </p>
 
       <div className="bg-white shadow rounded-lg p-6 space-y-6">
@@ -80,7 +102,7 @@ const Contact = () => {
 
         <div className="border-t pt-6 text-sm text-gray-700 space-y-2">
           <p>
-            <strong>Địa chỉ:</strong> 87 Trần Hưng Đạo - Hoàn Kiếm - Hà Nội
+            <strong>Địa chỉ:</strong> 48 Trần Hưng Đạo - Hoàn Kiếm - Hà Nội
           </p>
           <p>
             <strong>Email:</strong>{" "}
@@ -93,7 +115,10 @@ const Contact = () => {
           </p>
           <p>
             <strong>Điện thoại:</strong>{" "}
-            <a href="tel:+842812345678" className="text-blue-600 hover:underline">
+            <a
+              href="tel:+842812345678"
+              className="text-blue-600 hover:underline"
+            >
               +84 28 1234 5678
             </a>
           </p>
