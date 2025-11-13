@@ -23,7 +23,7 @@ const Navbar = () => {
         <img
           src={assets.company}
           alt="Company Name"
-          className="hidden sm:block md:h-12 mb-3 object-contain"
+          className="hidden sm:block md:h-16 mb-3 object-contain"
         />
 
         <ul className="hidden sm:flex gap-6 text-base">
