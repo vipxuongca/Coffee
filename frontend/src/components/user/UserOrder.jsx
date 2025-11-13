@@ -59,7 +59,7 @@ const UserOrders = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8  rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
+    <div className="w-[100%] mx-auto p-8 rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
       <h2 className="text-2xl font-semibold mb-6 text-[#3e2723]">
         Đơn hàng của bạn
       </h2>
