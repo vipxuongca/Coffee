@@ -31,7 +31,12 @@ export const userApi = {
 
   single() {
     return apiAuth.get(`${BASE}/single`);
+  },
+
+  changePassword(data) {
+    return apiAuth.put(`${BASE}/change-password`, data);
   }
+
 };
 
 export const userDetailApi = {
