@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../../context/AdminContext";
 import { useNavigate } from "react-router-dom";
 import { orderApi } from "../../api/order-api";
+import { Eye } from "lucide-react";
 
 const Orders = () => {
   const { token, statusFilter, setStatusFilter } = useContext(AdminContext);
@@ -39,6 +40,15 @@ const Orders = () => {
       minute: "2-digit",
     });
 
+  const statusNamesVN = {
+    PAID: "ĐÃ THANH TOÁN",
+    PENDING_PAYMENT: "CHỜ THANH TOÁN",
+    CANCELLED: "ĐÃ HỦY",
+    PROCESSING: "ĐANG XỬ LÝ",
+    FAILED: "THẤT BẠI",
+    REFUNDED: "ĐÃ HOÀN TIỀN",
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case "PAID":
@@ -71,14 +81,14 @@ const Orders = () => {
             <button
               key={status}
               onClick={() => toggleStatus(status)}
-              className={`px-3 py-1 text-xs   border transition
+              className={`px-3 py-1 text-xs border transition
           ${
             active
               ? "bg-[#3e2723] text-white border-[#3e2723]"
               : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
           }`}
             >
-              {status.replace("_", " ")}
+              {statusNamesVN[status] || status.replace("_", " ")}
             </button>
           );
         })}
@@ -126,11 +136,19 @@ const Orders = () => {
                 </td>
                 <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-1 text-xs font-semibold  ${getStatusColor(
+                    className={`px-2 py-1 text-xs font-semibold ${getStatusColor(
                       order.status
                     )}`}
                   >
-                    {order.status.replace("_", " ")}
+                    {order.status === "PENDING_PAYMENT"
+                      ? "CHỜ THANH TOÁN"
+                      : order.status === "PAID"
+                      ? "ĐÃ THANH TOÁN"
+                      : order.status === "CANCELLED"
+                      ? "ĐÃ HỦY"
+                      : order.status === "PROCESSING"
+                      ? "ĐANG XỬ LÝ"
+                      : order.status}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-gray-600">
@@ -141,7 +159,7 @@ const Orders = () => {
                     onClick={() => navigate(`/orders/${order.orderId}`)}
                     className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white   transition"
                   >
-                    Xem chi tiết
+                    <Eye size={16} />
                   </button>
                 </td>
               </tr>

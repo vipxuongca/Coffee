@@ -11,6 +11,17 @@ textarea {
   border-radius: 4px;
 }
 
+@font-face {
+  font-family: 'MyFont';
+  src: url('./assets/MyFont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: 'MyFont', sans-serif !important;
+}
+
 
 @keyframes loading-bar {
   0% { width: 0%; }
