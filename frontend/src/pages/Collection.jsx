@@ -170,14 +170,15 @@ const Collection = () => {
           {/* Product Grid */}
           <div
             className="grid justify-center gap-3 sm:gap-4 
-             grid-cols-[repeat(auto-fit,minmax(18rem,max-content))] 
-             place-items-center rounded-none"
+  grid-cols-[repeat(auto-fit,minmax(12rem,max-content))] 
+  sm:grid-cols-[repeat(auto-fit,minmax(18rem,max-content))] 
+  place-items-center rounded-none"
           >
             {filterProducts.map((item) => (
               <a
                 key={item._id}
                 href={`/product/${item._id}`}
-                className="group flex justify-center"
+                className="group flex justify-center scale-90 sm:scale-100"
               >
                 <ProductCard product={item} />
               </a>

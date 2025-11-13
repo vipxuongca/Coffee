@@ -78,26 +78,36 @@ const Cart = () => {
           {cartItems.map((item) => (
             <div
               key={item.cartId}
-              className="flex items-center justify-between bg-[#fff8f0] border border-[#d7ccc8] shadow-sm rounded-xl p-4 hover:shadow-md transition"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between 
+  bg-[#fff8f0] border border-[#d7ccc8] shadow-sm rounded-xl p-4 
+  hover:shadow-md transition space-y-3 sm:space-y-0"
             >
-              <Link to={`/product/${item.productId}`}>
+              {/* Image */}
+              <Link
+                to={`/product/${item.productId}`}
+                className="flex justify-center sm:block"
+              >
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-20 h-20 object-cover rounded-lg border border-[#bcaaa4]"
+                  className="w-24 h-24 object-cover rounded-lg border border-[#bcaaa4]"
                 />
               </Link>
 
-              <div className="flex-1 ml-4">
+              {/* Info */}
+              <div className="flex-1 sm:ml-4 text-center sm:text-left">
                 <Link to={`/product/${item.productId}`}>
-                  <h2 className="font-semibold text-[#4e342e]">{item.name}</h2>
+                  <h2 className="font-semibold text-[#4e342e] text-base">
+                    {item.name}
+                  </h2>
                   <p className="text-sm text-[#6d4c41]">
                     {item.price.toLocaleString()}₫
                   </p>
                 </Link>
               </div>
 
-              <div className="flex items-center space-x-3">
+              {/* Quantity */}
+              <div className="flex items-center justify-center sm:justify-start space-x-3">
                 <button
                   onClick={() => decreaseQty(item.cartId)}
                   className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
@@ -113,11 +123,10 @@ const Cart = () => {
                   }
                   onBlur={() => handleBlur(item.cartId)}
                   className="w-12 text-center border border-[#bcaaa4] rounded-md
-    [appearance:textfield] 
-    [&::-webkit-inner-spin-button]:appearance-none 
-    [&::-webkit-outer-spin-button]:appearance-none"
+      [appearance:textfield] 
+      [&::-webkit-inner-spin-button]:appearance-none 
+      [&::-webkit-outer-spin-button]:appearance-none"
                 />
-
                 <button
                   onClick={() => increaseQty(item.cartId)}
                   className="bg-[#efebe9] border border-[#bcaaa4] rounded-full w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
@@ -126,8 +135,9 @@ const Cart = () => {
                 </button>
               </div>
 
-              <div className="flex items-center space-x-4 ml-6">
-                <p className="font-semibold w-20 text-right text-[#3e2723]">
+              {/* Total + Delete */}
+              <div className="flex justify-between sm:justify-end items-center sm:space-x-4 mt-2 sm:mt-0">
+                <p className="font-semibold text-[#3e2723]">
                   {(item.price * item.quantity).toLocaleString()}₫
                 </p>
                 <button

@@ -21,8 +21,9 @@ const Navbar = () => {
         <img
           src={assets.company}
           alt="Company Name"
-          className="md:h-12 mb-3 object-contain"
+          className="hidden sm:block md:h-12 mb-3 object-contain"
         />
+
         <ul className="hidden sm:flex gap-6 text-base">
           {[
             { name: "TRANG CHỦ", path: "/" },
@@ -51,7 +52,7 @@ const Navbar = () => {
         {/* Profile top-right */}
         <Link to={!token ? "/login" : "/user"}>
           <button className="flex items-center gap-2 px-4 py-2 rounded-full border">
-            <span>{!token ? "Đăng nhập/Đăng ký" : "Xin chào"}</span>
+            <span>{!token ? "Đăng nhập" : "Xin chào"}</span>
             <FiUser className="w-5 h-5" />
           </button>
         </Link>

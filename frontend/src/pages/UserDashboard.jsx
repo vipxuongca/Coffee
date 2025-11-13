@@ -40,60 +40,69 @@ const UserDashboard = () => {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-[18%] min-h-screen border-r border-[#a1887f] bg-[#f8f3ef] shadow-inner flex flex-col">
-        <div className="p-6 pb-4 border-b border-[#d7ccc8]">
-          <h2 className="text-xl font-semibold tracking-wide text-[#4e342e] ">
-            Tài Khoản
+      <aside className="w-[20%] sm:w-[18%] min-h-screen border-r border-[#a1887f] bg-[#f8f3ef] shadow-inner flex flex-col items-center sm:items-stretch">
+        <div className="p-4 sm:p-6 pb-4 border-b border-[#d7ccc8] text-center sm:text-left">
+          <h2 className="text-lg sm:text-xl font-semibold tracking-wide text-[#4e342e]">
+            <span className="hidden sm:inline">Tài Khoản</span>
+            <User className="w-6 h-6 inline sm:hidden text-[#4e342e]" />
           </h2>
         </div>
 
-        <div className="flex flex-col gap-3 px-4 pt-6 text-sm ">
+        <div className="flex flex-col gap-3 px-2 sm:px-4 pt-6 text-xs sm:text-sm">
           <NavLink
             to="/user/profile"
             className={({ isActive }) =>
-              `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+              `${baseLinkStyle} ${
+                isActive ? activeLinkStyle : ""
+              } justify-center sm:justify-start`
             }
           >
             <User className="w-5 h-5" />
-            <span>Hồ sơ</span>
+            <span className="hidden sm:inline">Hồ sơ</span>
           </NavLink>
 
           <NavLink
             to="/user/details"
             className={({ isActive }) =>
-              `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+              `${baseLinkStyle} ${
+                isActive ? activeLinkStyle : ""
+              } justify-center sm:justify-start`
             }
           >
             <MapPin className="w-5 h-5" />
-            <span>Địa chỉ</span>
+            <span className="hidden sm:inline">Địa chỉ</span>
           </NavLink>
 
           <NavLink
             to="/user/orders"
             className={({ isActive }) =>
-              `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+              `${baseLinkStyle} ${
+                isActive ? activeLinkStyle : ""
+              } justify-center sm:justify-start`
             }
           >
             <Receipt className="w-5 h-5" />
-            <span>Đơn hàng</span>
+            <span className="hidden sm:inline">Đơn hàng</span>
           </NavLink>
 
           <NavLink
             to="/user/password"
             className={({ isActive }) =>
-              `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+              `${baseLinkStyle} ${
+                isActive ? activeLinkStyle : ""
+              } justify-center sm:justify-start`
             }
           >
             <Lock className="w-5 h-5" />
-            <span>Đổi mật khẩu</span>
+            <span className="hidden sm:inline">Đổi mật khẩu</span>
           </NavLink>
 
           <button
             onClick={handleLogout}
-            className={`${baseLinkStyle} hover:bg-red-200 border-red-300`}
+            className={`${baseLinkStyle} hover:bg-red-200 border-red-300 justify-center sm:justify-start`}
           >
             <LogOut className="w-5 h-5 opacity-80" />
-            <span>Đăng xuất</span>
+            <span className="hidden sm:inline">Đăng xuất</span>
           </button>
         </div>
       </aside>
