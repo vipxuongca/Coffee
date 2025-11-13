@@ -13,6 +13,7 @@ import {
   UserDashboard,
   NotFound,
   Policy,
+  Privacy,
   Checkout,
   Stripe,
 } from "./pages";
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="/place-order/:orderId" element={<PlaceOrder />} />
           <Route path="/orders/:orderId" element={<OrderDetail />} />
           <Route path="/policy" element={<Policy />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="/user/*" element={<UserDashboard />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/stripe" element={<Stripe />} />

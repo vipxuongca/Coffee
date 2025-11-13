@@ -76,7 +76,7 @@ const EditCategory = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-2xl mx-auto">
+    <div className="bg-white p-6   shadow-md w-full max-w-2xl mx-auto">
       <h1 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">
         Chỉnh Sửa Phân Loại
       </h1>
@@ -97,7 +97,7 @@ const EditCategory = () => {
             {(Array.isArray([image1]) ? [image1] : []).map((img, i) => (
               <label key={i} htmlFor={`image${i + 1}`}>
                 <img
-                  className="w-24 h-24 object-cover rounded-md border border-gray-300 cursor-pointer hover:opacity-80"
+                  className="w-24 h-24 object-cover   border border-gray-300 cursor-pointer hover:opacity-80"
                   src={
                     !img
                       ? assets.upload_area
@@ -134,7 +134,7 @@ const EditCategory = () => {
           <input
             onChange={(e) => setName(e.target.value)}
             value={name}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
+            className="w-full border border-gray-300  px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
             type="text"
             placeholder="Enter category name"
             required
@@ -152,7 +152,7 @@ const EditCategory = () => {
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
+            className="w-full border border-gray-300  px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
             rows="3"
             placeholder="Enter category description"
             required
@@ -162,7 +162,7 @@ const EditCategory = () => {
         {/* Submit */}
         <button
           type="submit"
-          className="w-32 py-2.5 bg-[#3e2723] text-white rounded-lg hover:bg-[#4e342e] transition-colors"
+          className="w-32 py-2.5 bg-[#3e2723] text-white  hover:bg-[#4e342e] transition-colors"
         >
           CHỈNH SỬA
         </button>

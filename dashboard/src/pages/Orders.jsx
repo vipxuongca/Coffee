@@ -71,7 +71,7 @@ const Orders = () => {
             <button
               key={status}
               onClick={() => toggleStatus(status)}
-              className={`px-3 py-1 text-xs rounded-md border transition
+              className={`px-3 py-1 text-xs   border transition
           ${
             active
               ? "bg-[#3e2723] text-white border-[#3e2723]"
@@ -84,7 +84,7 @@ const Orders = () => {
         })}
       </div>
 
-      <div className="overflow-x-auto shadow rounded-lg">
+      <div className="overflow-x-auto shadow ">
         <table className="min-w-full text-sm text-left border-collapse">
           <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
             <tr>
@@ -126,7 +126,7 @@ const Orders = () => {
                 </td>
                 <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
+                    className={`px-2 py-1 text-xs font-semibold  ${getStatusColor(
                       order.status
                     )}`}
                   >
@@ -139,7 +139,7 @@ const Orders = () => {
                 <td className="px-4 py-3 text-right">
                   <button
                     onClick={() => navigate(`/orders/${order.orderId}`)}
-                    className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md transition"
+                    className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white   transition"
                   >
                     Xem chi tiết
                   </button>

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { ShopContext } from "../context/ShopContext";
 import { orderApi } from "../../api/order-api";
+import { Eye } from "lucide-react";
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -38,7 +39,7 @@ const OrderDetail = () => {
         </p>
         <button
           onClick={() => navigate("/orders")}
-          className="mt-4 px-4 py-2 bg-[#6d4c41] text-white rounded-md hover:bg-[#5d4037]"
+          className="mt-4 px-4 py-2 bg-[#6d4c41] text-white   hover:bg-[#5d4037]"
         >
           Quay lại
         </button>
@@ -50,7 +51,7 @@ const OrderDetail = () => {
     v.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 
   const Section = ({ title, children }) => (
-    <div className="mb-6 bg-[#fff8f0] border border-[#d7ccc8] rounded-xl p-4 shadow-sm">
+    <div className="mb-6 bg-[#fff8f0] border border-[#d7ccc8]   p-4 shadow-sm">
       <h3 className="text-lg font-semibold text-[#4e342e] border-b border-[#d7ccc8] pb-2 mb-3">
         {title}
       </h3>
@@ -101,14 +102,14 @@ const OrderDetail = () => {
   );
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-inner p-6">
+    <div className="max-w-5xl mx-auto mt-6 bg-[#f8f3ef] border border-[#d7ccc8]   shadow-inner p-4 sm:p-6">
       {/* Header */}
-      <div className="flex justify-between items-center border-b border-[#d7ccc8] pb-3 mb-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 border-b border-[#d7ccc8] pb-3 mb-6">
         <h2 className="text-2xl font-bold text-[#3e2723]">
           Chi tiết đơn hàng #{order.orderId}
         </h2>
         <span
-          className={`px-3 py-1 text-sm font-semibold rounded-md ${
+          className={`px-3 py-1 text-sm font-semibold ${
             order.status === "PENDING_PAYMENT"
               ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
               : order.status === "PAID"
@@ -120,13 +121,21 @@ const OrderDetail = () => {
               : "bg-gray-100 text-gray-700"
           }`}
         >
-          {order.status}
+          {order.status === "PENDING_PAYMENT"
+            ? "CHỜ THANH TOÁN"
+            : order.status === "PAID"
+            ? "ĐÃ THANH TOÁN"
+            : order.status === "CANCELLED"
+            ? "ĐÃ HỦY"
+            : order.status === "PROCESSING"
+            ? "ĐANG XỬ LÝ"
+            : order.status}
         </span>
       </div>
 
       {/* Sections */}
       <Section title="Thông tin chung">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-y-2 text-[#3e2723] text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-2 text-[#3e2723] text-sm">
           <p>
             <strong>Mã đơn:</strong> {order.orderId}
           </p>
@@ -143,7 +152,7 @@ const OrderDetail = () => {
       </Section>
 
       <Section title="Thông tin giao hàng">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-y-2 text-[#3e2723] text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-2 text-[#3e2723] text-sm">
           <p>
             <strong>Người nhận:</strong> {order.userDetail?.receiverName || "—"}
           </p>
@@ -161,8 +170,8 @@ const OrderDetail = () => {
       </Section>
 
       <Section title="Sản phẩm trong đơn hàng">
-        <div className="overflow-x-auto rounded-xl">
-          <table className="min-w-full text-sm border-collapse">
+        <div className="overflow-x-auto  ">
+          <table className="min-w-[600px] text-sm border-collapse">
             <thead className="bg-[#fff8f0] text-[#4e342e] uppercase text-xs border-b border-[#d7ccc8]">
               <tr>
                 <th className="px-4 py-3 text-left">#</th>
@@ -191,7 +200,7 @@ const OrderDetail = () => {
                       <img
                         src={item.image[0]}
                         alt={item.name}
-                        className="w-16 h-16 object-cover rounded-md border border-[#d7ccc8] mx-auto"
+                        className="w-16 h-16 object-cover   border border-[#d7ccc8] mx-auto"
                       />
                     )}
                   </td>
@@ -210,9 +219,10 @@ const OrderDetail = () => {
                   <td className="px-4 py-3 text-right">
                     <Link
                       to={`/product/${item.productId}`}
-                      className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md transition"
+                      className="inline-flex items-center justify-center w-8 h-8 bg-[#3e2723] hover:bg-[#4e342e] text-white rounded-md transition"
+                      title="Xem sản phẩm"
                     >
-                      Xem sản phẩm
+                      <Eye size={16} />
                     </Link>
                   </td>
                 </tr>
@@ -247,10 +257,10 @@ const OrderDetail = () => {
       </Section>
 
       {/* Action buttons */}
-      <div className="flex justify-between items-center mt-8">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mt-8">
         <button
           onClick={() => navigate("/user/orders")}
-          className="bg-[#6d4c41] text-white px-5 py-2 rounded-md hover:bg-[#5d4037]"
+          className="bg-[#6d4c41] text-white px-5 py-2   hover:bg-[#5d4037]"
         >
           Quay lại danh sách
         </button>
@@ -259,7 +269,7 @@ const OrderDetail = () => {
           <button
             onClick={handleCancelOrder}
             disabled={processing}
-            className={`px-5 py-2 rounded-md border transition-all font-medium shadow-sm 
+            className={`px-5 py-2   border transition-all font-medium shadow-sm 
       ${
         processing
           ? "bg-gray-200 text-gray-500 cursor-not-allowed border-gray-300"

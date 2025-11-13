@@ -99,67 +99,100 @@ const Checkout = () => {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-[#3e2723] border-b border-[#a1887f] pb-2 flex items-center gap-2 mb-6">
-        <PackageCheck className="w-6 h-6 text-[#4e342e]" />
-        Xác nhận đơn hàng
-      </h1>
+    <div className="w-full bg-[#faf6f3] min-h-screen py-10 px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* PAGE TITLE */}
+        {/* PAGE TITLE + ACTION BUTTONS */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-10 border-b border-[#d7ccc8] pb-4">
+          <h1 className="text-3xl font-semibold text-[#3e2723] flex items-center gap-3">
+            <PackageCheck className="w-7 h-7 text-[#4e342e]" />
+            Xác nhận đơn hàng
+          </h1>
 
-      <UserDefaultAddress />
-      <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl shadow-inner border border-[#d7ccc8] mt-10">
-        <div className="space-y-4">
-          {cartItems.map((item) => (
-            <div
-              key={item.cartId}
-              className="flex items-center justify-between bg-[#fff8f0] border border-[#d7ccc8] shadow-sm rounded-xl p-4"
+          <div className="flex gap-3 mt-4 lg:mt-0">
+            <button
+              onClick={() => navigate("/cart")}
+              className="bg-[#6d4c41] text-white px-5 py-2   hover:bg-[#5d4037] transition"
             >
-              <div className="flex items-center gap-4">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-16 h-16 object-cover rounded-lg border border-[#bcaaa4]"
-                />
-                <div>
-                  <h2 className="font-semibold text-[#4e342e]">{item.name}</h2>
-                  <p className="text-sm text-[#6d4c41]">
-                    {item.price.toLocaleString()}₫ × {item.quantity}
-                  </p>
-                </div>
-              </div>
-              <p className="font-semibold text-[#3e2723]">
-                {(item.price * item.quantity).toLocaleString()}₫
-              </p>
+              Quay lại giỏ hàng
+            </button>
+            <button
+              onClick={handleOrderPlacement}
+              className="bg-[#3e2723] text-white px-5 py-2   hover:bg-[#4e342e] flex items-center gap-2 transition"
+            >
+              <CreditCard size={16} />
+              XÁC NHẬN ĐẶT HÀNG
+            </button>
+          </div>
+        </div>
+
+        {/* MAIN LAYOUT */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* LEFT SIDE: Address + Cart */}
+          <div className="lg:col-span-1 space-y-4">
+            {/* ADDRESS SECTION */}
+            <div className="bg-white shadow-sm border border-[#e0d6d2] p-6">
+              <UserDefaultAddress />
             </div>
-          ))}
+
+            {/* CART SECTION */}
+            <div className="bg-white   shadow-sm border border-[#e0d6d2] p-6">
+              <h2 className="text-lg font-semibold text-[#4e342e] mb-4">
+                Sản phẩm trong đơn hàng
+              </h2>
+              <div className="space-y-4">
+                {cartItems.map((item) => (
+                  <div
+                    key={item.cartId}
+                    className="flex items-center justify-between border-b border-[#f0e6e2] pb-3"
+                  >
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-16 h-16 object-cover   border border-[#d7ccc8]"
+                      />
+                      <div>
+                        <h3 className="font-medium text-[#3e2723]">
+                          {item.name}
+                        </h3>
+                        <p className="text-sm text-[#6d4c41]">
+                          {item.price.toLocaleString()}₫ × {item.quantity}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="font-semibold text-[#4e342e]">
+                      {(item.price * item.quantity).toLocaleString()}₫
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 flex justify-between items-center border-t border-[#e0d6d2] pt-4">
+                <span className="text-lg font-medium text-[#3e2723]">
+                  Tổng cộng:
+                </span>
+                <span className="text-xl font-bold text-[#4e342e]">
+                  {totalAmount.toLocaleString()}₫
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE: Payment + Action */}
+          <div className="lg:col-span-1">
+            <div className="bg-white   shadow-sm border border-[#e0d6d2] p-6 sticky top-10">
+              <h2 className="text-lg font-semibold text-[#4e342e] mb-4">
+                Phương thức thanh toán
+              </h2>
+
+              <PaymentMethod
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
+              />
+            </div>
+          </div>
         </div>
-
-        <div className="mt-8 border-t border-[#a1887f] pt-4 flex justify-between text-[#3e2723]">
-          <span className="font-semibold text-lg">Tổng cộng:</span>
-          <span className="font-bold text-lg">
-            {totalAmount.toLocaleString()}₫
-          </span>
-        </div>
-      </div>
-
-      <PaymentMethod
-        paymentMethod={paymentMethod}
-        setPaymentMethod={setPaymentMethod}
-      />
-
-      <div className="mt-10 flex justify-end gap-3">
-        <button
-          onClick={() => navigate("/cart")}
-          className="bg-[#6d4c41] text-white px-5 py-2 rounded-md hover:bg-[#5d4037]"
-        >
-          Quay lại giỏ hàng
-        </button>
-        <button
-          onClick={handleOrderPlacement}
-          className="bg-[#3e2723] text-white px-5 py-2 rounded-md hover:bg-[#4e342e] flex items-center gap-2"
-        >
-          <CreditCard size={16} />
-          XÁC NHẬN ĐẶT HÀNG
-        </button>
       </div>
     </div>
   );

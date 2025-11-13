@@ -18,7 +18,7 @@ const HighlightBox = () => {
         }
       `}</style>
 
-      <div className="relative bg-gradient-to-b from-yellow-400 via-red-400 to-pink-500 rounded-lg p-4 text-black border-4 border-yellow-200 shadow-2xl flash-marquee">
+      <div className="relative bg-gradient-to-b from-yellow-400 via-red-400 to-pink-500  p-4 text-black border-4 border-yellow-200 shadow-2xl flash-marquee">
         
         {/* Close button */}
         {/* <button
@@ -55,7 +55,7 @@ const HighlightBox = () => {
 
           {/* Button */}
           <button
-            className="mt-4 px-4 py-2 rounded-md bg-black text-yellow-300 font-bold hover:scale-105 transition"
+            className="mt-4 px-4 py-2   bg-black text-yellow-300 font-bold hover:scale-105 transition"
             onClick={() => alert("Redirect to promo or purchase flow.")}
           >
             CLAIM

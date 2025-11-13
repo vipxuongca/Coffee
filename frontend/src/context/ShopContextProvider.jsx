@@ -107,7 +107,7 @@ const ShopContextProvider = (props) => {
     <ShopContext.Provider value={value}>
       {showLoading && (
         <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center">
+          <div className="bg-white p-6  shadow-lg flex flex-col items-center">
             <ClipLoader color="#3e2723" size={60} />
             <p className="text-gray-700 font-medium mt-2">Loading...</p>
           </div>

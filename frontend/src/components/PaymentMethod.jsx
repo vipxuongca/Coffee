@@ -10,7 +10,7 @@ const methods = [
 
 const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef] rounded-xl border mt-10">
+    <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef]   border mt-10">
       <label className="block text-[#4e342e] font-semibold mb-4">
         Phương thức thanh toán
       </label>
@@ -20,7 +20,7 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
           <button
             key={m.value}
             onClick={() => setPaymentMethod(m.value)}
-            className={`px-4 py-2 text-sm rounded-lg border transition ${
+            className={`px-4 py-2 text-sm  border transition ${
               paymentMethod === m.value
                 ? "bg-[#4e342e] text-white border-[#4e342e]"
                 : "bg-white text-[#4e342e] border-[#a1887f]"
@@ -32,7 +32,7 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
       </div>
 
       {/* Tab Content */}
-      <div className="p-4 border rounded-lg bg-white text-[#4e342e]">
+      <div className="p-4 border  bg-white text-[#4e342e]">
         {paymentMethod === "COD" && <p>Thanh toán khi nhận hàng. </p>}
 
         {paymentMethod === "CARD" && (
@@ -56,6 +56,15 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
             </p>
 
             <div className="border p-4 rounded bg-gray-50 space-y-1">
+                          <div className="pt-4 flex flex-col items-center">
+              <div className="w-48 h-48 bg-gray-200 flex items-center justify-center">
+                <img
+                  src={assets.qr}
+                  alt="QR"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </div>
               <p>
                 <span className="font-semibold">Ngân hàng:</span> Vietcombank
               </p>
@@ -77,16 +86,7 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
               Thanh toán đơn hàng
             </p>
 
-            <div className="pt-4 flex flex-col items-center">
-              <p className="font-semibold mb-2">Mã QR thanh toán:</p>
-              <div className="w-48 h-48 bg-gray-200 flex items-center justify-center">
-                <img
-                  src={assets.qr}
-                  alt="QR"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            </div>
+
 
             <p className="text-sm text-gray-600">
               Lưu ý: Đơn hàng sẽ được xác nhận sau khi bộ phận kế toán kiểm tra

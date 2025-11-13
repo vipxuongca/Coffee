@@ -1,71 +1,73 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { ShopContext } from "../../context/ShopContext";
-import ProductItem from "../ProductItem";
 import Title from "./Title";
 import { Link } from "react-router-dom";
+import ProductCard from "../ProductCard";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const RelatedProducts = ({ category, subCategory }) => {
+const RelatedProducts = ({ category }) => {
   const { products } = useContext(ShopContext);
   const [related, setRelated] = useState([]);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
-    if (products.length > 0 && category && subCategory) {
-      let filtered = products.filter(
-        (item) => item.category === category && item.subCategory === subCategory
-      );
-      setRelated(filtered.slice(0, 5));
+    if (products.length > 0 && category) {
+      const filtered = products.filter((item) => item.category === category);
+      setRelated(filtered.slice(0, 10)); // slightly more items for scroll effect
     }
-  }, [products, category, subCategory]);
+  }, [products, category]);
+
+  const scroll = (direction) => {
+    if (!scrollRef.current) return;
+    const { clientWidth } = scrollRef.current;
+    scrollRef.current.scrollBy({
+      left: direction === "left" ? -clientWidth : clientWidth,
+      behavior: "smooth",
+    });
+  };
 
   return (
-    <div className="my-24">
-      {/* Section Title */}
-      <div className="text-center mb-10">
+    <div className="relative my-10">
+      {/* Section title */}
+      <div className="text-center py-8 text-3xl">
         <Title text1="SẢN PHẨM " text2="TƯƠNG TỰ" />
-        <p className="text-gray-500 text-sm mt-2">
-          Gợi ý sản phẩm tương tự dành cho bạn
+        <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
+          Những sản phẩm bạn có thể quan tâm
         </p>
       </div>
 
-      {/* Product Grid */}
-      {related.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {related.map((item) => (
-            <Link to={"/product/" + item._id}>
-              <div
-                key={item._id}
-                className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer"
-              >
-                {/* Product Image */}
-                <div className="relative">
-                  <img
-                    src={Array.isArray(item.image) ? item.image[0] : item.image}
-                    alt={item.name}
-                    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
+      {/* Scroll buttons */}
+      <button
+        onClick={() => scroll("left")}
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2  z-10 hover:bg-gray-100"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
 
-                {/* Product Info */}
-                <div className="p-4 text-center">
-                  <h3 className="text-gray-800 font-medium truncate">
-                    {item.name}
-                  </h3>
-                  <p className="text-amber-700 font-semibold mt-2">
-                    {item.price.toLocaleString()}₫
-                  </p>
-                  <button className="mt-4 px-4 py-2 w-full bg-[#3e2723] text-white text-sm rounded-lg hover:bg-gray-800 transition-colors duration-150">
-                    Xem chi tiết
-                  </button>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <p className="text-center text-gray-500 mt-10">
-          Không có sản phẩm liên quan.
-        </p>
-      )}
+      <button
+        onClick={() => scroll("right")}
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2  z-10 hover:bg-gray-100"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+
+      {/* Scrollable container */}
+      <div
+        ref={scrollRef}
+        className="flex gap-4 sm:gap-5 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-8 scroll-smooth"
+      >
+        {related.map((item) => (
+          <Link
+            key={item._id}
+            to={`/product/${item._id}`}
+            className="snap-start flex-shrink-0"
+          >
+            <div className="w-fit bg-white border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 group cursor-pointer">
+              <ProductCard product={item} />
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

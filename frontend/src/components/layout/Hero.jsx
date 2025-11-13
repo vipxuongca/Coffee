@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <div className="flex flex-col sm:flex-row items-center bg-gradient-to-r from-amber-50 to-amber-100 rounded-2xl overflow-hidden shadow-md my-6">
+    <div className="flex flex-col sm:flex-row items-center bg-gradient-to-r from-amber-50 to-amber-100  overflow-hidden shadow-md my-6">
       {/* Left Section */}
       <div className="w-full sm:w-1/2 flex flex-col justify-center items-start px-8 sm:px-12 py-10 text-[#2f2f2f]">
         <div className="flex items-center gap-2 mb-3">
@@ -27,7 +27,7 @@ const Hero = () => {
 
         <Link
           to="/shop"
-          className="bg-amber-700 text-white font-medium px-6 py-3 rounded-lg hover:bg-amber-800 transition-colors duration-300"
+          className="bg-amber-700 text-white font-medium px-6 py-3  hover:bg-amber-800 transition-colors duration-300"
         >
           Mua Ngay
         </Link>

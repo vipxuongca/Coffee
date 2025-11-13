@@ -43,7 +43,7 @@ const PlaceOrder = () => {
         ✅ Đặt hàng thành công!
       </h1>
 
-      <div className="bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-inner p-6 space-y-6 text-[#3e2723]">
+      <div className="bg-[#f8f3ef] border border-[#d7ccc8]   shadow-inner p-6 space-y-6 text-[#3e2723]">
         <section>
           <h2 className="text-lg font-medium border-b border-[#d7ccc8] pb-2 mb-2 text-[#4e342e]">
             Mã đơn hàng: {order.orderId}

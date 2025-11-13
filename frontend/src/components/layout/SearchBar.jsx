@@ -9,7 +9,7 @@ const SearchBar = () => {
 
   return (
     <div className="border-t bg-gray-50 text-center">
-      <div className="inline-flex items-center justify-center border border-gray-400 px-3 py-1.5 my-3 mx-2 rounded-full w-2/3 sm:w-1/3">
+      <div className="inline-flex items-center justify-center border border-gray-400 px-3 py-1.5 my-3 mx-2  w-2/3 sm:w-1/3">
         <input
           className="flex-1 outline-none bg-inherit text-xs"
           value={search}

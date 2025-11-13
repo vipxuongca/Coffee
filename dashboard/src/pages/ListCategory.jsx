@@ -60,7 +60,7 @@ const ListCategory = () => {
         Danh Mục Phân Loại
       </p>
 
-      <div className="w-full border rounded-lg overflow-hidden shadow-sm">
+      <div className="w-full border  overflow-hidden shadow-sm">
         {/* Header */}
         <div className="hidden md:grid grid-cols-[120px_2fr_3fr_150px] bg-gray-100 text-gray-800 font-semibold px-4 py-2">
           <span>Hình Ảnh</span>

@@ -155,7 +155,7 @@ const Edit = () => {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6 mt-6">
+    <div className="w-full max-w-3xl mx-auto bg-white shadow-md   p-6 mt-6">
       <h1 className="text-2xl font-semibold mb-6 text-[#3e2723]">
         Chỉnh Sửa Sản Phẩm<menu type="toolbar"></menu>
       </h1>
@@ -174,7 +174,7 @@ const Edit = () => {
             {[image1, image2, image3, image4].map((img, i) => (
               <label key={i} htmlFor={`image${i + 1}`}>
                 <img
-                  className="w-24 h-24 object-cover rounded-md border border-gray-300 cursor-pointer hover:opacity-80"
+                  className="w-24 h-24 object-cover   border border-gray-300 cursor-pointer hover:opacity-80"
                   src={
                     !img
                       ? assets.upload_area
@@ -210,7 +210,7 @@ const Edit = () => {
           <input
             onChange={(e) => setName(e.target.value)}
             value={name}
-            className="w-full border rounded-md px-3 py-2"
+            className="w-full border   px-3 py-2"
             type="text"
             placeholder="Tên sản phẩm"
             required
@@ -225,7 +225,7 @@ const Edit = () => {
           <input
             onChange={(e) => setBrand(e.target.value)}
             value={brand}
-            className="w-full border rounded-md px-3 py-2"
+            className="w-full border   px-3 py-2"
             type="text"
             placeholder="Thương hiệu"
             required
@@ -240,7 +240,7 @@ const Edit = () => {
           <input
             onChange={(e) => setPackageType(e.target.value)}
             value={packageType}
-            className="w-full border rounded-md px-3 py-2"
+            className="w-full border   px-3 py-2"
             type="text"
             placeholder="Hình thức đóng gói"
             required
@@ -254,7 +254,7 @@ const Edit = () => {
           <textarea
             onChange={(e) => setPackageDetail(e.target.value)}
             value={packageDetail}
-            className="w-full border rounded-md px-3 py-2 h-24"
+            className="w-full border   px-3 py-2 h-24"
             placeholder="Mô tả chi tiết hình thức đóng gói"
           />
         </div>
@@ -267,7 +267,7 @@ const Edit = () => {
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
-            className="w-full border rounded-md px-3 py-2 h-40"
+            className="w-full border   px-3 py-2 h-40"
             placeholder="Mô tả ngắn sản phẩm"
             required
           />
@@ -279,7 +279,7 @@ const Edit = () => {
           <textarea
             onChange={(e) => setLongDescription(e.target.value)}
             value={longDescription}
-            className="w-full border rounded-md px-3 py-2 h-40"
+            className="w-full border   px-3 py-2 h-40"
             placeholder="Mô tả chi tiết sản phẩm"
           />
         </div>
@@ -292,7 +292,7 @@ const Edit = () => {
               <span className="text-red-600 ml-1 font-bold text-lg">*</span>
             </p>
             <select
-              className="w-full border rounded-md px-3 py-2"
+              className="w-full border   px-3 py-2"
               onChange={(e) => setCategory(e.target.value)}
               value={category}
               required
@@ -308,7 +308,7 @@ const Edit = () => {
           {/* <div className="flex-1">
             <p className="mb-1 font-medium">Subcategory</p>
             <select
-              className="w-full border rounded-md px-3 py-2"
+              className="w-full border   px-3 py-2"
               onChange={(e) => setSubCategory(e.target.value)}
               value={subCategory}
             >
@@ -331,7 +331,7 @@ const Edit = () => {
             <input
               onChange={(e) => setPrice(e.target.value)}
               value={price}
-              className="w-full border rounded-md px-3 py-2"
+              className="w-full border   px-3 py-2"
               type="number"
               placeholder="0"
               required
@@ -346,7 +346,7 @@ const Edit = () => {
             <input
               onChange={(e) => setStock(e.target.value)}
               value={stock}
-              className="w-full border rounded-md px-3 py-2"
+              className="w-full border   px-3 py-2"
               type="number"
               placeholder="0"
               required
@@ -362,7 +362,7 @@ const Edit = () => {
             <input
               onChange={(e) => setDiscount(e.target.value)}
               value={discount}
-              className="w-full border rounded-md px-3 py-2"
+              className="w-full border   px-3 py-2"
               type="number"
               placeholder="0"
             />
@@ -375,7 +375,7 @@ const Edit = () => {
             <input
               onChange={(e) => setWarranty(e.target.value)}
               value={warranty}
-              className="w-full border rounded-md px-3 py-2"
+              className="w-full border   px-3 py-2"
               type="text"
               placeholder="Nhập bảo hành. VD: 18 tháng"
             />
@@ -413,7 +413,7 @@ const Edit = () => {
         {/* Submit */}
         <button
           type="submit"
-          className="w-32 py-3 mt-4 bg-[#3e2723] text-white rounded-md hover:bg-[#4e342e] transition"
+          className="w-32 py-3 mt-4 bg-[#3e2723] text-white   hover:bg-[#4e342e] transition"
         >
           CHỈNH SỬA
         </button>

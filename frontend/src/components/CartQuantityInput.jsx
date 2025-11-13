@@ -51,7 +51,7 @@ const CartQuantityInput = ({ currentQuantity, cartId, productId }) => {
       min="1"
       value={currentQuantity}
       onChange={(e) => handleQtyChange(cartId, e.target.value)}
-      className="w-12 text-center border border-[#bcaaa4] rounded-md text-[#3e2723] 
+      className="w-12 text-center border border-[#bcaaa4]   text-[#3e2723] 
              [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none 
              [&::-webkit-outer-spin-button]:appearance-none"
     />

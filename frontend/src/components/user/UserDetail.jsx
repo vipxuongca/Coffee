@@ -92,14 +92,14 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
   };
 
   const content = (
-    <div className="card bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-inner">
+    <div className="card bg-[#f8f3ef] border border-[#d7ccc8] shadow-inner">
       <div className="card-body text-[#3e2723]">
         <div className="flex items-center justify-between border-b border-[#d7ccc8] pb-2 mb-3">
           <h2 className="font-bold text-xl text-[#4e342e]">
             Địa chỉ giao hàng
           </h2>
           <button
-            className="bg-[#6d4c41] text-white text-sm px-3 py-1 rounded-md hover:bg-[#5d4037]"
+            className="bg-[#6d4c41] text-white text-sm px-3 py-1 hover:bg-[#5d4037]"
             onClick={() => setShowAddModal(true)}
           >
             + Thêm địa chỉ
@@ -113,7 +113,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
               .map((item) => (
                 <div
                   key={item._id}
-                  className={`p-4 rounded-lg border transition-all shadow-sm ${
+                  className={`p-4  border transition-all shadow-sm ${
                     item.isDefault
                       ? "border-[#a1887f] bg-[#fff8f0] shadow-md"
                       : "border-[#d7ccc8] bg-[#fdf8f6]"
@@ -137,7 +137,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
                         <strong>Tỉnh/Thành Phố:</strong> {item.city}
                       </p>
                       {item.isDefault && (
-                        <span className="mt-2 inline-block text-xs font-semibold text-[#3e2723] bg-[#d7ccc8] px-2 py-1 rounded-md">
+                        <span className="mt-2 inline-block text-xs font-semibold text-[#3e2723] bg-[#d7ccc8] px-2 py-1  ">
                           Mặc định
                         </span>
                       )}
@@ -208,14 +208,14 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
         onClick={() => setShowModal(false)}
       >
         <div
-          className="modal-box bg-[#f8f3ef] border border-[#d7ccc8] rounded-xl shadow-2xl w-full max-w-2xl h-[600px] md:h-[700px] lg:h-[750px]
+          className="modal-box bg-[#f8f3ef] border border-[#d7ccc8] shadow-2xl w-full max-w-2xl h-[600px] md:h-[700px] lg:h-[750px]
  overflow-y-auto p-0"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-6">{content}</div>
           <div className="modal-action p-4 border-t border-[#d7ccc8]">
             <button
-              className="bg-[#6d4c41] text-white px-4 py-2 rounded-md hover:bg-[#5d4037]"
+              className="bg-[#6d4c41] text-white px-4 py-2 hover:bg-[#5d4037]"
               onClick={() => setShowModal(false)}
             >
               Đóng

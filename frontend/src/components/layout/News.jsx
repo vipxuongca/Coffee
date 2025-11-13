@@ -6,7 +6,7 @@ const News = () => {
   };
 
   return (
-    <div className="bg-amber-50 py-16 px-6 sm:px-10 rounded-2xl shadow-inner text-center my-12">
+    <div className="bg-amber-50 py-16 px-6 sm:px-10  shadow-inner text-center my-12">
       <h2 className="text-3xl font-semibold text-amber-900">
         Đăng ký nhận tin
       </h2>
@@ -22,12 +22,12 @@ const News = () => {
         <input
           type="email"
           placeholder="Nhập email của bạn..."
-          className="w-full sm:flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600 transition-all duration-200"
+          className="w-full sm:flex-1 px-4 py-3 border border-gray-300  focus:outline-none focus:ring-2 focus:ring-amber-600 transition-all duration-200"
           required
         />
         <button
           type="submit"
-          className="bg-amber-700 text-white px-6 py-3 rounded-lg hover:bg-amber-800 transition-colors duration-300 w-full sm:w-auto"
+          className="bg-amber-700 text-white px-6 py-3  hover:bg-amber-800 transition-colors duration-300 w-full sm:w-auto"
         >
           Đăng Ký
         </button>

@@ -11,7 +11,7 @@ const EmptyCart = () => {
       </p>
       <Link
         to="/shop"
-        className="px-6 py-3 rounded-xl bg-[#3e2723] text-white hover:bg-[#5d4037] transition-all"
+        className="px-6 py-3   bg-[#3e2723] text-white hover:bg-[#5d4037] transition-all"
       >
         Tiếp tục mua sắm
       </Link>

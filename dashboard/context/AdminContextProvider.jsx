@@ -45,7 +45,7 @@ const AdminContextProvider = (props) => {
     <AdminContext.Provider value={value}>
       {showLoading && (
         <div className="fixed inset-0 z-50 bg-black/30">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6  shadow-lg flex flex-col items-center">
             <ClipLoader color="#3e2723" size={60} />
             <p className="text-gray-700 font-medium mt-2">Loading...</p>
           </div>
