@@ -16,6 +16,7 @@ import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
 import company from './company.png'
 import qr from './qr.png'
+import MyFont from './MyFont.TTF'
 
 export const assets = {
     logo,
@@ -35,5 +36,6 @@ export const assets = {
     stripe_logo,
     cross_icon,
     company,
-    qr
+    qr,
+    MyFont
 }
