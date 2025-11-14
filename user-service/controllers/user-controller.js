@@ -49,7 +49,7 @@ const loginUser = async (req, res) => {
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: isProd,
-    sameSite: isProd ? "strict" : "lax",
+    sameSite: isProd ? "strict" : "none",
     maxAge: 14 * 24 * 60 * 60 * 1000
   });
 
