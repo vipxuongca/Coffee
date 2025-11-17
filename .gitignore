@@ -1,2 +1,4 @@
 /_mongo
 /_mongobackup
+*.key
+*.pem 

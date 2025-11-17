@@ -28,7 +28,7 @@ const addCategory = async (req, res) => {
     const category = new categoryModel(categoryData);
     await category.save();
 
-    res.json({ success: true, message: 'Category added successfully' });
+    res.json({ success: true, message: 'Thêm phân loại thành công' });
   } catch (error) {
     console.error('Error adding category:', error);
     res.status(500).json({ message: error.message });
@@ -51,7 +51,7 @@ const removeCategory = async (req, res) => {
     if (!deleted) {
       return res.status(404).json({ message: 'Delete failed' });
     }
-    res.json({ success: true, message: 'Category removed successfully' });
+    res.json({ success: true, message: 'Xóa phân loại thành công' });
   } catch (error) {
     console.error('Error removing category:', error);
     res.status(500).json({ message: error.message });
@@ -64,7 +64,7 @@ const getOneCategory = async (req, res) => {
     const category = await categoryModel.findById(id);
 
     if (!category) {
-      return res.status(404).json({ success: false, message: 'Category not found' });
+      return res.status(404).json({ success: false, message: 'Không tìm thấy phân loại' });
     }
 
     res.json({ success: true, category });
@@ -109,7 +109,7 @@ const updateCategory = async (req, res) => {
 
     await categoryModel.findByIdAndUpdate(id, updatedData, { new: true });
 
-    res.json({ success: true, message: "Category updated successfully" });
+    res.json({ success: true, message: "Chỉnh sửa phân loại thành công" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: error.message });

@@ -22,7 +22,7 @@ textarea {
   font-family: 'MyFont', sans-serif !important;
 }
 
-
+/* 
 @keyframes loading-bar {
   0% { width: 0%; }
   50% { width: 70%; }
@@ -31,4 +31,9 @@ textarea {
 
 .animate-loading-bar {
   animation: loading-bar 1.5s ease-in-out infinite;
+} */
+
+[data-admin-root] {
+  position: static !important;
+  z-index: auto !important;
 }
