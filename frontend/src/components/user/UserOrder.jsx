@@ -59,6 +59,15 @@ const UserOrders = () => {
     }
   };
 
+  const statusNamesVN = {
+    PAID: "ĐÃ THANH TOÁN",
+    PENDING_PAYMENT: "CHỜ THANH TOÁN",
+    CANCELLED: "ĐÃ HỦY",
+    PROCESSING: "ĐANG XỬ LÝ",
+    FAILED: "THẤT BẠI",
+    REFUNDED: "ĐÃ HOÀN TIỀN",
+  };
+
   return (
     <div className="w-[100%] mx-auto p-8   shadow-inner border border-[#d7ccc8] mt-10">
       <h2 className="text-2xl font-semibold mb-6 text-[#3e2723]">
@@ -73,14 +82,14 @@ const UserOrders = () => {
             <button
               key={status}
               onClick={() => toggleStatus(status)}
-              className={`px-3 py-1 text-xs   border transition
+              className={`px-3 py-1 text-xs border transition
           ${
             active
               ? "bg-[#3e2723] text-white border-[#3e2723]"
               : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
           }`}
             >
-              {status.replace("_", " ")}
+              {statusNamesVN[status] || status.replace("_", " ")}
             </button>
           );
         })}

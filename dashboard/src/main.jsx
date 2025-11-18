@@ -7,7 +7,9 @@ import AdminContextProvider from "../context/AdminContextProvider.jsx";
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <AdminContextProvider>
-      <App />
+      <div data-admin-root>
+        <App />
+      </div>
     </AdminContextProvider>
   </BrowserRouter>
 );

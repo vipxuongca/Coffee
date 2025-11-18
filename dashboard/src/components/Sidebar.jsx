@@ -12,7 +12,7 @@ const Sidebar = () => {
     <div className="w-[18%] min-h-screen border-r border-[#a1887f] bg-[#f8f3ef] shadow-inner flex flex-col">
       {/* Header */}
       <div className="p-6 pb-4 border-b border-[#d7ccc8]">
-        <h2 className="text-xl font-semibold tracking-wide text-[#4e342e]">
+        <h2 className="text-xl font-semibold tracking-wide text-[#4e342e] hidden md:block">
           Dashboard
         </h2>
       </div>

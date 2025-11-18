@@ -1,2 +1,5 @@
 /_mongo
 /_mongobackup
+*.key
+*.pem 
+_nginx

@@ -46,10 +46,17 @@ const loginUser = async (req, res) => {
 
   const isProd = process.env.NODE_ENV === "production";
 
+  // res.cookie("refreshToken", refreshToken, {
+  //   httpOnly: true,
+  //   secure: isProd,
+  //   sameSite: isProd ? "strict" : "none",
+  //   maxAge: 14 * 24 * 60 * 60 * 1000
+  // });
+
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? "strict" : "none",
+    secure: true,
+    sameSite: "strict",
     maxAge: 14 * 24 * 60 * 60 * 1000
   });
 
@@ -140,4 +147,49 @@ const singleUser = async (req, res) => {
   }
 };
 
-export { loginUser, registerUser, singleUser, logoutUser, refreshAccessToken };
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.user.id; // assume verified via middleware
+
+    const user = await userModel.findById(userId);
+    if (!user) return res.status(404).json({ success: false, message: "Không tìm thấy người dùng." });
+
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch)
+      return res.status(400).json({ success: false, message: "Mật khẩu hiện tại không chính xác." });
+
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Mật khẩu mới không được trùng với mật khẩu hiện tại.",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    // Invalidate refresh token after password change
+    const tokenFromCookie = req.cookies.refreshToken;
+    if (tokenFromCookie) {
+      const hashed = crypto.createHash("sha256").update(tokenFromCookie).digest("hex");
+      await RefreshToken.findOneAndDelete({ token: hashed });
+    }
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
+
+    return res.json({ success: true, message: "Đổi mật khẩu thành công. Vui lòng đăng nhập lại." });
+  } catch (error) {
+    console.error("Change password error:", error);
+    return res.status(500).json({ success: false, message: "Lỗi máy chủ." });
+  }
+};
+
+export { loginUser, registerUser, singleUser, logoutUser, refreshAccessToken, changePassword };

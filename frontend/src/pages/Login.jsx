@@ -47,7 +47,7 @@ const Login = () => {
       const { token, email } = event.data;
       if (token) {
         setToken(token);
-        toast.success(`Logged in as ${email}`);
+        toast.success(`Đăng nhập với ${email}`);
         navigate("/");
         window.removeEventListener("message", messageListener);
       }

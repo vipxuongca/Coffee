@@ -14,6 +14,8 @@
     "lucide-react": "^0.548.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-fullscreen-loader": "^0.1.23",
+    "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^7.9.4",
     "react-spinners": "^0.17.0",
     "react-toastify": "^11.0.5",

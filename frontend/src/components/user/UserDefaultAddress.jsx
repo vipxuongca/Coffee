@@ -38,12 +38,14 @@ const UserDetailAddress = () => {
   }, [token, reloadAddress]);
 
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-[#f8f3ef]   shadow-inner border border-[#d7ccc8] mt-10">
+    <div className="max-w-3xl mx-auto p-8 bg-white border-[1px] border-[#e0d6d2] mt-10">
+      <label className="block text-[#4e342e] font-semibold mb-4">
+        Địa chỉ giao hàng
+      </label>
       {defaultAddress ? (
         <div className="mb-6 bg-[#fff8f0] p-4   border border-[#d7ccc8] relative">
           <div className="flex items-center gap-2 text-[#4e342e] mb-2">
             <MapPin size={18} />
-            <span className="font-semibold">Địa chỉ giao hàng</span>
           </div>
           <p className="text-[#3e2723] font-medium">
             {defaultAddress.receiverName} — {defaultAddress.phone}
@@ -56,7 +58,7 @@ const UserDetailAddress = () => {
             onClick={() => setShowDetailModal(true)}
             className="absolute top-3 right-3 text-[#5d4037] hover:text-[#3e2723] flex items-center gap-1 text-sm"
           >
-            <Pencil size={14} /> Sửa địa chỉ
+            <Pencil size={14} /> Sửa
           </button>
         </div>
       ) : (

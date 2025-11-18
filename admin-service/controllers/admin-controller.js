@@ -60,10 +60,17 @@ const loginAdmin = async (req, res) => {
 
       const isProd = process.env.NODE_ENV === "production";
 
+      // res.cookie("refreshToken", refreshToken, {
+      //   httpOnly: true,
+      //   secure: isProd,
+      //   sameSite: isProd ? "strict" : "none",
+      //   maxAge: 14 * 24 * 60 * 60 * 1000
+      // });
+
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: isProd,
-        sameSite: isProd ? "strict" : "none",
+        secure: true,
+        sameSite: "strict",
         maxAge: 14 * 24 * 60 * 60 * 1000
       });
 
