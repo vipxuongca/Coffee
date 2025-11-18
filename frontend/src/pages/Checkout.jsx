@@ -131,12 +131,11 @@ const Checkout = () => {
           {/* LEFT SIDE: Address + Cart */}
           <div className="lg:col-span-1 space-y-4">
             {/* ADDRESS SECTION */}
-           
-              <UserDefaultAddress />
-      
+
+            <UserDefaultAddress />
 
             {/* CART SECTION */}
-            <div className="bg-white shadow-sm border border-[1px] border-[#e0d6d2] p-6">
+            <div className="max-w-3xl mx-auto p-8 bg-white border-[1px] border-[#e0d6d2] mt-10">
               <h2 className="text-lg font-semibold text-[#4e342e] mb-4">
                 Sản phẩm
               </h2>
@@ -181,12 +180,10 @@ const Checkout = () => {
 
           {/* RIGHT SIDE: Payment + Action */}
           <div className="lg:col-span-1">
-           
-              <PaymentMethod
-                paymentMethod={paymentMethod}
-                setPaymentMethod={setPaymentMethod}
-              />
-    
+            <PaymentMethod
+              paymentMethod={paymentMethod}
+              setPaymentMethod={setPaymentMethod}
+            />
           </div>
         </div>
       </div>
