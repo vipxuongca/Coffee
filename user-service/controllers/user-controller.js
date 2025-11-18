@@ -46,10 +46,17 @@ const loginUser = async (req, res) => {
 
   const isProd = process.env.NODE_ENV === "production";
 
+  // res.cookie("refreshToken", refreshToken, {
+  //   httpOnly: true,
+  //   secure: isProd,
+  //   sameSite: isProd ? "strict" : "none",
+  //   maxAge: 14 * 24 * 60 * 60 * 1000
+  // });
+
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? "strict" : "none",
+    secure: true,
+    sameSite: "strict",
     maxAge: 14 * 24 * 60 * 60 * 1000
   });
 
@@ -152,7 +159,7 @@ const changePassword = async (req, res) => {
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch)
       return res.status(400).json({ success: false, message: "Mật khẩu hiện tại không chính xác." });
-    
+
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
     if (isSamePassword) {
       return res.status(400).json({
