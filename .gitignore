@@ -2,3 +2,4 @@
 /_mongobackup
 *.key
 *.pem 
+_nginx
