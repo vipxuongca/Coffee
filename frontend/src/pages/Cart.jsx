@@ -105,39 +105,38 @@ const Cart = () => {
                   </p>
                 </Link>
               </div>
-              <div>
-                {/* Quantity */}
-                <div className="flex items-center justify-center sm:justify-start space-x-3">
-                  <button
-                    onClick={() => decreaseQty(item.cartId)}
-                    className="bg-[#efebe9] border border-[#bcaaa4]  w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
-                  >
-                    <Minus size={14} />
-                  </button>
-                  <input
-                    type="number"
-                    min="1"
-                    value={draftQty[item.cartId] ?? item.quantity}
-                    onChange={(e) =>
-                      handleDraftChange(item.cartId, e.target.value)
-                    }
-                    onBlur={() => handleBlur(item.cartId)}
-                    className="w-12 text-center border border-[#bcaaa4]  
+
+              {/* Quantity */}
+              <div className="flex items-center justify-center sm:justify-start space-x-3">
+                <button
+                  onClick={() => decreaseQty(item.cartId)}
+                  className="bg-[#efebe9] border border-[#bcaaa4]  w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
+                >
+                  <Minus size={14} />
+                </button>
+                <input
+                  type="number"
+                  min="1"
+                  value={draftQty[item.cartId] ?? item.quantity}
+                  onChange={(e) =>
+                    handleDraftChange(item.cartId, e.target.value)
+                  }
+                  onBlur={() => handleBlur(item.cartId)}
+                  className="w-12 text-center border border-[#bcaaa4]  
       [appearance:textfield] 
       [&::-webkit-inner-spin-button]:appearance-none 
       [&::-webkit-outer-spin-button]:appearance-none"
-                  />
-                  <button
-                    onClick={() => increaseQty(item.cartId)}
-                    className="bg-[#efebe9] border border-[#bcaaa4] w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
-                  >
-                    <Plus size={14} />
-                  </button>
-                </div>
+                />
+                <button
+                  onClick={() => increaseQty(item.cartId)}
+                  className="bg-[#efebe9] border border-[#bcaaa4] w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
+                >
+                  <Plus size={14} />
+                </button>
               </div>
 
               {/* Total + Delete */}
-              <div className="flex justify-between sm:justify-end items-center sm:space-x-4 mt-2 sm:mt-0">
+              <div className="flex justify-between sm:justify-end items-center sm:space-x-4 mt-2 sm:mt-0 w-[200px]">
                 <p className="font-semibold text-[#3e2723]">
                   {(item.price * item.quantity).toLocaleString()}₫
                 </p>
