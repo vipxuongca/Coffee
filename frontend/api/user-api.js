@@ -3,9 +3,12 @@ import axios from 'axios';
 
 const BASE = import.meta.env.VITE_API_USER;
 const BASE_DETAIL = import.meta.env.VITE_API_USERDETAIL;
+const BASE_OAUTH = import.meta.env.VITE_API_OAUTH;
+
 /*
 VITE_API_USER=http://localhost:4002/api/user
 VITE_API_USERDETAIL=http://localhost:4002/api/user-detail
+VITE_API_OAUTH=http://localhost:4001/auth
 */
 const apiPublic = axios.create({
   withCredentials: true,
