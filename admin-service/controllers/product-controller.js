@@ -59,13 +59,34 @@ const addProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
   try {
-    const products = await productModel.find({});
-    res.json({ success: true, products });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    // Count total
+    const totalProducts = await productModel.countDocuments();
+
+    // Paginated query
+    const products = await productModel
+      .find({})
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      page,
+      limit,
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / limit),
+      products
+    });
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 const getOneStockProduct = async (req, res) => {
   try {
     const { id } = req.params; // get id from URL path

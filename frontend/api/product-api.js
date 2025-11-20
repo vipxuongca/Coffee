@@ -12,8 +12,12 @@ const BASE_CAT = import.meta.env.VITE_API_CATEGORY;
 // http://locahost:4000/api/product
 
 export const productApi = {
-  getProduct() {
-    return apiPublic.get(`${BASE}/get`);
+  getProduct(page, limit) {
+    return apiPublic.get(`${BASE}/get`,
+      {
+        params: { page, limit }
+      }
+    );
   },
 
   getOneProduct(productId) {
