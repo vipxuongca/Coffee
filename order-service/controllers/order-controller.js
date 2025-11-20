@@ -343,15 +343,25 @@ const orderGetOne = async (req, res) => {
 const orderGetUser = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log(userId);
 
-    // 1️⃣ Find all orders for this user
-    const orders = await Order.find({ userId });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    // Count total orders of this user
+    const totalOrders = await Order.countDocuments({ userId });
+
+    // Paginated orders
+    const orders = await Order.find({ userId })
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
     if (!orders || orders.length === 0) {
-      return res.status(404).json({ error: 'Không tìm thấy đơn hàng.' });
+      return res.status(404).json({ error: "Không tìm thấy đơn hàng." });
     }
 
-    // 2️⃣ Fetch product details for each order
+    // Fetch product details
     const ordersWithDetails = await Promise.all(
       orders.map(async (order) => {
         const itemsWithDetails = await Promise.all(
@@ -362,12 +372,12 @@ const orderGetUser = async (req, res) => {
               );
               return {
                 ...item.toObject(),
-                product: productRes.data
+                product: productRes.data,
               };
             } catch {
               return {
                 ...item.toObject(),
-                product: null
+                product: null,
               };
             }
           })
@@ -378,22 +388,26 @@ const orderGetUser = async (req, res) => {
           items: itemsWithDetails,
           total: order.total,
           status: order.status,
-          createdAt: order.createdAt
+          createdAt: order.createdAt,
         };
       })
     );
 
-    // 3️⃣ Return all orders
     res.json({
-      message: 'Danh sách đơn hàng:',
-      orders: ordersWithDetails
+      message: "Danh sách đơn hàng:",
+      page,
+      limit,
+      totalOrders,
+      totalPages: Math.ceil(totalOrders / limit),
+      orders: ordersWithDetails,
     });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Không thể tải đơn hàng.' });
+    res.status(500).json({ error: "Không thể tải đơn hàng." });
   }
 };
+
 
 // Cancel an order by ID
 const orderCancel = async (req, res) => {
