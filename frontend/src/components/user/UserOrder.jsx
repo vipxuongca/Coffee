@@ -7,6 +7,10 @@ import { Eye } from "lucide-react";
 const UserOrders = () => {
   const { token, statusFilter, setStatusFilter } = useContext(ShopContext);
   const [orders, setOrders] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const [totalPages, setTotalPages] = useState(1);
+
   const navigate = useNavigate();
 
   const toggleStatus = (status) => {
@@ -17,16 +21,17 @@ const UserOrders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await orderApi.getUserOrders();
+        const res = await orderApi.getUserOrders(page, limit);
         if (res.data && res.data.orders) {
           setOrders(res.data.orders);
+          setTotalPages(res.data.totalPages);
         }
       } catch (err) {
         console.error("Error fetching orders:", err);
       }
     };
     fetchOrders();
-  }, [token]);
+  }, [token, page, limit]);
 
   const formatCurrency = (value) =>
     value.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
@@ -93,6 +98,23 @@ const UserOrders = () => {
             </button>
           );
         })}
+      </div>
+
+      <div className="mb-4 flex items-center gap-2">
+        <span className="text-sm text-gray-600">Hiển thị:</span>
+        <select
+          className="border px-2 py-1 text-sm"
+          value={limit}
+          onChange={(e) => {
+            setLimit(Number(e.target.value));
+            setPage(1);
+          }}
+        >
+          <option value={20}>20</option>
+          <option value={50}>50</option>
+          <option value={100}>100</option>
+        </select>
+        <span className="text-sm text-gray-600">mỗi trang</span>
       </div>
 
       <div className="overflow-x-auto  ">
@@ -177,6 +199,24 @@ const UserOrders = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex items-center gap-2 mt-4">
+        <span className="text-sm text-gray-600">Trang:</span>
+
+        <select
+          className="border px-2 py-1 text-sm"
+          value={page}
+          onChange={(e) => setPage(Number(e.target.value))}
+        >
+          {Array.from({ length: totalPages }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {i + 1}
+            </option>
+          ))}
+        </select>
+
+        <span className="text-sm text-gray-600">/ {totalPages}</span>
       </div>
     </div>
   );

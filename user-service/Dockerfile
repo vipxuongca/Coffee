@@ -3,5 +3,5 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --production
 COPY . .
-EXPOSE 4004
+EXPOSE 4002
 CMD ["node", "server.js"]

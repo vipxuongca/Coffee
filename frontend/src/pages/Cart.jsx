@@ -65,7 +65,7 @@ const Cart = () => {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef]   shadow-inner border border-[#d7ccc8]">
+    <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] shadow-inner border border-[#d7ccc8] mt-10">
       <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2 flex items-center gap-2">
         <ShoppingBag className="w-6 h-6 text-[#4e342e]" />
         Giỏ hàng

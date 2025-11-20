@@ -28,17 +28,20 @@ import AdBanner from "./components/ad/AdBanner.jsx";
 const App = () => {
   const location = useLocation();
   const isUserRoute = location.pathname.startsWith("/user");
+
   return (
-    <div className="relative min-h-screen">
+    <div className="flex flex-col min-h-screen">
       <ToastContainer position="top-left" autoClose={1500} />
+
+      {/* Navbar and banners */}
       <Navbar />
       <AdBanner />
       <TopScroll />
 
       {location.pathname === "/shop" && <SearchBar />}
 
-      {/* Apply padding only if not in /user */}
-      <div className={isUserRoute ? "" : "px-4 lg:px-[4vw]"}>
+      {/* Main content grows to fill remaining space */}
+      <main className={isUserRoute ? "flex-1 min-h-[60vh]" : "flex-1 min-h-[60vh] px-4 lg:px-[4vw]"}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -57,8 +60,9 @@ const App = () => {
           <Route path="/stripe" element={<Stripe />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </div>
+      </main>
 
+      {/* Footer */}
       <Footer />
     </div>
   );

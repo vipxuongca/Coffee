@@ -16,6 +16,9 @@ const ShopContextProvider = (props) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [reloadAddress, setReloadAddress] = useState(0);
   const [defaultAddress, setDefaultAddress] = useState(null);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [statusFilter, setStatusFilter] = useState({
     PAID: true,
@@ -43,9 +46,10 @@ const ShopContextProvider = (props) => {
 
   const getProductsData = async () => {
     try {
-      const response = await productApi.getProduct();
+      const response = await productApi.getProduct(page, limit);
       if (response.data.success) {
         setProducts(response.data.products);
+        setTotalPages(response.data.totalPages);
       } else {
         toast.error(response.data.message);
       }
@@ -70,7 +74,7 @@ const ShopContextProvider = (props) => {
 
   useEffect(() => {
     getProductsData();
-  }, []);
+  }, [page, limit]);
   useEffect(() => {
     getCategoriesData();
   }, []);
@@ -91,6 +95,9 @@ const ShopContextProvider = (props) => {
     setDefaultAddress,
     statusFilter,
     setStatusFilter,
+    totalPages,
+    setPage,
+    setLimit,
   };
 
   return (

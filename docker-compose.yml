@@ -1,0 +1,25 @@
+services:
+  user:
+    build: ./USER-SERVICE
+    ports:
+      - "4002:4002"
+
+  admin:
+    build: ./ADMIN-SERVICE
+    ports:
+      - "4000:4000"
+
+  auth:
+    build: ./OAUTH-SERVICE
+    ports:
+      - "4001:4001"
+
+  order:
+    build: ./ORDER-SERVICE
+    ports:
+      - "4004:4004"
+
+  cart:
+    build: ./CART-SERVICE
+    ports:
+      - "4003:4003"

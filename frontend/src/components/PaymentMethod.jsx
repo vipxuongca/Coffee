@@ -3,9 +3,9 @@ import { assets } from "../assets/assets";
 
 const methods = [
   { value: "COD", label: "Thanh toán khi nhận hàng (COD)" },
-  { value: "CARD", label: "Thẻ tín dụng / ghi nợ" },
+  // { value: "CARD", label: "Thẻ tín dụng / ghi nợ" },
   { value: "TRANSFER", label: "Chuyển khoản ngân hàng" },
-  { value: "STRIPE", label: "Stripe" },
+  // { value: "STRIPE", label: "Stripe" },
 ];
 
 const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
@@ -34,7 +34,7 @@ const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => {
 
       {/* Tab Content */}
       <div className="p-4 border  bg-white text-[#4e342e]">
-        {paymentMethod === "COD" && <p>Thanh toán khi nhận hàng. </p>}
+        {paymentMethod === "COD" && <p>Thanh toán khi nhận hàng. Xin thanh toán cho shipper khi nhận hàng.</p>}
 
         {paymentMethod === "CARD" && (
           <div className="space-y-3">

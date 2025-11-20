@@ -2,22 +2,25 @@ import axios from 'axios';
 import OrderModel from '../models/order-model.js';
 
 const orderGet = async (req, res) => {
-  // GET  http://localhost:4004/order/admin/get
-  // with JWT of ADMIN
-
   try {
-    const adminId = req.admin.id;
-    console.log(adminId);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
 
-    // some authorisation here
+    // Count total orders
+    const totalOrders = await OrderModel.countDocuments();
 
-    // 1️⃣ Find all orders for this user
-    const orders = await OrderModel.find();
+    // Paginated query
+    const orders = await OrderModel.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
     if (!orders || orders.length === 0) {
-      return res.status(404).json({ error: 'Không tìm thấy đơn hàng.' });
+      return res.status(404).json({ error: "Không tìm thấy đơn hàng." });
     }
 
-    // 2️⃣ Fetch product details for each order
+    // Attach product details
     const ordersWithDetails = await Promise.all(
       orders.map(async (order) => {
         const itemsWithDetails = await Promise.all(
@@ -26,14 +29,15 @@ const orderGet = async (req, res) => {
               const productRes = await axios.get(
                 `${process.env.PRODUCT_URL}/api/products/get-one/${item.productId}`
               );
+
               return {
                 ...item.toObject(),
-                product: productRes.data
+                product: productRes.data,
               };
             } catch {
               return {
                 ...item.toObject(),
-                product: null
+                product: null,
               };
             }
           })
@@ -44,22 +48,25 @@ const orderGet = async (req, res) => {
           items: itemsWithDetails,
           total: order.total,
           status: order.status,
-          createdAt: order.createdAt
+          createdAt: order.createdAt,
         };
       })
     );
 
-    // 3️⃣ Return all orders
     res.json({
-      message: 'Danh sách đơn hàng:',
-      orders: ordersWithDetails
+      message: "Danh sách đơn hàng:",
+      page,
+      limit,
+      totalOrders,
+      totalPages: Math.ceil(totalOrders / limit),
+      orders: ordersWithDetails,
     });
-
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Không thể tải đơn hàng.' });
+    res.status(500).json({ error: "Không thể tải đơn hàng." });
   }
 };
+
 
 const orderGetOne = async (req, res) => {
   try {

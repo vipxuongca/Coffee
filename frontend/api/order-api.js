@@ -20,8 +20,12 @@ export const orderApi = {
     return apiAuth.get(`${BASE}/get-one/${orderId}`);
   },
 
-  getUserOrders() {
-    return apiAuth.get(`${BASE}/get-user`);
+  getUserOrders(page, limit) {
+    return apiAuth.get(`${BASE}/get-user`,
+      {
+        params: { page, limit }
+      }
+    );
   },
 
   cancelOrder(orderId) {
