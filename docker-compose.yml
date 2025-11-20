@@ -1,37 +1,25 @@
-version: "3.9"
-
 services:
   user:
     build: ./USER-SERVICE
     ports:
       - "4002:4002"
-    env_file:
-      - ./services/user/.env
 
   admin:
     build: ./ADMIN-SERVICE
     ports:
       - "4000:4000"
-    env_file:
-      - ./services/admin/.env
 
   auth:
     build: ./OAUTH-SERVICE
     ports:
       - "4001:4001"
-    env_file:
-      - ./services/auth/.env
 
   order:
     build: ./ORDER-SERVICE
     ports:
       - "4004:4004"
-    env_file:
-      - ./services/order/.env
 
   cart:
     build: ./CART-SERVICE
     ports:
       - "4003:4003"
-    env_file:
-      - ./services/cart/.env
