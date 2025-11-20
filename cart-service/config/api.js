@@ -6,8 +6,8 @@ dotenv.config({ path: envFile });
 const BASE_PRODUCT = process.env.API_PRODUCT;
 
 export const productApi = {
-  delete: `${BASE_PRODUCT}/api/product/delete`,
-  list: `${BASE_PRODUCT}/api/product`,
-  create: `${BASE_PRODUCT}/api/product/create`,
-  getOneProduct: `${BASE_PRODUCT}/api/product/fetch`//with id passed by the controller
+  delete: `${BASE_PRODUCT}/delete`,
+  list: `${BASE_PRODUCT}`,
+  create: `${BASE_PRODUCT}/create`,
+  getOneProduct: `${BASE_PRODUCT}/fetch`//with id passed by the controller
 };
