@@ -8,7 +8,7 @@ const UserOrders = () => {
   const { token, statusFilter, setStatusFilter } = useContext(ShopContext);
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(20);
   const [totalPages, setTotalPages] = useState(1);
 
   const navigate = useNavigate();
