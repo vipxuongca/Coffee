@@ -31,7 +31,6 @@ const Navbar = () => {
             { name: "TRANG CHỦ", path: "/" },
             { name: "CỬA HÀNG", path: "/shop" },
             { name: "GIỚI THIỆU", path: "/about" },
-            { name: "LIÊN HỆ", path: "/contact" },
           ].map((item) => (
             <NavLink
               key={item.name}
@@ -110,7 +109,6 @@ const Navbar = () => {
             { name: "TRANG CHỦ", path: "/" },
             { name: "CỬA HÀNG", path: "/shop" },
             { name: "GIỚI THIỆU", path: "/about" },
-            { name: "LIÊN HỆ", path: "/contact" },
           ].map((item) => (
             <NavLink
               key={item.name}

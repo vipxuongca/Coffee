@@ -5,8 +5,10 @@ const BASE = import.meta.env.VITE_API_ORDER;
 
 export const orderApi = {
 
-  getAllOrder() {
-    return apiAuth.get(`${BASE}/get`);
+  getAllOrder(page, limit) {
+    return apiAuth.get(`${BASE}/get`, {
+      params: { page, limit }
+    });
   },
 
   getOneOrder(orderId) {

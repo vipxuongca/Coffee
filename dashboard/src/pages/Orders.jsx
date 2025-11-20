@@ -12,6 +12,9 @@ const Orders = () => {
 
   const [orders, setOrders] = useState(null);
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   const toggleStatus = (status) => {
     setStatusFilter((prev) => ({ ...prev, [status]: !prev[status] }));
@@ -25,9 +28,10 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await orderApi.getAllOrder();
+        const res = await orderApi.getAllOrder(page, limit);
         if (res.data && Array.isArray(res.data.orders)) {
           setOrders(res.data.orders);
+          setTotalPages(res.data.totalPages);
         } else {
           setOrders([]); // prevent null errors
         }
@@ -38,7 +42,7 @@ const Orders = () => {
     };
 
     fetchOrders();
-  }, [token]);
+  }, [token, page, limit]);
 
   const formatCurrency = (value) =>
     value.toLocaleString("vi-VN", {
@@ -109,6 +113,23 @@ const Orders = () => {
         })}
       </div>
 
+      <div className="mb-4 flex items-center gap-2">
+        <span className="text-sm text-gray-600">Hiển thị:</span>
+        <select
+          className="border px-2 py-1 text-sm"
+          value={limit}
+          onChange={(e) => {
+            setLimit(Number(e.target.value));
+            setPage(1);
+          }}
+        >
+          <option value={20}>20</option>
+          <option value={50}>50</option>
+          <option value={100}>100</option>
+        </select>
+        <span className="text-sm text-gray-600">mỗi trang</span>
+      </div>
+
       <div className="overflow-x-auto shadow">
         <table className="min-w-full text-sm text-left border-collapse">
           <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
@@ -128,13 +149,27 @@ const Orders = () => {
             {loading &&
               Array.from({ length: 5 }).map((_, i) => (
                 <tr key={i} className="border-b">
-                  <td className="px-4 py-3"><Skeleton width={20} /></td>
-                  <td className="px-4 py-3"><Skeleton width={120} /></td>
-                  <td className="px-4 py-3"><Skeleton width={180} /></td>
-                  <td className="px-4 py-3"><Skeleton width={80} /></td>
-                  <td className="px-4 py-3"><Skeleton width={90} /></td>
-                  <td className="px-4 py-3"><Skeleton width={120} /></td>
-                  <td className="px-4 py-3 text-right"><Skeleton width={30} /></td>
+                  <td className="px-4 py-3">
+                    <Skeleton width={20} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Skeleton width={120} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Skeleton width={180} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Skeleton width={80} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Skeleton width={90} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Skeleton width={120} />
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Skeleton width={30} />
+                  </td>
                 </tr>
               ))}
 
@@ -198,13 +233,33 @@ const Orders = () => {
             {/* ----------------- EMPTY STATE -------------------- */}
             {!loading && orders && orders.length === 0 && (
               <tr>
-                <td colSpan="7" className="text-center py-6 text-gray-500 italic">
+                <td
+                  colSpan="7"
+                  className="text-center py-6 text-gray-500 italic"
+                >
                   Không tìm thấy đơn hàng nào.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+      </div>
+      <div className="flex items-center gap-2 mt-4">
+        <span className="text-sm text-gray-600">Trang:</span>
+
+        <select
+          className="border px-2 py-1 text-sm"
+          value={page}
+          onChange={(e) => setPage(Number(e.target.value))}
+        >
+          {Array.from({ length: totalPages }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {i + 1}
+            </option>
+          ))}
+        </select>
+
+        <span className="text-sm text-gray-600">/ {totalPages}</span>
       </div>
     </div>
   );
