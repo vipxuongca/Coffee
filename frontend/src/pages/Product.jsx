@@ -209,7 +209,7 @@ const Product = () => {
 
         {tab === "packageDetail" && (
           <div className="border-x border-b px-6 py-6 text-sm text-gray-600">
-            Không có mô tả.
+            <p>{productData.packageDetail || "Không có mô tả chi tiết."}</p>
           </div>
         )}
       </div>
