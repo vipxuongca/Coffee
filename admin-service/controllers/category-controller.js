@@ -47,16 +47,20 @@ const getCategory = async (req, res) => {
 
 const removeCategory = async (req, res) => {
   try {
-    const deleted = await categoryModel.findByIdAndDelete(req.body.id);
+    const { id } = req.params;
+
+    const deleted = await categoryModel.findByIdAndDelete(id);
     if (!deleted) {
       return res.status(404).json({ message: 'Delete failed' });
     }
+
     res.json({ success: true, message: 'Xóa phân loại thành công' });
   } catch (error) {
     console.error('Error removing category:', error);
     res.status(500).json({ message: error.message });
   }
 };
+
 
 const getOneCategory = async (req, res) => {
   try {
