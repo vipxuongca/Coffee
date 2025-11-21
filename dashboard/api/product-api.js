@@ -35,7 +35,7 @@ export const productApi = {
   },
 
   updateProduct(productId, formData) {
-    return apiAuth.post(`${BASE}/edit/${productId}`, formData, {
+    return apiAuth.put(`${BASE}/edit/${productId}`, formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
   },

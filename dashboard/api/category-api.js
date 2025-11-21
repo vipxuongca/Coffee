@@ -27,7 +27,7 @@ export const categoryApi = {
   },
 
   updateCategory(categoryId, formData) {
-    return apiAuth.post(`${BASE}/edit/${categoryId}`, formData, {
+    return apiAuth.put(`${BASE}/edit/${categoryId}`, formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
   },
