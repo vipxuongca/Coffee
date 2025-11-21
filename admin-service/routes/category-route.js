@@ -14,6 +14,6 @@ router.get('/fetch/:id', getOneCategory);
 router.put('/edit/:id', adminAuth, upload.fields([
   { name: "image1", maxCount: 1 },
 ]), updateCategory);
-router.delete('/delete', adminAuth, removeCategory);
+router.delete('/delete/:id', adminAuth, removeCategory);
 
 export default router;

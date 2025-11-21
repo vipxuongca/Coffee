@@ -32,7 +32,7 @@ export const categoryApi = {
     });
   },
 
-  // deleteCategory(categoryId) {
-  //   return apiAuth.delete(`${BASE}/delete/${categoryId}`);
-  // }
+  deleteCategory(categoryId) {
+    return apiAuth.delete(`${BASE}/delete/${categoryId}`);
+  }
 };
