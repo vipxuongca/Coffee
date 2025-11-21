@@ -111,7 +111,6 @@ const Collection = () => {
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 pt-10 border-t">
-
       {/* Filtering */}
       <div className="min-w-60 max-w-60">
         <div
@@ -162,8 +161,6 @@ const Collection = () => {
 
       {/* Cards */}
       <div className="flex-1">
-
-        
         {/* Header */}
         <div className="flex justify-between items-center text-base sm:text-2xl mb-4">
           <Title text1="TẤT CẢ " text2="SẢN PHẨM" />
@@ -175,24 +172,23 @@ const Collection = () => {
             <option value="low-high">Giá: Thấp - Cao</option>
             <option value="high-low">Giá: Cao - Thấp</option>
           </select>
-          
         </div>
-              <div className="mb-4 flex items-center gap-2">
-        <span className="text-sm text-gray-600">Hiển thị:</span>
-        <select
-          className="border px-2 py-1 text-sm"
-          value={limit}
-          onChange={(e) => {
-            setLimit(Number(e.target.value));
-            setPage(1);
-          }}
-        >
-          <option value={20}>20</option>
-          <option value={50}>50</option>
-          {/* <option value={100}>100</option> */}
-        </select>
-        <span className="text-sm text-gray-600">mỗi trang</span>
-      </div>
+        <div className="mb-4 flex items-center gap-2">
+          <span className="text-sm text-gray-600">Hiển thị:</span>
+          <select
+            className="border px-2 py-1 text-sm"
+            value={limit}
+            onChange={(e) => {
+              setLimit(Number(e.target.value));
+              setPage(1);
+            }}
+          >
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            {/* <option value={100}>100</option> */}
+          </select>
+          <span className="text-sm text-gray-600">mỗi trang</span>
+        </div>
 
         {/* Product Grid */}
         <div
@@ -209,25 +205,24 @@ const Collection = () => {
             </a>
           ))}
         </div>
-              <div className="flex items-center gap-2 mt-4">
-        <span className="text-sm text-gray-600">Trang:</span>
+        <div className="flex items-center gap-2 mt-4">
+          <span className="text-sm text-gray-600">Trang:</span>
 
-        <select
-          className="border px-2 py-1 text-sm"
-          value={page}
-          onChange={(e) => setPage(Number(e.target.value))}
-        >
-          {Array.from({ length: totalPages }, (_, i) => (
-            <option key={i + 1} value={i + 1}>
-              {i + 1}
-            </option>
-          ))}
-        </select>
+          <select
+            className="border px-2 py-1 text-sm"
+            value={page}
+            onChange={(e) => setPage(Number(e.target.value))}
+          >
+            {Array.from({ length: totalPages }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </select>
 
-        <span className="text-sm text-gray-600">/ {totalPages}</span>
+          <span className="text-sm text-gray-600">/ {totalPages}</span>
+        </div>
       </div>
-      </div>
-
     </div>
   );
 };
