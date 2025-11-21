@@ -114,23 +114,36 @@ const Collection = () => {
       {/* Filtering */}
       <div className="min-w-60 max-w-60">
         <div
-          className={`border-gray-300 border pl-5 py-3 mt-6 ${
+          className={`border-gray-300 border pl-5 py-4 mt-6 ${
             showFilter ? "" : "hidden"
           } sm:block`}
         >
           <p className="mb-3 text-sm font-medium">PHÂN LOẠI</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            {categories.map((cat) => (
-              <p key={cat._id}>
-                <input
-                  className="w-3"
-                  type="checkbox"
-                  value={cat.name}
-                  onChange={toggleCategory}
-                />{" "}
-                {cat.name}
-              </p>
-            ))}
+            {categories
+              .filter((cat) => cat.productCount > 0)
+              .map((cat) => (
+                <label
+                  key={cat._id}
+                  className="flex items-center justify-between w-full"
+                >
+                  {/* Left: checkbox + name */}
+                  <div className="flex items-center gap-2">
+                    <input
+                      className="w-3"
+                      type="checkbox"
+                      value={cat.name}
+                      onChange={toggleCategory}
+                    />
+                    <span>{cat.name}</span>
+                  </div>
+
+                  {/* Right: fixed width to align counts */}
+                  <span className="text-gray-500 min-w-[40px]">
+                    ({cat.productCount})
+                  </span>
+                </label>
+              ))}
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import categoryModel from '../models/category-model.js';
+import productModel from '../models/product-model.js';
 
 const addCategory = async (req, res) => {
   try {
@@ -120,4 +121,84 @@ const updateCategory = async (req, res) => {
   }
 };
 
-export { addCategory, getCategory, removeCategory, getOneCategory, updateCategory };
+const recountCategoryProductCount = async (req, res) => {
+  try {
+    // Group products by their category field
+    const productCounts = await productModel.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Create a quick lookup map for performance
+    const countMap = {};
+    for (const item of productCounts) {
+      countMap[item._id] = item.count;
+    }
+
+    // Fetch all categories
+    const categories = await categoryModel.find();
+
+    // Prepare bulk updates
+    const bulkOps = categories.map((cat) => ({
+      updateOne: {
+        filter: { _id: cat._id },
+        update: {
+          $set: {
+            productCount: countMap[cat.name] || 0
+          }
+        }
+      }
+    }));
+
+    if (bulkOps.length > 0) {
+      await categoryModel.bulkWrite(bulkOps);
+    }
+
+    return res.json({
+      success: true,
+      message: "Category product counts recalculated successfully."
+    });
+
+  } catch (err) {
+    console.error("Recount error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error."
+    });
+  }
+};
+
+const updateCategoryCount = async (oldCategoryName, newCategoryName) => {
+  try {
+    // Decrement old category (only if changed)
+    if (oldCategoryName && oldCategoryName !== newCategoryName) {
+      await categoryModel.findOneAndUpdate(
+        { name: oldCategoryName },
+        { $inc: { productCount: -1 } }
+      );
+      console.log("decremented");
+    }
+
+    // Increment new category
+    if (newCategoryName) {
+      await categoryModel.findOneAndUpdate(
+        { name: newCategoryName },
+        { $inc: { productCount: 1 } }
+      );
+      console.log("incremented");
+    }
+
+  } catch (err) {
+    console.error("Error updating category counts:", err);
+    throw err;
+  }
+};
+
+
+
+
+export { addCategory, getCategory, removeCategory, getOneCategory, updateCategory, recountCategoryProductCount, updateCategoryCount };
