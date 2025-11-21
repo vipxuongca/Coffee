@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import { backendUrl } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";

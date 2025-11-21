@@ -4,12 +4,13 @@ import { ShopContext } from "../context/ShopContext";
 import RelatedProducts from "../components/layout/RelatedProducts";
 import { toast } from "react-toastify";
 import { CartContext } from "../context/CartContext";
+import { productApi } from "../../api/product-api";
 
 const Product = () => {
   const { productId } = useParams();
 
   // contexts
-  const { products, currency } = useContext(ShopContext);
+  const { currency } = useContext(ShopContext);
   const { getQuantityByProductId, cartAdd } = useContext(CartContext);
 
   // states
@@ -22,13 +23,20 @@ const Product = () => {
 
   // Load product data
   useEffect(() => {
-    if (!productId || !Array.isArray(products) || products.length === 0) return;
-    const item = products.find((p) => String(p._id) === String(productId));
-    if (item) {
-      setProductData(item);
-      setImage(Array.isArray(item.image) ? item.image[0] : item.image || "");
-    }
-  }, [products, productId]);
+    if (!productId) return;
+
+    const fetchProduct = async () => {
+      const res = await productApi.getOneProduct(productId);
+      const item = res.data.product;
+
+      if (item) {
+        setProductData(item);
+        setImage(Array.isArray(item.image) ? item.image[0] : item.image || "");
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
 
   const handleAddToCart = async () => {
     if (!productData?._id) return;
