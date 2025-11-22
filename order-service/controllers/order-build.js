@@ -11,13 +11,11 @@ import { productApi } from "../api/product-api.js";
 /* ----------------------- FETCHERS ----------------------- */
 async function fetchProducts(items) {
   const productPromises = items.map(async (item) => {
-    const product = await productApi.getOneProduct(item.productId);
+    const res = await productApi.getOneProduct(item.productId);
+    if (!res || !res.data || !res.data.product) return null;
 
-    if (!product) return null;
-
-    // Merge quantity into the full product object
     return {
-      ...product,
+      ...res.data.product, // real product fields
       quantity: item.quantity,
     };
   });
@@ -27,17 +25,28 @@ async function fetchProducts(items) {
 }
 
 
+
 /* ----------------------- BUILDER ----------------------- */
 export async function buildOrderData(items, userId) {
   try {
-    const [user, userDetail, products] = await Promise.all([
+    const [uRes, detailRes] = await Promise.all([
       userApi.single(userId),
       detailApi.getDefaultAddress(userId),
-      fetchProducts(items),
     ]);
+    const productRes = await fetchProducts(items);
 
-    if (!user || !userDetail || products.length === 0)
-      throw new Error("Không đủ dữ liệu tạo đơn hàng");
+    // pack user information (id and email)
+    const { _id, email } = uRes.data.data;
+    const user = { _id, email };
+
+    // pack user detail
+    const userDetail = detailRes.data;
+
+    // pack products
+    const products = productRes;
+
+    // if (!user || !userDetail || products.length === 0)
+    //   throw new Error("Không đủ dữ liệu tạo đơn hàng");
 
     console.log("Dữ liệu đơn hàng như sau");
     console.log("user: ", user)

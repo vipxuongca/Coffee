@@ -1,7 +1,7 @@
 import userModel from '../../models/user-model.js';
 
 const singleUser = async (req, res) => {
-  const { userId } = req.params;
+  const { userId } = req.body;
   try {
     const user = await userModel.findOne({ _id: userId }).select('-password');
 
