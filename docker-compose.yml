@@ -19,9 +19,9 @@ services:
     ports:
       - "4004:4004"
     environment:
-      API_USER: "http://user:4002/api/user"
+      API_USER: "http://user:4002/api/user/order"
       API_USERDETAIL: "http://user:4002/api/userdetail"
-      API_CART: "http://cart:4003/api/cart"
+      API_CART: "http://cart:4003/api/cart/order"
       API_PRODUCT: "http://admin:4000/api/product"
       API_ADMIN: "http://admin:4000/api/admin"
 
