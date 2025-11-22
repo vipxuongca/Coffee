@@ -1,21 +1,21 @@
 services:
   user:
-    build: ./USER-SERVICE
+    build: ./user-service
     ports:
       - "4002:4002"
 
   admin:
-    build: ./ADMIN-SERVICE
+    build: ./admin-service
     ports:
       - "4000:4000"
 
   auth:
-    build: ./OAUTH-SERVICE
+    build: ./oauth-service
     ports:
       - "4001:4001"
 
   order:
-    build: ./ORDER-SERVICE
+    build: ./order-service
     ports:
       - "4004:4004"
     environment:
@@ -26,7 +26,7 @@ services:
       API_ADMIN: "http://admin:4000/api/admin"
 
   cart:
-    build: ./CART-SERVICE
+    build: ./cart-service
     ports:
       - "4003:4003"
     environment:
