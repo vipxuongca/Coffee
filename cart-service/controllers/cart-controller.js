@@ -1,6 +1,5 @@
 import CartModel from '../models/cart-model.js';
-import axios from 'axios';
-import { productApi } from '../config/api.js';
+import { productApi } from '../api/product-api.js';
 
 const cartGet = async (req, res) => {
   try {
@@ -16,8 +15,8 @@ const cartGet = async (req, res) => {
     const itemsWithDetails = await Promise.all(
       cart.items.map(async (item) => {
         try {
-          const fetchURI = `${productApi.getOneProduct}/${item.productId}`;
-          const productRes = await axios.get(fetchURI);
+
+          const productRes = await productApi.getOneProduct(item.productId);
           // console.log('Fetched product:', productRes.data);
           return {
             ...item.toObject(),
@@ -65,9 +64,7 @@ const cartAdd = async (req, res) => {
       return res.status(400).json({ error: 'Số lượng sản phẩm không hợp lệ.' });
     }
 
-    const fetchURI = `${productApi.getOneProduct}/${productId}`;
-    console.log('Fetch URI:', fetchURI);
-    const productResponse = await axios.get(fetchURI);
+    const productResponse = await productApi.getOneProduct(productId);
     const productData = productResponse.data;
 
     if (!productData) {
@@ -200,7 +197,7 @@ const cartUpdateItemIncrease = async (req, res) => {
     const { productId } = req.params;
 
     // Check product exists and stock
-    const productResponse = await axios.get(`http://localhost:4000/api/product/fetch/${productId}`);
+    const productResponse = await productApi.getOneProduct(productId);
     const productData = productResponse.data;
     if (!productData) {
       return res.status(404).json({ error: 'Không có sản phẩm này.' });

@@ -1,5 +1,5 @@
 import express from 'express';
-import { addCategory, removeCategory, getCategory, getOneCategory, updateCategory } from '../controllers/category-controller.js';
+import { addCategory, removeCategory, getCategory, getOneCategory, updateCategory, recountCategoryProductCount } from '../controllers/category-controller.js';
 import upload from '../middleware/multer.js';
 import adminAuth from '../middleware/admin-auth.js';
 
@@ -15,5 +15,6 @@ router.put('/edit/:id', adminAuth, upload.fields([
   { name: "image1", maxCount: 1 },
 ]), updateCategory);
 router.delete('/delete/:id', adminAuth, removeCategory);
+router.post('/recount', adminAuth, recountCategoryProductCount)
 
 export default router;

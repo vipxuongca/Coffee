@@ -114,23 +114,36 @@ const Collection = () => {
       {/* Filtering */}
       <div className="min-w-60 max-w-60">
         <div
-          className={`border-gray-300 border pl-5 py-3 mt-6 ${
+          className={`border-gray-300 border pl-5 py-4 mt-6 ${
             showFilter ? "" : "hidden"
           } sm:block`}
         >
           <p className="mb-3 text-sm font-medium">PHÂN LOẠI</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            {categories.map((cat) => (
-              <p key={cat._id}>
-                <input
-                  className="w-3"
-                  type="checkbox"
-                  value={cat.name}
-                  onChange={toggleCategory}
-                />{" "}
-                {cat.name}
-              </p>
-            ))}
+            {categories
+              .filter((cat) => cat.productCount > 0)
+              .map((cat) => (
+                <label
+                  key={cat._id}
+                  className="flex items-center justify-between w-full"
+                >
+                  {/* Left: checkbox + name */}
+                  <div className="flex items-center gap-2">
+                    <input
+                      className="w-3"
+                      type="checkbox"
+                      value={cat.name}
+                      onChange={toggleCategory}
+                    />
+                    <span>{cat.name}</span>
+                  </div>
+
+                  {/* Right: fixed width to align counts */}
+                  <span className="text-gray-500 min-w-[40px]">
+                    ({cat.productCount})
+                  </span>
+                </label>
+              ))}
           </div>
         </div>
 
@@ -173,21 +186,46 @@ const Collection = () => {
             <option value="high-low">Giá: Cao - Thấp</option>
           </select>
         </div>
-        <div className="mb-4 flex items-center gap-2">
-          <span className="text-sm text-gray-600">Hiển thị:</span>
-          <select
-            className="border px-2 py-1 text-sm"
-            value={limit}
-            onChange={(e) => {
-              setLimit(Number(e.target.value));
-              setPage(1);
-            }}
-          >
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-            {/* <option value={100}>100</option> */}
-          </select>
-          <span className="text-sm text-gray-600">mỗi trang</span>
+        <div className="flex items-center justify-between">
+          {/* Left: limit selector */}
+          <div className="mb-4 flex items-center gap-2">
+            <span className="text-sm text-gray-600">Hiển thị:</span>
+            <select
+              className="border px-2 py-1 text-sm"
+              value={limit}
+              onChange={(e) => {
+                setLimit(Number(e.target.value));
+                setPage(1);
+              }}
+            >
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+            <span className="text-sm text-gray-600">mỗi trang</span>
+          </div>
+
+          {/* Right: pagination */}
+          <div className="flex items-center gap-2 mb-4">
+            <div className="flex gap-1">
+              {Array.from({ length: totalPages }, (_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    className={
+                      `px-3 py-1 border text-sm ` +
+                      (page === pageNum
+                        ? "bg-black text-white"
+                        : "bg-white text-gray-700")
+                    }
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* Product Grid */}
@@ -204,23 +242,6 @@ const Collection = () => {
               <ProductCard product={item} />
             </a>
           ))}
-        </div>
-        <div className="flex items-center gap-2 mt-4">
-          <span className="text-sm text-gray-600">Trang:</span>
-
-          <select
-            className="border px-2 py-1 text-sm"
-            value={page}
-            onChange={(e) => setPage(Number(e.target.value))}
-          >
-            {Array.from({ length: totalPages }, (_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {i + 1}
-              </option>
-            ))}
-          </select>
-
-          <span className="text-sm text-gray-600">/ {totalPages}</span>
         </div>
       </div>
     </div>

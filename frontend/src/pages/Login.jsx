@@ -17,6 +17,8 @@ const Login = () => {
 
       if (response.data.success) {
         setToken(response.data.token);
+        setEmail("");
+        setPassword("");
         toast.success("Đăng nhập thành công!");
         setTimeout(() => navigate("/"), 1000);
       } else {

@@ -34,5 +34,9 @@ export const categoryApi = {
 
   deleteCategory(categoryId) {
     return apiAuth.delete(`${BASE}/delete/${categoryId}`);
+  },
+
+  recountCategory() {
+    return apiAuth.post(`${BASE}/recount`);
   }
 };
