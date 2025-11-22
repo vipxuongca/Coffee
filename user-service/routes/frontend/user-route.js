@@ -6,8 +6,8 @@ import {
   singleUser,
   refreshAccessToken,
   changePassword
-} from '../controllers/user-controller.js';
-import verifyToken from '../middleware/verifyToken.js'
+} from '../../controllers/frontend/user-controller.js';
+import verifyToken from '../../middleware/verifyToken.js'
 
 const router = express.Router();
 

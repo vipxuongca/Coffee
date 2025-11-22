@@ -6,8 +6,8 @@ import {
   updateDetail,
   deleteDetail,
   setDefaultDetail,
-} from "../controllers/user-detail-controller.js";
-import verifyToken from "../middleware/verifyToken.js"
+} from "../../controllers/frontend/detail-controller.js";
+import verifyToken from "../../middleware/verifyToken.js"
 
 const router = express.Router();
 

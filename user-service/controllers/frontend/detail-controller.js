@@ -1,4 +1,4 @@
-import userDetailModel from "../models/user-detail-model.js";
+import userDetailModel from "../../models/detail-model.js";
 
 
 // Create a new shipping detail

@@ -1,4 +1,5 @@
-import axios from "axios";
+import { userApi, detailApi } from "../api/user-api.js";
+import { productApi } from "../api/product-api.js";
 
 /* ----------------------- CONFIG ----------------------- */
 // const SERVICE_URLS = {
@@ -7,44 +8,10 @@ import axios from "axios";
 //   product: process.env.PRODUCT_URL,
 // };
 
-const SERVICE_URLS = {
-  user: "http://localhost:4002",
-  userDetail: "http://localhost:4002",
-  product: "http://localhost:4000",
-};
-
-/* ----------------------- HELPERS ----------------------- */
-async function safeGet(url, token, label) {
-  try {
-    const res = await axios.get(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    // return the first actual payload key if known
-    return res.data?.product || res.data?.data || res.data;
-  } catch (err) {
-    console.error(`Error fetching ${label}:`, err.message);
-    return null;
-  }
-}
-
 /* ----------------------- FETCHERS ----------------------- */
-async function fetchUser(token) {
-  return await safeGet(`${SERVICE_URLS.user}/api/user/single`, token, "User");
-}
-
-async function fetchUserDetail(token) {
-  return await safeGet(`${SERVICE_URLS.userDetail}/api/user-detail/default`, token, "UserDetail");
-}
-
-async function fetchProducts(items, token) {
+async function fetchProducts(items) {
   const productPromises = items.map(async (item) => {
-    const product = await safeGet(
-      `${SERVICE_URLS.product}/api/product/fetch/${item.productId}`,
-      token,
-      `Product ${item.productId}`
-    );
-
-    // console.log(`${SERVICE_URLS.product}/api/product/fetch/${item.productId}`);
+    const product = await productApi.getOneProduct(item.productId);
 
     if (!product) return null;
 
@@ -61,16 +28,21 @@ async function fetchProducts(items, token) {
 
 
 /* ----------------------- BUILDER ----------------------- */
-export async function buildOrderData(items, token) {
+export async function buildOrderData(items, userId) {
   try {
     const [user, userDetail, products] = await Promise.all([
-      fetchUser(token),
-      fetchUserDetail(token),
-      fetchProducts(items, token),
+      userApi.single(userId),
+      detailApi.getDefaultAddress(userId),
+      fetchProducts(items),
     ]);
 
     if (!user || !userDetail || products.length === 0)
-      throw new Error("Incomplete order data");
+      throw new Error("Không đủ dữ liệu tạo đơn hàng");
+
+    console.log("Dữ liệu đơn hàng như sau");
+    console.log("user: ", user)
+    console.log("userDetail: ", userDetail)
+    console.log("products: ", products)
 
     return {
       user,
@@ -78,7 +50,7 @@ export async function buildOrderData(items, token) {
       products,
     };
   } catch (err) {
-    console.error("Error building order data:", err.message);
+    console.error("Xảy ra lỗi khi tạo dữ liệu đơn hàng:", err.message);
     throw err;
   }
 }

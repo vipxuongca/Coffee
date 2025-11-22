@@ -9,8 +9,12 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import connectDB from './config/mongodb.js';
-import userRouter from './routes/user-route.js';
-import userDetailRouter from './routes/user-detail-route.js';
+
+import userRouter from './routes/frontend/user-route.js';
+import detailRouter from './routes/frontend/detail-route.js';
+
+import userOrderRouter from './routes/order-service/user-order-route.js';
+import detailOrderRouter from './routes/order-service/detail-order-route.js';
 
 
 // configuration
@@ -49,9 +53,17 @@ app.use(cors({
   credentials: true,
 }));
 
-//api endpoint
+//api endpoint for frontend
 app.use('/api/user', userRouter);
-app.use('/api/user-detail', userDetailRouter);
+app.use('/api/detail', detailRouter);
+
+// following enpoints are for order service, which is to be used internally
+// which means they do not rely on token to get user ID
+// these endpoints are the same as the frontend counterparts
+// but userId is required to be passed as payloads
+
+app.use('/api/user/order', userOrderRouter);
+app.use('/api/detail/order', detailOrderRouter);
 
 //start the server
 app.listen(PORT, () => {

@@ -1,9 +1,9 @@
-import axios from 'axios';
 import jwt from 'jsonwebtoken'
 import { buildOrderData } from "../controllers/order-build.js";
 import Order from '../models/order-model.js';
-import { paymentApi } from '../api/payment-api.js';
+// import { paymentApi } from '../api/payment-api.js';
 import { cartApi } from '../api/cart-api.js';
+import { productApi } from '../api/product-api.js';
 
 
 const orderCreateCOD = async (req, res) => {
@@ -14,6 +14,7 @@ Expected payload:
   try {
     const { items, defaultAddress, notes } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
+    const userId = jwt.verify(token, process.env.JWT_SECRET).id;
 
     console.log(defaultAddress)
 
@@ -24,7 +25,7 @@ Expected payload:
       });
     }
 
-    const orderData = await buildOrderData(items, token);
+    const orderData = await buildOrderData(items, userId);
     if (!orderData?.user || !orderData?.userDetail || !orderData?.products) {
       return res.status(400).json({
         success: false,
@@ -74,7 +75,7 @@ Expected payload:
     });
 
     await newOrder.save();
-    const userId = jwt.verify(token, process.env.JWT_SECRET).id;
+
     // console.log("user id is", userId)
     // --- Clear user's cart after successful order creation ---
     try {
@@ -119,7 +120,7 @@ Expected payload:
       });
     }
 
-    const orderData = await buildOrderData(items, token);
+    const orderData = await buildOrderData(items,);
     if (!orderData?.user || !orderData?.userDetail || !orderData?.products) {
       return res.status(400).json({
         success: false,
@@ -306,9 +307,7 @@ const orderGetOne = async (req, res) => {
     const itemsWithDetails = await Promise.all(
       order.items.map(async (item) => {
         try {
-          const productRes = await axios.get(
-            `http://localhost:4000/api/products/get-one/${item.productId}`
-          );
+          const productRes = await productApi.getOneProduct(item.productId);
           return {
             ...item.toObject(),
             product: productRes.data
@@ -367,9 +366,7 @@ const orderGetUser = async (req, res) => {
         const itemsWithDetails = await Promise.all(
           order.items.map(async (item) => {
             try {
-              const productRes = await axios.get(
-                `${process.env.PRODUCT_URL}/api/products/get-one/${item.productId}`
-              );
+              const productRes = await productApi.getOneProduct(item.productId);
               return {
                 ...item.toObject(),
                 product: productRes.data,

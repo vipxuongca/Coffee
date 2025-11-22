@@ -1,5 +1,5 @@
-import userModel from '../models/user-model.js';
-import RefreshToken from '../models/refreshtoken-model.js';
+import userModel from '../../models/user-model.js';
+import RefreshToken from '../../models/refreshtoken-model.js';
 import crypto from "crypto"
 import validator from 'validator';
 import bcrypt from 'bcrypt';
