@@ -48,10 +48,10 @@ export async function buildOrderData(items, userId) {
     // if (!user || !userDetail || products.length === 0)
     //   throw new Error("Không đủ dữ liệu tạo đơn hàng");
 
-    console.log("Dữ liệu đơn hàng như sau");
-    console.log("user: ", user)
-    console.log("userDetail: ", userDetail)
-    console.log("products: ", products)
+    // console.log("Dữ liệu đơn hàng như sau");
+    // console.log("user: ", user)
+    // console.log("userDetail: ", userDetail)
+    // console.log("products: ", products)
 
     return {
       user,

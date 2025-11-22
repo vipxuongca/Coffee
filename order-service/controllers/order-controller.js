@@ -110,6 +110,7 @@ Expected payload:
   try {
     const { items, defaultAddress, notes } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
+    const userId = jwt.verify(token, process.env.JWT_SECRET).id;
 
     console.log(defaultAddress)
 
@@ -120,7 +121,7 @@ Expected payload:
       });
     }
 
-    const orderData = await buildOrderData(items,);
+    const orderData = await buildOrderData(items, userId);
     if (!orderData?.user || !orderData?.userDetail || !orderData?.products) {
       return res.status(400).json({
         success: false,
@@ -170,7 +171,7 @@ Expected payload:
     });
 
     await newOrder.save();
-    const userId = jwt.verify(token, process.env.JWT_SECRET).id;
+
     // console.log("user id is", userId)
     // --- Clear user's cart after successful order creation ---
     try {
@@ -205,6 +206,7 @@ Expected payload:
   try {
     const { items, defaultAddress, notes } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
+    const userId = jwt.verify(token, process.env.JWT_SECRET).id;
 
     console.log(defaultAddress)
 
@@ -215,7 +217,7 @@ Expected payload:
       });
     }
 
-    const orderData = await buildOrderData(items, token);
+    const orderData = await buildOrderData(items, userId);
     if (!orderData?.user || !orderData?.userDetail || !orderData?.products) {
       return res.status(400).json({
         success: false,
@@ -265,7 +267,7 @@ Expected payload:
     });
 
     await newOrder.save();
-    const userId = jwt.verify(token, process.env.JWT_SECRET).id;
+    
     // console.log("user id is", userId)
     // --- Clear user's cart after successful order creation ---
     try {
