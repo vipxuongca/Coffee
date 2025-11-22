@@ -21,5 +21,9 @@ export const productApi = {
 
   stockVerify(productId, quantity) {
     return apiAuth.post(`${BASE}/stock/${productId}`, { quantity });
+  },
+
+  deduceStock(items) {
+    return apiAuth.put(`${BASE}/deduce-stock`, { items });
   }
 };
