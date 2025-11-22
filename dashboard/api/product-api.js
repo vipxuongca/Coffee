@@ -40,6 +40,7 @@ export const productApi = {
     });
   },
 
+
   // deleteProduct(productId) {
   //   return apiAuth.delete(`${BASE}/stock/${productId}`);
   // }

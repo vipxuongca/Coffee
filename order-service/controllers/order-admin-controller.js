@@ -1,5 +1,6 @@
 import axios from 'axios';
 import OrderModel from '../models/order-model.js';
+import { productApi } from '../api/product-api.js';
 
 const orderGet = async (req, res) => {
   try {
@@ -166,18 +167,10 @@ const orderConfirmPayment = async (req, res) => {
       quantity: item.quantity
     }));
 
-    console.log(items)
+    // console.log(items)
 
     // Call stock deduction API
-    await axios.put(
-      "http://localhost:4000/api/product/deduce-stock",
-      { items },
-      {
-        headers: {
-          Authorization: req.headers.authorization
-        }
-      }
-    );
+    await productApi.deduceStock(items);
 
     // Update order status
     order.status = "PAID";
