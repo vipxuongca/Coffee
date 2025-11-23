@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { buildOrderData } from "../controllers/order-build.js";
+import { buildOrderData } from "./order-build.js";
 import Order from '../models/order-model.js';
 // import { paymentApi } from '../api/payment-api.js';
 import { cartApi } from '../api/cart-api.js';
