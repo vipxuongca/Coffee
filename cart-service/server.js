@@ -43,4 +43,6 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/cart/order', cartOrderRoutes);
 
 //listen
-app.listen(PORT, () => console.log(`CART running on port: http://localhost:${PORT}`));
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`CART is running on http://0.0.0.0:${PORT}`);
+});
