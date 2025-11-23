@@ -47,5 +47,6 @@ app.use(bodyParser.json());
 app.use('/api/order', orderRouter);
 app.use('/api/order/admin', orderAdminRouter);
 
-//listen
-app.listen(PORT, () => console.log(`ORDER running on port: http://localhost:${PORT}`));
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`ORDER is running on http://0.0.0.0:${PORT}`);
+});

@@ -47,6 +47,6 @@ app.use('/api/category', categoryRouter);
 
 
 //start the server
-app.listen(PORT, () => {
-    console.log(`ADMIN is running on http://localhost:${PORT}`);
-}); 
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`ADMIN is running on http://0.0.0.0:${PORT}`);
+});
