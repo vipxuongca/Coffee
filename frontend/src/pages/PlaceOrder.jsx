@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
 import { ShopContext } from "../context/ShopContext";
+import { orderApi } from "../../api/order-api";
 
 const PlaceOrder = () => {
   const { orderId } = useParams();
@@ -12,12 +12,7 @@ const PlaceOrder = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:4004/api/order/get-one/${orderId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await orderApi.getOneOrder(orderId);
         setOrder(res.data);
       } catch (err) {
         console.error("Failed to fetch order:", err);
@@ -29,7 +24,9 @@ const PlaceOrder = () => {
   }, [orderId, token]);
 
   if (loading)
-    return <div className="p-8 text-center text-[#5d4037]">Đang tải đơn hàng...</div>;
+    return (
+      <div className="p-8 text-center text-[#5d4037]">Đang tải đơn hàng...</div>
+    );
   if (!order)
     return (
       <div className="p-8 text-center text-red-600">
@@ -55,7 +52,8 @@ const PlaceOrder = () => {
             Trạng thái: <span className="text-[#6d4c41]">{order.status}</span>
           </p>
           <p className="text-sm font-medium">
-            Phương thức thanh toán: <span className="text-[#6d4c41]">{order.paymentMethod}</span>
+            Phương thức thanh toán:{" "}
+            <span className="text-[#6d4c41]">{order.paymentMethod}</span>
           </p>
         </section>
 
