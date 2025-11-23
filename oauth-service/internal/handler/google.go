@@ -128,9 +128,9 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 	// Generate JWT
 	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id": existingUser.ID.Hex(),
-		"email":   googleUser.Email,
-		"exp":     time.Now().Add(60 * time.Minute).Unix(),
+		"id":    existingUser.ID.Hex(),
+		"email": googleUser.Email,
+		"exp":   time.Now().Add(60 * time.Minute).Unix(),
 	})
 
 	tokenString, err := jwtToken.SignedString(jwtSecret)
@@ -138,6 +138,8 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to generate JWT", http.StatusInternalServerError)
 		return
 	}
+
+	fmt.Println("Reached callback, preparing to send postMessage to FE")
 
 	// Return token to the frontend popup via postMessage
 	html := `
