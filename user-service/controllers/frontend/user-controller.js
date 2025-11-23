@@ -74,7 +74,7 @@ const logoutUser = async (req, res) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,
-    sameSite: "strict"
+    sameSite: "none"
   });
 
   return res.json({ success: true });
@@ -182,7 +182,7 @@ const changePassword = async (req, res) => {
     res.clearCookie("refreshToken", {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
     });
 
     return res.json({ success: true, message: "Đổi mật khẩu thành công. Vui lòng đăng nhập lại." });
