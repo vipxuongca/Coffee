@@ -149,7 +149,7 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 				token: "` + tokenString + `",
 				email: "` + googleUser.Email + `"
 			}, "https://velvetroast.vercel.app");
-			window.close();
+		
 		</script>`
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Write([]byte(html))
