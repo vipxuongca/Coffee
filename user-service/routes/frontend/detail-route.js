@@ -22,7 +22,7 @@ payload:
 }
 */
 
-router.get("/", verifyToken, getAllDetails);
+router.get("/get", verifyToken, getAllDetails);
 router.get("/default", verifyToken, getDefaultDetail);
 router.post("/edit/:id", verifyToken, updateDetail);
 router.delete("/delete/:id", verifyToken, deleteDetail);

@@ -47,7 +47,7 @@ export const userDetailApi = {
     return apiAuth.post(`${BASE_DETAIL}/add`, newAddress)
   },
   getAllAddress() {
-    return apiAuth.get(`${BASE_DETAIL}/`);
+    return apiAuth.get(`${BASE_DETAIL}/get`);
   },
 
   getDefaultAddress() {
