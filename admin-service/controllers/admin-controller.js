@@ -70,7 +70,7 @@ const loginAdmin = async (req, res) => {
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: 14 * 24 * 60 * 60 * 1000
       });
 
@@ -134,7 +134,7 @@ const logoutAdmin = async (req, res) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,
-    sameSite: "strict"
+    sameSite: "none"
   });
 
   return res.json({ success: true });
