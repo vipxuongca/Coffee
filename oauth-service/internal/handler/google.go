@@ -140,6 +140,7 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Reached callback, preparing to send postMessage to FE")
+	fmt.Println("Generated JWT Token:", tokenString)
 
 	// Return token to the frontend popup via postMessage
 	html := `
