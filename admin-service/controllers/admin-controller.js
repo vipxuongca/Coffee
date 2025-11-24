@@ -71,7 +71,9 @@ const loginAdmin = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 14 * 24 * 60 * 60 * 1000
+        maxAge: 14 * 24 * 60 * 60 * 1000,
+        path: '/',
+        domain: process.env.COOKIE_DOMAIN || 'localhost'
       });
 
       return res.status(200).json({ success: true, token });
@@ -134,7 +136,9 @@ const logoutAdmin = async (req, res) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,
-    sameSite: "none"
+    sameSite: "none",
+    path: '/',
+    domain: process.env.COOKIE_DOMAIN
   });
 
   return res.json({ success: true });
