@@ -4,6 +4,7 @@ import crypto from "crypto"
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import path from 'path';
 
 const createRefreshToken = () =>
   crypto.randomBytes(64).toString("hex");
@@ -57,7 +58,9 @@ const loginUser = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    maxAge: 14 * 24 * 60 * 60 * 1000
+    maxAge: 14 * 24 * 60 * 60 * 1000,
+    path: '/',
+    domain: process.env.COOKIE_DOMAIN || 'localhost'
   });
 
   return res.json({ success: true, token });
@@ -74,7 +77,9 @@ const logoutUser = async (req, res) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,
-    sameSite: "none"
+    sameSite: "none",
+    path: '/',
+    domain: process.env.COOKIE_DOMAIN
   });
 
   return res.json({ success: true });
@@ -183,7 +188,10 @@ const changePassword = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
+      path: '/',
+      domain: process.env.COOKIE_DOMAIN
     });
+
 
     return res.json({ success: true, message: "Đổi mật khẩu thành công. Vui lòng đăng nhập lại." });
   } catch (error) {
