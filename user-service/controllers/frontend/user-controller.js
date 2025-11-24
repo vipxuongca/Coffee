@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
     sameSite: "none",
     maxAge: 14 * 24 * 60 * 60 * 1000,
     path: '/',
-    domain: process.env.COOKIE_DOMAIN || 'localhost'
+    // domain: process.env.COOKIE_DOMAIN || 'localhost'
   });
 
   return res.json({ success: true, token });
@@ -79,7 +79,7 @@ const logoutUser = async (req, res) => {
     secure: true,
     sameSite: "none",
     path: '/',
-    domain: process.env.COOKIE_DOMAIN
+    // domain: process.env.COOKIE_DOMAIN
   });
 
   return res.json({ success: true });
@@ -189,7 +189,7 @@ const changePassword = async (req, res) => {
       secure: true,
       sameSite: "none",
       path: '/',
-      domain: process.env.COOKIE_DOMAIN
+      // domain: process.env.COOKIE_DOMAIN
     });
 
 

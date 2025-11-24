@@ -73,7 +73,7 @@ const loginAdmin = async (req, res) => {
         sameSite: "none",
         maxAge: 14 * 24 * 60 * 60 * 1000,
         path: '/',
-        domain: process.env.COOKIE_DOMAIN || 'localhost'
+        // domain: process.env.COOKIE_DOMAIN || 'localhost'
       });
 
       return res.status(200).json({ success: true, token });
@@ -138,7 +138,7 @@ const logoutAdmin = async (req, res) => {
     secure: true,
     sameSite: "none",
     path: '/',
-    domain: process.env.COOKIE_DOMAIN
+    // domain: process.env.COOKIE_DOMAIN
   });
 
   return res.json({ success: true });
