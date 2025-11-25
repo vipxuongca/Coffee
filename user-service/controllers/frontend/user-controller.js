@@ -24,6 +24,7 @@ const refreshAccessToken = async (req, res) => {
   if (!stored) return res.status(401).json({ message: "Invalid refresh" });
 
   const newAccessToken = createAccessToken(stored.userId);
+  console.log("access token sent to frontend: ", newAccessToken);
   return res.json({ accessToken: newAccessToken });
 };
 
