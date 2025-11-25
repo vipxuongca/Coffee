@@ -70,7 +70,7 @@ const loginAdmin = async (req, res) => {
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "none",
+        sameSite: "strict",
         maxAge: 14 * 24 * 60 * 60 * 1000,
         path: '/',
         // domain: process.env.COOKIE_DOMAIN || 'localhost'
@@ -136,7 +136,7 @@ const logoutAdmin = async (req, res) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,
-    sameSite: "none",
+    sameSite: "strict",
     path: '/',
     // domain: process.env.COOKIE_DOMAIN
   });
