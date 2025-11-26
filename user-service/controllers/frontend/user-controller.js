@@ -33,7 +33,6 @@ const loginUser = async (req, res) => {
 
   const user = await userModel.findOne({ email });
   if (!user) return res.status(400).json({ success: false, message: "Tài khoản không tồn tại" });
-  if (!user) return res.status(400).json({ success: false, message: "Tài khoản không tồn tại" });
 
   const valid = await bcrypt.compare(password, user.password);
   if (!valid) return res.status(400).json({ success: false, message: "Email hoặc mật khẩu không đúng" });
