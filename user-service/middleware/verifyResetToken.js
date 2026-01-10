@@ -9,4 +9,4 @@ const verifyResetToken = (req, res, next) => {
   next();
 };
 
-export default { verifyResetToken };
+export default verifyResetToken;

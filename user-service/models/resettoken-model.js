@@ -15,8 +15,8 @@ const resetTokenSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: 3600,
+    expires: 900, //15 mins
   },
 });
 
-module.exports = mongoose.model("ResetToken", resetTokenSchema);
+export default mongoose.model("ResetToken", resetTokenSchema);
