@@ -23,7 +23,7 @@ router.post('/forgot-password', forgotPassword);
 
 // protected
 router.get('/single', verifyToken, singleUser);
-router.post('/reset-password', verifyResetToken, resetPassword);
+router.post('/reset-password/:token', resetPassword);
 router.get('/verify-reset-token', verifyResetToken, confirmResetToken);
 
 export default router;

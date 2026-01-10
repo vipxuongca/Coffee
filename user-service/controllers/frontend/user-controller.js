@@ -218,9 +218,15 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+
+
 const resetPassword = async (req, res) => {
   try {
-    const { token, newPassword } = req.body;
+    const { password } = req.body;
+    const { token } = req.params;
+
+    console.log("Received token:", token);
+    console.log("Received new password:", password);
 
     // 1. Find the token
     const tokenDoc = await ResetToken.findOne({ token });
@@ -235,9 +241,12 @@ const resetPassword = async (req, res) => {
 
     // 3. Find user and update password
     const user = await userModel.findById(tokenDoc.userId);
+    console.log("User found for password reset:", user);
     if (!user) return res.status(404).json({ success: false, message: "Người dùng không tồn tại." });
 
-    user.password = newPassword; // Ensure your User model hashes this on 'save'
+    const salt = await bcrypt.genSalt(10); // 5 to 15, longer is more secure yet slower
+    const hashedPassword = await bcrypt.hash(password, salt);
+    user.password = hashedPassword; // Ensure your User model hashes this on 'save'
     await user.save();
 
     // 4. Delete the token immediately after use (One-time use security)
