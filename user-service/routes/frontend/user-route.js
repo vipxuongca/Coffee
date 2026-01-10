@@ -7,7 +7,8 @@ import {
   refreshAccessToken,
   forgotPassword,
   resetPassword,
-  confirmResetToken
+  confirmResetToken,
+  changePassword,
 } from '../../controllers/frontend/user-controller.js';
 import verifyToken from '../../middleware/verifyToken.js'
 import verifyResetToken from '../../middleware/verifyResetToken.js';
@@ -25,5 +26,6 @@ router.post('/forgot-password', forgotPassword);
 router.get('/single', verifyToken, singleUser);
 router.post('/reset-password/:token', resetPassword);
 router.get('/verify-reset-token', verifyResetToken, confirmResetToken);
+router.post('/change-password', verifyToken, changePassword);
 
 export default router;

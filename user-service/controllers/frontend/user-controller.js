@@ -154,7 +154,29 @@ const singleUser = async (req, res) => {
     });
   }
 };
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = await userModel.findById(req.user.id);
 
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: "Mật khẩu hiện tại không đúng." });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+    return res.status(200).json({ success: true, message: "Mật khẩu đã được cập nhật." });
+  } catch (error) {
+    console.error('Lỗi:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: error.message,
+    });
+  }
+};
 
 const forgotPassword = async (req, res) => {
   try {
@@ -217,8 +239,6 @@ const forgotPassword = async (req, res) => {
     });
   }
 };
-
-
 
 const resetPassword = async (req, res) => {
   try {
@@ -294,4 +314,4 @@ const confirmResetToken = async (req, res) => {
 };
 
 
-export { loginUser, registerUser, singleUser, logoutUser, refreshAccessToken, forgotPassword, resetPassword, confirmResetToken };
+export { loginUser, registerUser, singleUser, logoutUser, refreshAccessToken, forgotPassword, resetPassword, confirmResetToken, changePassword };
