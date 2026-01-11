@@ -2,6 +2,48 @@
 //parameters
 import axios from "axios";
 import crypto from 'crypto';
+import Payment from '../models/payment-model.js';
+import {orderApi} from '../api/order-api.js';
+
+const verifyMomoSignature = (data) => {
+  const {
+    partnerCode,
+    orderId,
+    requestId,
+    amount,
+    orderInfo,
+    orderType,
+    transId,
+    resultCode,
+    message,
+    payType,
+    responseTime,
+    extraData,
+    signature
+  } = data;
+
+  const rawSignature =
+    `accessKey=${process.env.MOMO_ACCESS_KEY}` +
+    `&amount=${amount}` +
+    `&extraData=${extraData}` +
+    `&message=${message}` +
+    `&orderId=${orderId}` +
+    `&orderInfo=${orderInfo}` +
+    `&orderType=${orderType}` +
+    `&partnerCode=${partnerCode}` +
+    `&payType=${payType}` +
+    `&requestId=${requestId}` +
+    `&responseTime=${responseTime}` +
+    `&resultCode=${resultCode}` +
+    `&transId=${transId}`;
+
+  const expectedSignature = crypto
+    .createHmac('sha256', process.env.MOMO_SECRET_KEY)
+    .update(rawSignature)
+    .digest('hex');
+
+  return expectedSignature === signature;
+};
 
 const momoClient = async (req, res) => {
   const accessKey = process.env.MOMO_ACCESS_KEY;
@@ -76,12 +118,42 @@ const momoClient = async (req, res) => {
 }
 
 const momoCallback = async (req, res) => {
-  console.log("MOMO CALLBACK:: ");
-  const data = req.body;
-  const momoCallbackData = { ...data, success: true };
-  console.log("momoCallbackData: ", momoCallbackData);
-  return res.status(200).json(momoCallbackData);
-}
+  try {
+    const data = req.body;
+
+    // 1. Verify signature (SECURITY GATE)
+    if (!verifyMomoSignature(data)) {
+      // Do not reveal anything, do not retry
+      return res.status(200).end();
+    }
+
+    const { orderId, resultCode, transId, amount } = data;
+
+    // 2. Idempotent write (atomic)
+    await Payment.updateOne(
+      { provider: 'MOMO', transId },
+      {
+        orderId,
+        provider: 'MOMO',
+        transId,
+        amount,
+        status: resultCode === 0 ? 'SUCCESS' : 'FAILED',
+        rawPayload: data,
+        notified: false
+      },
+      { upsert: true }
+    );
+
+    // 3. Acknowledge immediately
+    return res.status(200).end();
+
+  } catch (err) {
+    console.error('MOMO CALLBACK ERROR', err);
+
+    // NEVER cause retries from MoMo
+    return res.status(200).end();
+  }
+};
 
 const momoVerifyTransaction = async (req, res) => {
   /*
@@ -133,4 +205,29 @@ const momoVerifyTransaction = async (req, res) => {
   }
 }
 
-export { momoClient, momoCallback, momoVerifyTransaction };
+const momoSuccessNotifyOrder = async () => {
+  const payments = await Payment.find({
+    notified: false,
+    status: { $in: ['SUCCESS', 'FAILED'] }
+  }).limit(50);
+
+  for (const p of payments) {
+    try {
+      await orderApi.momoResult({
+        orderId: p.orderId,
+        provider: p.provider,
+        transId: p.transId,
+        amount: p.amount,
+        status: p.status
+      });
+
+      p.notified = true;
+      p.notifiedAt = new Date();
+      await p.save();
+    } catch (err) {
+      // Do nothing — retry next run
+    }
+  }
+};
+
+export { momoClient, momoCallback, momoVerifyTransaction, momoSuccessNotifyOrder };

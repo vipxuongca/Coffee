@@ -1,6 +1,3 @@
-import { paymentApi } from '../api/payment-api.js'
-import { cartApi } from '../api/cart-api.js';
-import axios from 'axios';
 import jwt from 'jsonwebtoken'
 import { buildOrderData } from "./order-build.js";
 import Order from '../models/order-model.js';
@@ -10,6 +7,8 @@ const orderCreateMomo = async (req, res) => {
 Expected payload:
 
    */
+
+  const PAYMENT_TTL_MINUTES = 15; // Payment expiration time
   try {
     const { items, defaultAddress, notes } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
@@ -71,10 +70,11 @@ Expected payload:
       shippingFee: 0,
       notes: notes || "",
       status: "PROCESSING",
+      paymentExpiry: new Date(Date.now() + PAYMENT_TTL_MINUTES * 60 * 1000)
     });
 
     await newOrder.save();
-    
+
 
 
     res.status(201).json({
@@ -93,5 +93,29 @@ Expected payload:
   }
 };
 
+const handleMomoResult = async (req, res) => {
+  const { orderId, status } = req.body;
 
-export { orderCreateMomo }
+  const order = await Order.findById(orderId);
+  if (!order) return res.status(200).end();
+
+  // Idempotency guard
+  if (order.status === 'PAID') {
+    return res.status(200).end();
+  }
+
+  if (status === 'SUCCESS') {
+    order.status = 'PAID';
+    await order.save();
+
+    await postPaymentSuccess(order); // stock, cart, etc
+  } else {
+    order.status = 'PAYMENT_FAILED';
+    await order.save();
+  }
+
+  return res.status(200).end();
+};
+
+
+export { orderCreateMomo, handleMomoResult }
