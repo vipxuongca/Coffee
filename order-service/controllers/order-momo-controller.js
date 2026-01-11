@@ -126,7 +126,8 @@ const handleMomoResult = async (req, res) => {
   // Side effects (must be idempotent)
   console.log('Clearing cart for user: -- ', order.userId);
   await cartApi.clearCartFromOrder(order.userId);
-  console.log("success");
+  console.log('Updating product stock for order items -- ', order.items);
+  await productApi.deduceStock(order.items);
 
   return res.status(200).end();
 };
