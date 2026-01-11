@@ -5,7 +5,7 @@ import crypto from "crypto"
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import path from 'path';
+// import path from 'path';
 import transporter from '../../config/nodemailer.js';
 
 const createRefreshToken = () =>
@@ -154,6 +154,7 @@ const singleUser = async (req, res) => {
     });
   }
 };
+
 const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
@@ -314,4 +315,14 @@ const confirmResetToken = async (req, res) => {
 };
 
 
-export { loginUser, registerUser, singleUser, logoutUser, refreshAccessToken, forgotPassword, resetPassword, confirmResetToken, changePassword };
+export {
+  loginUser,
+  registerUser,
+  singleUser,
+  logoutUser,
+  refreshAccessToken,
+  forgotPassword,
+  resetPassword,
+  confirmResetToken,
+  changePassword
+};
