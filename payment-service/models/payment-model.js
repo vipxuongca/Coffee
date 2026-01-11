@@ -1,46 +1,55 @@
 import mongoose from "mongoose";
 
-const paymentSchema = new mongoose.Schema({
-  orderId: {
-    type: String,
-    required: true
+const paymentSchema = new mongoose.Schema(
+  {
+    orderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      index: true
+    },
+
+    provider: {
+      type: String,
+      enum: ["MOMO", "PAYPAL", "STRIPE"],
+      required: true
+    },
+
+    // MoMo: transId
+    // Stripe/PayPal: chargeId / captureId
+    providerPaymentId: {
+      type: String,
+      required: true
+    },
+
+    status: {
+      type: String,
+      enum: ["SUCCESS", "FAILED", "REFUNDED"],
+      required: true
+    },
+
+    amount: {
+      type: Number,
+      required: true
+    },
+
+    currency: {
+      type: String,
+      uppercase: true,
+      default: "VND"
+    },
+
+    rawResponse: {
+      type: mongoose.Schema.Types.Mixed,
+      required: true
+    }
   },
-  provider: {
-    type: String,
-    enum: ["paypal", "stripe"],
-    required: true,
-    default: "paypal"
-  },
-  providerPaymentId: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  status: {
-    type: String,
-    enum: ["CREATED", "APPROVED", "CAPTURED", "FAILED", "REFUNDED"],
-    default: "CREATED"
-  },
-  amount: {
-    type: Number,
-    required: true
-  },
-  currency: {
-    type: String,
-    uppercase: true,
-    default: "USD"
-  },
-  payerEmail: {
-    type: String
-  },
-  payerId: {
-    type: String
-  },
-  rawResponse: {
-    type: mongoose.Schema.Types.Mixed
-  }
-}, {
-  timestamps: true // createdAt, updatedAt
-});
+  { timestamps: true }
+);
+
+// Idempotency guarantee
+paymentSchema.index(
+  { provider: 1, providerPaymentId: 1 },
+  { unique: true }
+);
 
 export default mongoose.model("Payment", paymentSchema);

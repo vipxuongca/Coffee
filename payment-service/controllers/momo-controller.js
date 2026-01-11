@@ -3,7 +3,7 @@
 import axios from "axios";
 import crypto from 'crypto';
 import Payment from '../models/payment-model.js';
-import {orderApi} from '../api/order-api.js';
+import { orderApi } from '../api/order-api.js';
 
 const verifyMomoSignature = (data) => {
   const {
@@ -131,18 +131,21 @@ const momoCallback = async (req, res) => {
 
     // 2. Idempotent write (atomic)
     await Payment.updateOne(
-      { provider: 'MOMO', transId },
+      {
+        provider: "MOMO",
+        providerPaymentId: String(transId)
+      },
       {
         orderId,
-        provider: 'MOMO',
-        transId,
+        provider: "MOMO",
+        providerPaymentId: String(transId),
         amount,
-        status: resultCode === 0 ? 'SUCCESS' : 'FAILED',
-        rawPayload: data,
-        notified: false
+        status: resultCode === 0 ? "SUCCESS" : "FAILED",
+        rawResponse: data
       },
       { upsert: true }
     );
+
 
     // 3. Acknowledge immediately
     return res.status(200).end();
