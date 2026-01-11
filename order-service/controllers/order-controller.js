@@ -267,7 +267,7 @@ Expected payload:
     });
 
     await newOrder.save();
-    
+
     // console.log("user id is", userId)
     // --- Clear user's cart after successful order creation ---
     try {
@@ -296,7 +296,7 @@ Expected payload:
 const orderGetOne = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log(userId);
+    console.log("this is from orderGetOne: ", userId);
     const { orderid } = req.params;
 
     // 1️⃣ Find the order by ID and ensure it belongs to the current user
@@ -440,14 +440,6 @@ const orderCancel = async (req, res) => {
     return res.status(500).json({ success: false, message: "Lỗi khi hủy đơn hàng.", error: err.message });
   }
 };
-
-const verifyStripe = async (req, res) => {
-  try {
-
-  } catch (error) {
-
-  }
-}
 
 
 export { orderGetOne, orderCreateCOD, orderGetUser, orderCancel, orderCreateStripe, orderCreateTransfer };

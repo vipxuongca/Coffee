@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 import { buildOrderData } from "./order-build.js";
 import Order from '../models/order-model.js';
+import { cartApi } from '../api/cart-api.js';
+import { productApi } from '../api/product-api.js';
 
 const orderCreateMomo = async (req, res) => {
   /*
@@ -96,26 +98,39 @@ Expected payload:
 const handleMomoResult = async (req, res) => {
   const { orderId, status } = req.body;
 
+  console.log('MOMO RESULT RECEIVED -- ', req.body);
+
+  if (!orderId || !status) {
+    return res.status(400).end();
+  }
+  if (status !== "SUCCESS") {
+    return res.status(400).end();
+  }
   const order = await Order.findById(orderId);
   if (!order) return res.status(200).end();
 
   // Idempotency guard
-  if (order.status === 'PAID') {
+  if (order.status === "PAID") {
     return res.status(200).end();
   }
 
-  if (status === 'SUCCESS') {
-    order.status = 'PAID';
-    await order.save();
-
-    await postPaymentSuccess(order); // stock, cart, etc
-  } else {
-    order.status = 'PAYMENT_FAILED';
-    await order.save();
+  // Only PROCESSING orders can be paid
+  if (order.status !== "PROCESSING") {
+    return res.status(200).end();
   }
+
+  // Transition
+  order.status = "PAID";
+  await order.save();
+
+  // Side effects (must be idempotent)
+  console.log('Clearing cart for user: -- ', order.userId);
+  await cartApi.clearCartFromOrder(order.userId);
+  console.log("success");
 
   return res.status(200).end();
 };
+
 
 
 export { orderCreateMomo, handleMomoResult }

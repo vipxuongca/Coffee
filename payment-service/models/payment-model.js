@@ -41,7 +41,10 @@ const paymentSchema = new mongoose.Schema(
     rawResponse: {
       type: mongoose.Schema.Types.Mixed,
       required: true
-    }
+    },
+
+    notified: { type: Boolean, default: false },
+    notifiedAt: { type: Date }
   },
   { timestamps: true }
 );

@@ -13,6 +13,7 @@ import {
 } from '../controllers/order-stripe-controller.js'
 import {
   orderCreateMomo,
+  handleMomoResult
 } from '../controllers/order-momo-controller.js'
 
 
@@ -27,5 +28,6 @@ router.get('/get-one/:orderid', verifyToken, orderGetOne);
 router.get('/get-user', verifyToken, orderGetUser);
 router.put("/cancel/:orderid", verifyToken, orderCancel);
 router.put("/abandon/:orderid", verifyToken, orderAbandon);
+router.post('/momo/success', handleMomoResult);
 
 export default router;

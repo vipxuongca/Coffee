@@ -146,8 +146,21 @@ const momoCallback = async (req, res) => {
       { upsert: true }
     );
 
+    // 3. if success, notify order service to delete cart and reduce stock
+    if (resultCode === 0) {
 
-    // 3. Acknowledge immediately
+      const notifyData = {
+        orderId,
+        provider: "MOMO",
+        providerPaymentId: String(transId),
+        amount
+      };
+      console.log('NOTIFYING ORDER SERVICE OF MOMO PAYMENT SUCCESS -- ', notifyData);
+
+      await momoSuccessNotifyOrder(notifyData);
+    }
+
+    // 4. Terminate this gateway immediately
     return res.status(200).end();
 
   } catch (err) {
@@ -209,6 +222,7 @@ const momoVerifyTransaction = async (req, res) => {
 }
 
 const momoSuccessNotifyOrder = async () => {
+  console.log('MOMO SUCCESS NOTIFY ORDER REACHED...');
   const payments = await Payment.find({
     notified: false,
     status: { $in: ['SUCCESS', 'FAILED'] }
@@ -216,13 +230,17 @@ const momoSuccessNotifyOrder = async () => {
 
   for (const p of payments) {
     try {
-      await orderApi.momoResult({
-        orderId: p.orderId,
+      console.log('Notifying order service for payment -- ', p._id);
+      const notifyingData = {
+        orderId: String(p.orderId),
         provider: p.provider,
-        transId: p.transId,
+        providerPaymentId: p.providerPaymentId,
         amount: p.amount,
         status: p.status
-      });
+      }
+
+      console.log('Notifying data -- ', notifyingData);
+      await orderApi.momoResult(notifyingData);
 
       p.notified = true;
       p.notifiedAt = new Date();
