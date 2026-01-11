@@ -1,20 +1,7 @@
-# Use Node.js LTS lightweight image
-FROM node:20-alpine
-
-# Set working directory
+FROM node:18-alpine
 WORKDIR /app
-
-# Copy only package files first (for caching dependencies)
 COPY package*.json ./
-
-# Install production dependencies
-RUN npm ci --only=production
-
-# Copy rest of the source code
+RUN npm install --production
 COPY . .
-
-# Expose port
-EXPOSE 80
-
-# Start the app
-CMD ["npm", "start"]
+EXPOSE 4008
+CMD ["node", "server.js"]

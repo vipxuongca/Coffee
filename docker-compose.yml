@@ -25,6 +25,13 @@ services:
       API_PRODUCT: "http://admin:4000/api/product"
       API_ADMIN: "http://admin:4000/api/admin"
 
+  payment:
+    build: ./payment-service
+    ports:
+      - "4008:4008"
+    environment:
+      API_ORDER: "http://order:4004/api/order"
+
   cart:
     build: ./cart-service
     ports:
