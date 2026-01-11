@@ -3,4 +3,5 @@ export const PAYMENT_METHOD = Object.freeze({
   CART: "CART",
   TRANSFER: "TRANSFER",
   STRIPE: "STRIPE",
+  MOMO: "MOMO"
 });

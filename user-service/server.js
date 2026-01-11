@@ -2,6 +2,8 @@
 import dotenv from 'dotenv';
 const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
 dotenv.config({ path: envFile });
+import dns from 'node:dns';
+dns.setDefaultResultOrder('ipv4first'); // This forces Node to look for external IPs first
 
 
 import express from 'express';

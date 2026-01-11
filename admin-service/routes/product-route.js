@@ -26,6 +26,6 @@ router.put('/edit/:id', adminAuth, upload.fields([
 
 router.put("/deduce-stock", deduceStockForOrder);
 
-router.delete('/delete', adminAuth, removeProduct);
+router.delete('/delete/:id', adminAuth, removeProduct);
 
 export default router;

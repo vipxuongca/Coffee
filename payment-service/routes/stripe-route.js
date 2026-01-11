@@ -1,7 +1,7 @@
 // routes/payment.js
 import express from "express";
 import paypalClient from "../config/paypal.js";
-import CartModel from "../models/cart-model.js";
+// import CartModel from "../models/cart-model.js";
 import { verifyToken } from "../middleware/jwt-verify.js";
 
 const router = express.Router();

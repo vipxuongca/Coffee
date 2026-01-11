@@ -5,9 +5,13 @@ import {
   registerUser,
   singleUser,
   refreshAccessToken,
-  changePassword
+  forgotPassword,
+  resetPassword,
+  confirmResetToken,
+  changePassword,
 } from '../../controllers/frontend/user-controller.js';
 import verifyToken from '../../middleware/verifyToken.js'
+import verifyResetToken from '../../middleware/verifyResetToken.js';
 
 const router = express.Router();
 
@@ -16,9 +20,12 @@ router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 router.post('/register', registerUser);
 router.post('/refresh', refreshAccessToken);
+router.post('/forgot-password', forgotPassword);
 
 // protected
 router.get('/single', verifyToken, singleUser);
-router.put('/change-password', verifyToken, changePassword);
+router.post('/reset-password/:token', resetPassword);
+router.get('/verify-reset-token', verifyResetToken, confirmResetToken);
+router.post('/change-password', verifyToken, changePassword);
 
 export default router;

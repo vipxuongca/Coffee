@@ -50,7 +50,7 @@ const orderSchema = new mongoose.Schema(
     },
     paymentIntentId: { type: String },
     notes: { type: String },
-
+    paymentExpiry: { type: Date },
     status: {
       type: String,
       enum: Object.values(ORDER_STATUS),

@@ -116,7 +116,8 @@ const getOneStockProduct = async (req, res) => {
 
 const removeProduct = async (req, res) => {
   try {
-    const deleted = await productModel.findByIdAndDelete(req.body.id);
+    const { id } = req.params;
+    const deleted = await productModel.findByIdAndDelete(id);
     if (!deleted) {
       return res.status(404).json({ message: 'Xóa sản phẩm thất bại' });
     }
