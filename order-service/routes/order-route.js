@@ -5,12 +5,15 @@ import {
   orderGetOne,
   orderGetUser,
   orderCancel,
-  orderCreateTransfer
+  orderCreateTransfer,
 } from '../controllers/order-controller.js'
 import {
   orderCreateStripe,
   orderAbandon
 } from '../controllers/order-stripe-controller.js'
+import {
+  orderCreateMomo,
+} from '../controllers/order-momo-controller.js'
 
 
 const router = express.Router();
@@ -18,6 +21,7 @@ const router = express.Router();
 // /api/order
 router.post('/create/cod', verifyToken, orderCreateCOD);
 router.post('/create/stripe', verifyToken, orderCreateStripe);
+router.post('/create/momo', verifyToken, orderCreateMomo);
 router.post('/create/transfer', verifyToken, orderCreateTransfer);
 router.get('/get-one/:orderid', verifyToken, orderGetOne);
 router.get('/get-user', verifyToken, orderGetUser);
