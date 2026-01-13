@@ -148,7 +148,7 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 			window.opener.postMessage({
 				token: "` + tokenString + `",
 				email: "` + googleUser.Email + `"
-			}, "https://www.velvetroast.store");
+			}, "` + config.FrontendURL + `");
 		window.close();
 		</script>`
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")

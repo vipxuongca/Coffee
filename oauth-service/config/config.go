@@ -13,6 +13,7 @@ var (
 	GoogleClientSecret string
 	MongoURI           string
 	Port               string
+	FrontendURL        string
 )
 
 func LoadConfig() {
@@ -34,6 +35,7 @@ func LoadConfig() {
 	GoogleClientID = os.Getenv("GOOGLE_CLIENT_ID")
 	GoogleClientSecret = os.Getenv("GOOGLE_CLIENT_SECRET")
 	MongoURI = os.Getenv("MONGO_CLUSTER_URI")
+	FrontendURL = os.Getenv("FRONTEND_URL")
 
 	if GoogleClientID == "" || GoogleClientSecret == "" || RedirectURI == "" {
 		log.Fatal("Missing required Google OAuth environment variables")
