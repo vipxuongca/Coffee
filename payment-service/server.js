@@ -32,6 +32,9 @@ app.use(cors({
 }));
 connectDB();
 
+app.use(cors());
+
+
 // use json for the whole application, this automatically parse JSON into objects
 app.use(bodyParser.json()); 
 
