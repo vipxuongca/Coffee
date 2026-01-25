@@ -7,7 +7,7 @@ import { verifyToken } from "../middleware/jwt-verify.js";
 const router = express.Router();
 // 4008/api/momo
 
-router.post("/", momoClient);
+router.post("/create", momoClient);
 router.post("/callback", momoCallback);
 router.post("/verify-transaction", momoVerifyTransaction);
 
