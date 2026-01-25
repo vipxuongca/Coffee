@@ -46,6 +46,7 @@ const verifyMomoSignature = (data) => {
 };
 
 const momoClient = async (req, res) => {
+  console.log('MOMO CLIENT REACHED...');
   const accessKey = process.env.MOMO_ACCESS_KEY;
   const secretKey = process.env.MOMO_SECRET_KEY;
   const { orderId, amount } = req.body;
