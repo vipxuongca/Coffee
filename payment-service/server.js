@@ -39,4 +39,6 @@ app.use('/api/stripe', stripeRouter);
 app.use('/api/momo', momoRouter);
 
 
-app.listen(PORT, () => console.log(`PAYMENT running on port: http://localhost:${PORT}`));
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`PAYMENT is running on http://0.0.0.0:${PORT}`);
+});
