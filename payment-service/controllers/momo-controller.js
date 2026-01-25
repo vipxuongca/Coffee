@@ -121,6 +121,7 @@ const momoClient = async (req, res) => {
 const momoCallback = async (req, res) => {
   try {
     const data = req.body;
+    console.log('MOMO CALLBACK REACHED -- ', data);
 
     // 1. Verify signature (SECURITY GATE)
     if (!verifyMomoSignature(data)) {
