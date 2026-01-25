@@ -76,6 +76,7 @@ const momoClient = async (req, res) => {
   console.log(signature)
 
   //json object send to MoMo endpoint
+  console.log("ipnUrl:", ipnUrl);
   const requestBody = JSON.stringify({
     partnerCode: partnerCode,
     partnerName: "Test",
