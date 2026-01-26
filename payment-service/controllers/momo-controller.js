@@ -53,7 +53,7 @@ const momoClient = async (req, res) => {
   var orderInfo = 'pay with MoMo';
   var partnerCode = 'MOMO';
   const redirectUrl = process.env.REDIRECT_URL;
-  const ipnUrl = process.env.MOMO_IPN_URL + '/api/momo/callback';
+  const ipnUrl = process.env.MOMO_IPN_URL;
   var requestType = "payWithMethod";
   var requestId = orderId;
   var extraData = '';
