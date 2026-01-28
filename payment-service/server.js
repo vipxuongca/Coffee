@@ -9,7 +9,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import connectDB from './config/mongodb.js';
-import stripeRouter from './routes/stripe-route.js';
+// import stripeRouter from './routes/stripe-route.js';
 import momoRouter from './routes/momo-route.js';
 
 //initialisation
@@ -25,18 +25,24 @@ app.use(cors({
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
+      console.log("CORS ERROR", origin);
     }
   },
   credentials: true,
 }));
 connectDB();
 
+// app.use(cors());
+
+
 // use json for the whole application, this automatically parse JSON into objects
 app.use(bodyParser.json()); 
 
 // Routes listing
-app.use('/api/stripe', stripeRouter);
+// app.use('/api/stripe', stripeRouter);
 app.use('/api/momo', momoRouter);
 
 
-app.listen(PORT, () => console.log(`PAYMENT running on port: http://localhost:${PORT}`));
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`PAYMENT is running on http://0.0.0.0:${PORT}`);
+});
