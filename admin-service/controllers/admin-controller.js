@@ -1,5 +1,6 @@
 import adminModel from '../models/admin-model.js';
 import RefreshToken from '../models/refreshtoken-model.js';
+import reportModel from '../models/report-model.js';
 import crypto from "crypto"
 import validator from 'validator';
 import bcrypt from 'bcrypt';
@@ -155,12 +156,23 @@ const getOrderAndProcessData = async (req, res) => {
 
 
 const getReport = async (req, res) => {
-  // This gets the report data to send to front end upon login
   try {
-    const reports = await reportModel.find();
-    res.status(200).json(reports);
+    const latestReport = await reportModel
+      .findOne()
+      .sort({ createdAt: -1 })
+      .lean();
+
+    if (!latestReport) {
+      return res.status(404).json({ success: false, message: 'No report found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: latestReport
+    });
+
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching reports', error });
+    res.status(500).json({ message: 'Error fetching latest report', error });
   }
 };
 
@@ -177,4 +189,33 @@ const fetchLiveReport = async (req, res) => {
   }
 };
 
-export { loginAdmin, registerAdmin, logoutAdmin, refreshAccessToken, getReport, fetchLiveReport };
+const createReportRecord = async (req, res) => {
+  try {
+    const { metrics, salesData, bestSellers } = req.body;
+
+    const report = await reportModel.create({
+      metrics,
+      salesData,
+      bestSellers
+    });
+
+    // CHANGE THIS: Return the structure the frontend expects
+    res.status(201).json({
+      success: true,
+      message: "Report Created Successfully",
+      data: report
+    });
+
+  } catch (error) {
+    // Log the actual error to your terminal so you can see WHY it fails
+    console.error("Backend Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: 'Error creating report record',
+      error: error.message
+    });
+  }
+};
+
+export { loginAdmin, registerAdmin, logoutAdmin, refreshAccessToken, getReport, fetchLiveReport, createReportRecord };
