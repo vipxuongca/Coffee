@@ -314,7 +314,6 @@ const confirmResetToken = async (req, res) => {
   }
 };
 
-
 export {
   loginUser,
   registerUser,
