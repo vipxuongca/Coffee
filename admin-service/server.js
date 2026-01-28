@@ -9,11 +9,10 @@ import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
 import cookieParser from 'cookie-parser';
 
-
+// routers
 import adminRouter from './routes/admin-route.js';
 import productRouter from './routes/product-route.js';
 import categoryRouter from './routes/category-route.js';
-import reportRouter from './routes/report-route.js';
 
 // configuration
 const app = express();
@@ -45,7 +44,6 @@ app.use(cors({
 app.use('/api/admin', adminRouter);
 app.use('/api/product', productRouter);
 app.use('/api/category', categoryRouter);
-app.use('/api/report', reportRouter);
 
 
 //start the server

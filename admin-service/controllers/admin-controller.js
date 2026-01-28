@@ -144,4 +144,37 @@ const logoutAdmin = async (req, res) => {
   return res.json({ success: true });
 };
 
-export { loginAdmin, registerAdmin, logoutAdmin, refreshAccessToken };
+const getOrderAndProcessData = async (req, res) => {
+  try {
+    const reports = await reportModel.find();
+    res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching reports', error });
+  }
+}
+
+
+const getReport = async (req, res) => {
+  // This gets the report data to send to front end upon login
+  try {
+    const reports = await reportModel.find();
+    res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching reports', error });
+  }
+};
+
+const fetchLiveReport = async (req, res) => {
+  // this would first connect to order-service to fetch orders
+  // then process orders, do 2 things:
+  // 1. update the report database
+  // 2. return the report data to frontend
+  try {
+    const reports = await reportModel.find();
+    res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching reports', error });
+  }
+};
+
+export { loginAdmin, registerAdmin, logoutAdmin, refreshAccessToken, getReport, fetchLiveReport };
