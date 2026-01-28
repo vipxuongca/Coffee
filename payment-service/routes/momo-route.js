@@ -9,7 +9,7 @@ const router = express.Router();
 // 4008/api/momo
 
 router.post("/create", momoClient);
-router.post("/callback", callbackLog, momoCallback);
+router.post("/callback", momoCallback);
 router.post("/verify-transaction", momoVerifyTransaction);
 router.post("/verified-callback", momoVerifiedCallback);
 

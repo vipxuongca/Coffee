@@ -9,7 +9,7 @@ import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
 import cookieParser from 'cookie-parser';
 
-
+// routers
 import adminRouter from './routes/admin-route.js';
 import productRouter from './routes/product-route.js';
 import categoryRouter from './routes/category-route.js';

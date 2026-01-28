@@ -309,4 +309,59 @@ const momoSuccessNotifyOrder = async () => {
   }
 };
 
-export { momoClient, momoCallback, momoVerifyTransaction, momoSuccessNotifyOrder, momoVerifiedCallback };
+const momoVerifiedCallback = async (req, res) => {
+  try {
+    const data = req.body;
+    console.log('MOMO VERIFIED CALLBACK REACHED -- ', data);
+
+    const { orderId, resultCode, transId, amount } = data;
+    console.log("parsed data -- ", orderId, resultCode, transId, amount);
+
+    // 2. Idempotent write (atomic)
+    await Payment.updateOne(
+      {
+        provider: "MOMO",
+        providerPaymentId: String(transId),
+      },
+      {
+        $set: {
+          amount,
+          status: resultCode === 0 ? "SUCCESS" : "FAILED",
+          rawResponse: data,
+        },
+        $setOnInsert: {
+          orderId,
+          provider: "MOMO",
+          providerPaymentId: String(transId),
+        },
+      },
+      { upsert: true }
+    );
+
+
+    // 3. if success, notify order service to delete cart and reduce stock
+    if (resultCode === 0) {
+      console.log("result 0 is reached");
+      const notifyData = {
+        orderId,
+        provider: "MOMO",
+        providerPaymentId: String(transId),
+        amount
+      };
+      console.log('NOTIFYING ORDER SERVICE OF MOMO PAYMENT SUCCESS -- ', notifyData);
+
+      await momoSuccessNotifyOrder(notifyData);
+    }
+
+    // 4. Terminate this gateway immediately
+    return res.status(200).end();
+
+  } catch (err) {
+    console.error('MOMO CALLBACK ERROR', err);
+
+    // NEVER cause retries from MoMo
+    return res.status(200).end();
+  }
+};
+
+export { momoClient, momoCallback, momoVerifyTransaction, momoSuccessNotifyOrder, momoVerifiedCallback, momoVerifiedCallback };
