@@ -114,6 +114,66 @@ const getOneStockProduct = async (req, res) => {
   }
 };
 
+const checkStockBulk = async (req, res) => {
+  try {
+    const { items } = req.body;
+    const results = [];
+
+    for (const item of items) {
+      const product = await productModel.findById(item.productId);
+
+      if (!product) {
+        results.push({
+          productId: item.productId,
+          success: false,
+          reason: "NOT_FOUND",
+        });
+        continue;
+      }
+
+      if (product.stock < item.quantity) {
+        results.push({
+          productId: item.productId,
+          success: false,
+          reason: "INSUFFICIENT_STOCK",
+          availableStock: product.stock,
+        });
+        continue;
+      }
+
+      results.push({
+        productId: item.productId,
+        success: true,
+      });
+    }
+
+    const allSuccess = results.every(r => r.success);
+
+    if (!allSuccess) {
+      return res.status(409).json({
+        success: false,
+        code: "STOCK_UNAVAILABLE",
+        message: "Some products are not available in the requested quantity",
+        details: results,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      details: results,
+    });
+
+  } catch (error) {
+    console.error("Error checking stock bulk:", error);
+    res.status(500).json({
+      success: false,
+      code: "INTERNAL_ERROR",
+      message: "Stock check failed",
+    });
+  }
+};
+
+
 const removeProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -270,5 +330,6 @@ export {
   getOneProduct,
   updateProduct,
   getOneStockProduct,
-  deduceStockForOrder
+  deduceStockForOrder,
+  checkStockBulk
 };

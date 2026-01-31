@@ -23,6 +23,10 @@ export const productApi = {
     return apiAuth.post(`${BASE}/stock/${productId}`, { quantity });
   },
 
+  checkStockBulk(items) {
+    return apiAuth.post(`${BASE}/stock/checkbulk`, { items });
+  },
+
   deduceStock(items) {
     return apiAuth.put(`${BASE}/deduce-stock`, { items });
   }

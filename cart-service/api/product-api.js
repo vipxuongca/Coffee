@@ -20,6 +20,6 @@ export const productApi = {
   },
 
   stockVerify(productId, quantity) {
-    return apiAuth.post(`${BASE}/stock/${productId}`, { quantity });
+    return apiAuth.post(`${BASE}/stock/single/${productId}`, { quantity });
   }
 };
