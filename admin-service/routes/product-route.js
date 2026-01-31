@@ -1,5 +1,5 @@
 import express from 'express';
-import { addProduct, removeProduct, getProducts, getOneProduct, updateProduct, getOneStockProduct, deduceStockForOrder } from '../controllers/product-controller.js';
+import { addProduct, removeProduct, getProducts, getOneProduct, updateProduct, getOneStockProduct, deduceStockForOrder, checkStockBulk } from '../controllers/product-controller.js';
 import upload from '../middleware/multer.js';
 import adminAuth from '../middleware/admin-auth.js';
 
@@ -15,7 +15,8 @@ router.post('/add', adminAuth, upload.fields([
   { name: "image3", maxCount: 1 },
   { name: "image4", maxCount: 1 }
 ]), addProduct);
-router.post('/stock/:id', getOneStockProduct);
+router.post('/stock/single/:id', getOneStockProduct);
+router.post('/stock/checkbulk', checkStockBulk);
 
 router.put('/edit/:id', adminAuth, upload.fields([
   { name: "image1", maxCount: 1 },
