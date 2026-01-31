@@ -314,6 +314,33 @@ const confirmResetToken = async (req, res) => {
   }
 };
 
+const sendEmail = async (req, res) => {
+  const { name, email, message } = req.body;
+
+  const mailOptions = {
+    from: `"${name}" <velvetroaststore@gmail.com>`, // Sender address
+    to: "velvetroaststore@gmail.com", // Receiver (Store Owner)
+    replyTo: email, // Reply to the customer
+    subject: `Contact Form: ${name}`,
+    html: `
+      <h3>New Message from Velvet Roast Website</h3>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message}</p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully');
+    res.status(200).json({ success: true, message: 'Email sent' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ success: false, message: 'Failed to send email' });
+  }
+}
+
 export {
   loginUser,
   registerUser,
@@ -323,5 +350,6 @@ export {
   forgotPassword,
   resetPassword,
   confirmResetToken,
-  changePassword
+  changePassword,
+  sendEmail
 };
