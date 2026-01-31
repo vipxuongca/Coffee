@@ -19,25 +19,29 @@ const orderCreateMomo = async (req, res) => {
       });
     }
 
-    /* ---------- STOCK CHECK (CRITICAL FIX) ---------- */
+    /* ---------- STOCK CHECK (RECONCILED) ---------- */
     try {
-      await productApi.checkStockBulk(items);
+      const stockRes = await productApi.checkStockBulk(items);
+
+      if (!stockRes?.data?.success) {
+        return res.status(409).json({
+          success: false,
+          code: "STOCK_UNAVAILABLE",
+          message: "Một số sản phẩm không có đủ hàng trong kho",
+          details: stockRes.data.details,
+        });
+      }
     } catch (err) {
-      return res
-        .status(err.response?.status || 409)
-        .json(
-          err.response?.data || {
-            success: false,
-            code: "STOCK_UNAVAILABLE",
-            message: "Một số sản phẩm không có đủ hàng trong kho",
-          }
-        );
+      if (err.response?.data?.code === "STOCK_UNAVAILABLE") {
+        return res.status(409).json(err.response.data);
+      }
+      throw err;
     }
 
     /* ---------- BUILD ORDER DATA ---------- */
     const orderData = await buildOrderData(items, userId);
 
-    if (!orderData?.products) {
+    if (!orderData?.user || !orderData?.products) {
       return res.status(400).json({
         success: false,
         message: "Failed to build order data",
@@ -54,8 +58,31 @@ const orderCreateMomo = async (req, res) => {
     const newOrder = new Order({
       userId: orderData.user._id,
       userEmail: orderData.user.email,
-      userDetail: defaultAddress,
-      items: orderData.products,
+      userDetail: {
+        receiverName: defaultAddress.receiverName,
+        phone: defaultAddress.phone,
+        addressLine1: defaultAddress.addressLine1,
+        ward: defaultAddress.ward,
+        city: defaultAddress.city,
+        isDefault: defaultAddress.isDefault,
+      },
+      items: orderData.products.map(p => ({
+        productId: p._id,
+        name: p.name,
+        description: p.description,
+        longDescription: p.longDescription,
+        image: p.image,
+        category: p.category,
+        subCategory: p.subCategory,
+        variant: p.variant,
+        brand: p.brand,
+        discount: p.discount,
+        quantity: p.quantity,
+        price: p.price,
+        warranty: p.warranty,
+        packageType: p.packageType,
+        packageDetail: p.packageDetail,
+      })),
       total,
       paymentMethod: "MOMO",
       shippingFee: 0,
@@ -83,6 +110,7 @@ const orderCreateMomo = async (req, res) => {
     });
   }
 };
+
 
 
 const handleMomoResult = async (req, res) => {

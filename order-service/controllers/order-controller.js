@@ -19,25 +19,29 @@ const orderCreateCOD = async (req, res) => {
       });
     }
 
-    /* ---------- STOCK CHECK (FIXED) ---------- */
-    let stockRes;
+    /* ---------- STOCK CHECK (RECONCILED) ---------- */
     try {
-      stockRes = await productApi.checkStockBulk(items);
-    } catch (err) {
-      // Forward stock error EXACTLY as-is
-      return res
-        .status(err.response?.status || 409)
-        .json(err.response?.data || {
+      const stockRes = await productApi.checkStockBulk(items);
+
+      if (!stockRes?.data?.success) {
+        return res.status(409).json({
           success: false,
           code: "STOCK_UNAVAILABLE",
-          message: "Stock check failed",
+          message: "Insufficient stock for some items",
+          details: stockRes.data.details,
         });
+      }
+    } catch (err) {
+      if (err.response?.data?.code === "STOCK_UNAVAILABLE") {
+        return res.status(409).json(err.response.data);
+      }
+      throw err;
     }
 
     /* ---------- BUILD ORDER DATA ---------- */
     const orderData = await buildOrderData(items, userId);
 
-    if (!orderData?.products) {
+    if (!orderData?.user || !orderData?.products) {
       return res.status(400).json({
         success: false,
         message: "Failed to build order data",
@@ -45,15 +49,38 @@ const orderCreateCOD = async (req, res) => {
     }
 
     const total = orderData.products.reduce(
-      (sum, p) => sum + p.price * p.quantity,
+      (acc, p) => acc + p.price * p.quantity,
       0
     );
 
     const newOrder = new Order({
       userId: orderData.user._id,
       userEmail: orderData.user.email,
-      userDetail: defaultAddress,
-      items: orderData.products,
+      userDetail: {
+        receiverName: defaultAddress.receiverName,
+        phone: defaultAddress.phone,
+        addressLine1: defaultAddress.addressLine1,
+        ward: defaultAddress.ward,
+        city: defaultAddress.city,
+        isDefault: defaultAddress.isDefault,
+      },
+      items: orderData.products.map(p => ({
+        productId: p._id,
+        name: p.name,
+        description: p.description,
+        longDescription: p.longDescription,
+        image: p.image,
+        category: p.category,
+        subCategory: p.subCategory,
+        variant: p.variant,
+        brand: p.brand,
+        discount: p.discount,
+        quantity: p.quantity,
+        price: p.price,
+        warranty: p.warranty,
+        packageType: p.packageType,
+        packageDetail: p.packageDetail,
+      })),
       total,
       paymentMethod: "COD",
       shippingFee: 0,
@@ -80,7 +107,6 @@ const orderCreateCOD = async (req, res) => {
   }
 };
 
-
 const orderCreateTransfer = async (req, res) => {
   try {
     const { items, defaultAddress, notes } = req.body;
@@ -94,23 +120,29 @@ const orderCreateTransfer = async (req, res) => {
       });
     }
 
-    /* ---------- STOCK CHECK (FIXED) ---------- */
+    /* ---------- STOCK CHECK (RECONCILED) ---------- */
     try {
-      await productApi.checkStockBulk(items);
-    } catch (err) {
-      return res
-        .status(err.response?.status || 409)
-        .json(err.response?.data || {
+      const stockRes = await productApi.checkStockBulk(items);
+
+      if (!stockRes?.data?.success) {
+        return res.status(409).json({
           success: false,
           code: "STOCK_UNAVAILABLE",
           message: "Một số sản phẩm không có đủ hàng trong kho",
+          details: stockRes.data.details,
         });
+      }
+    } catch (err) {
+      if (err.response?.data?.code === "STOCK_UNAVAILABLE") {
+        return res.status(409).json(err.response.data);
+      }
+      throw err;
     }
 
     /* ---------- BUILD ORDER DATA ---------- */
     const orderData = await buildOrderData(items, userId);
 
-    if (!orderData?.products) {
+    if (!orderData?.user || !orderData?.products) {
       return res.status(400).json({
         success: false,
         message: "Failed to build order data",
@@ -127,8 +159,31 @@ const orderCreateTransfer = async (req, res) => {
     const newOrder = new Order({
       userId: orderData.user._id,
       userEmail: orderData.user.email,
-      userDetail: defaultAddress,
-      items: orderData.products,
+      userDetail: {
+        receiverName: defaultAddress.receiverName,
+        phone: defaultAddress.phone,
+        addressLine1: defaultAddress.addressLine1,
+        ward: defaultAddress.ward,
+        city: defaultAddress.city,
+        isDefault: defaultAddress.isDefault,
+      },
+      items: orderData.products.map(p => ({
+        productId: p._id,
+        name: p.name,
+        description: p.description,
+        longDescription: p.longDescription,
+        image: p.image,
+        category: p.category,
+        subCategory: p.subCategory,
+        variant: p.variant,
+        brand: p.brand,
+        discount: p.discount,
+        quantity: p.quantity,
+        price: p.price,
+        warranty: p.warranty,
+        packageType: p.packageType,
+        packageDetail: p.packageDetail,
+      })),
       total,
       paymentMethod: "TRANSFER",
       shippingFee: 0,
@@ -156,6 +211,7 @@ const orderCreateTransfer = async (req, res) => {
     });
   }
 };
+
 
 
 
